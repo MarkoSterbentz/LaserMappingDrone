@@ -1,1 +1,1 @@
-this a readme
+##LIDAR-Enabled Drone Mapping Project at Idaho State University
