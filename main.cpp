@@ -11,7 +11,7 @@ struct DummyPoint {
 };
 
 int main() {
-    QuadTree<DummyPoint> quadTree;
+    QuadTree<DummyPoint> quadTree(2);
     quadTree.addPoint({0.5f, 0.5f});
     quadTree.addPoint({0.5f, -0.5f});
     quadTree.addPoint({5.0f, 0.5f});

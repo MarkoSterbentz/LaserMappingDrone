@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <stdexcept>
 
 #define UP_L 0
 #define UP_R 1
@@ -20,7 +21,7 @@ namespace LaserMappingDrone {
      * when a point is tested to see where it falls in relation to a square,
      * these are the 9 possible cases.  See function Node::contains
      */
-    enum containsCases {    // all cases that can be returned by Node::contains
+    enum containsCases {
         INSIDE  =   2,
         UPLEFT  =   4,      //  ________________
         UP      =   8,      //  | 4  | 8  | 12 |
@@ -45,7 +46,7 @@ namespace LaserMappingDrone {
         bool isEndNode();
         void split();
         void split3(int whichNot);
-        std::string toString(int level);
+        std::string toString(unsigned level);
     };
 
     /*******************    QUADTREE CLASS HEADER    *************************/
@@ -54,28 +55,37 @@ namespace LaserMappingDrone {
     class QuadTree {
     private:
         Node<P>* head;
-        int maxPointsPerNode;
+        unsigned maxPointsPerNode;
         float defaultHalfWidth;
         bool expansionToggler;
 
         int pickQuadrant(Node<P>* node, P& point);
         void expand(P point, int wherePoint);
+
+#ifdef EXPERIMENTAL_METHODS
+        void recombineLastExpansion(unsigned whichQuadrantHasPoints);
+#endif
     public:
-        QuadTree(int maxPointsPerNode = 1, float defaultHalfWidth = 1.f);
+        QuadTree(unsigned maxPointsPerNode = 1, float defaultHalfWidth = 1.f);
         ~QuadTree();
         void clean();
         void addPoint(P point);
-        void addPoint(P point, Node<P>* node);
+        void addPoint(P point, Node<P>* node
+#ifndef EXPERIMENTAL_METHODS
+        );
+#else
+        , unsigned expansionsDone = 0);
+#endif
         void addPoints(std::vector<P> points);
         void addPoints(P* array, int length);
-        void setMaxPointsPerNode(int numPoints, bool rebuild = false);
+        void setMaxPointsPerNode(unsigned numPoints, bool rebuild = false);
         std::string toString();
     };
 
     /*******************    QUADTREE CLASS IMPLEMENTATION    *************************/
 
     template<class P>
-    QuadTree<P>::QuadTree(int maxPointsPerNode /*= 1*/, float defaultHalfWidth /*= 1.f*/)
+    QuadTree<P>::QuadTree(unsigned maxPointsPerNode /*= 1*/, float defaultHalfWidth /*= 1.f*/)
             : head(0), maxPointsPerNode(maxPointsPerNode), defaultHalfWidth(defaultHalfWidth), expansionToggler(false) {
 
     }
@@ -100,15 +110,20 @@ namespace LaserMappingDrone {
     }
 
     template<class P>
-    void QuadTree<P>::addPoint(P point, Node<P>* node) {
-        if (!head) {//no head node yet - make a head node and stick the point in it
+    void QuadTree<P>::addPoint(P point, Node<P>* node
+#ifndef EXPERIMENTAL_METHODS
+    ) {
+#else
+    }, unsigned expansionsDone /*=0*/) {
+#endif
+        if (!head) {//no head node yet - make a head node of default size and stick the point in it
             head = new Node<P>(point.x - defaultHalfWidth, point.x + defaultHalfWidth,
                                point.y - defaultHalfWidth, point.y + defaultHalfWidth);
             head->points.push_back(point);
         } else {
             int wherePoint = node->contains(point);
             if (wherePoint == containsCases::INSIDE) { //point is inside node
-                if (node->isEndNode()) {                // node is a leaf
+                if (node->isEndNode()) { // node is an end-node
                     if (node->points.size() < maxPointsPerNode) { //there is room in the node
                         node->points.push_back(point);
                     } else { //there is no room - split the node
@@ -123,7 +138,13 @@ namespace LaserMappingDrone {
                 } else { // node is not a leaf - move down a level
                     addPoint(point, node->children[pickQuadrant(node, point)]);
                 }
-            } else {//point is not inside node - add nodes above head and switch head to root
+            } else { //point is not inside node - add parent node to head and switch head to the parent
+#ifdef EXPERIMENTAL_METHODS
+                if (expansionsDone) { // if an expansion was just done on the last pass (and it still didn't reach)
+                    // recombine the previous expansion's extra branches (because it created a redundant branch)
+                    recombineLastExpansion(expansionsDone - 1);
+                }
+#endif
                 expand(point, wherePoint);
             }
         }
@@ -144,12 +165,18 @@ namespace LaserMappingDrone {
     void QuadTree<P>::expand(P point, int wherePoint) {
         Node<P>* newHead = 0;
         float half = head->xMax - head->xMin;
+#ifdef EXPERIMENTAL_METHODS
+        unsigned whichIsOldHead = 0;
+#endif
         switch (wherePoint) {
             UPLEFT:
             case UPLEFT:
                 newHead = new Node<P>(head->xMin - half, head->xMax, head->yMin, head->yMax + half);
                 newHead->split3(DN_R);
                 newHead->children[DN_R] = head;
+#ifdef EXPERIMENTAL_METHODS
+                whichIsOldHead = DN_R + 1;
+#endif
                 break;
             case UP:
                 expansionToggler = !expansionToggler;
@@ -159,6 +186,9 @@ namespace LaserMappingDrone {
                 newHead = new Node<P>(head->xMin, head->xMax + half, head->yMin, head->yMax + half);
                 newHead->split3(DN_L);
                 newHead->children[DN_L] = head;
+#ifdef EXPERIMENTAL_METHODS
+                whichIsOldHead = DN_L + 1;
+#endif
                 break;
             case LEFT:
                 expansionToggler = !expansionToggler;
@@ -171,6 +201,9 @@ namespace LaserMappingDrone {
                 newHead = new Node<P>(head->xMin - half, head->xMax, head->yMin - half, head->yMax);
                 newHead->split3(UP_R);
                 newHead->children[UP_R] = head;
+#ifdef EXPERIMENTAL_METHODS
+                whichIsOldHead = UP_R + 1;
+#endif
                 break;
             case DOWN:
                 expansionToggler = !expansionToggler;
@@ -180,13 +213,46 @@ namespace LaserMappingDrone {
                 newHead = new Node<P>(head->xMin, head->xMax + half, head->yMin - half, head->yMax);
                 newHead->split3(UP_L);
                 newHead->children[UP_L] = head;
+#ifdef EXPERIMENTAL_METHODS
+                whichIsOldHead = UP_L + 1;
+#endif
                 break;
             default:
-                break;  // default should never happen
+                throw new std::runtime_error("QuadTree expand: bad enumerator.");;  // default should never happen
         }
         head = newHead;
-        addPoint(point, head);
+        addPoint(point, head
+#ifndef EXPERIMENTAL_METHODS
+        );
+#else
+        , whichIsOldHead);
+#endif
     }
+
+    /*
+     * In some cases, a new point will be added that is so far outside of the existing quadtree bounds that upon calling
+     * addPoint(), expand() will be called twice or more in succession before the quadtree finally encompasses the point.
+     * In this case, there will then exist within the tree one or more redundant branches that ought to be removed.
+     * This function is called every time expand is called again after being called, alleviating the issue as it arises.
+     *
+     * EDIT: After thought, this may be more complex than I originally understood. The above statement only applies
+     * after only one point has been added.  Once two or more have been added this reduction is not useful. But it
+     * actually seems that the case where this happens after the first point is fairly common.  It may still be worth
+     * it to figure this out, so I'm leaving all these horrid defines in here for a bit longer...
+     */
+#ifdef EXPERIMENTAL_METHODS
+    template<class P>
+    void QuadTree<P>::recombineLastExpansion(unsigned whichQuadrantHasPoints) {
+        Node<P>* tempChildren[4];
+        for (unsigned i = 0; i < 4; ++i) {
+            tempChildren[i] = head->children[whichQuadrantHasPoints]->children[i];
+        }
+        delete head->children[whichQuadrantHasPoints];
+        for (unsigned i = 0; i < 4; ++i) {
+            head->children[i] = tempChildren[i];
+        }
+    }
+#endif
 
     template<class P>
     void QuadTree<P>::addPoints(std::vector<P> points) {
@@ -199,7 +265,7 @@ namespace LaserMappingDrone {
     }
 
     template<class P>
-    void QuadTree<P>::setMaxPointsPerNode(int numPoints, bool rebuild /* = false */) {
+    void QuadTree<P>::setMaxPointsPerNode(unsigned numPoints, bool rebuild /* = false */) {
         maxPointsPerNode = numPoints;
         if (rebuild) {
 
@@ -279,23 +345,26 @@ namespace LaserMappingDrone {
                 children[DN_L] = new Node(xMin, xCenter, yMin, yCenter);
                 break;
             default:
-                break;  //default should never happen
+                throw new std::runtime_error("QuadTree split3: bad enumerator.");;  // default should never happen;
         }
     }
 
     template<class P>
-    std::string Node<P>::toString(int level) {
+    std::string Node<P>::toString(unsigned level) {
         std::stringstream sstr;
         std::string tabs;
         for (unsigned i = 0; i < level; ++i) {
             tabs += '\t';
         }
-        sstr << tabs << "NODE: " << xMin << " " << xMax << " " << yMin << " " << yMax << " : ";
+        sstr << tabs << "NODE: " << xMin << " " << xMax << " " << yMin << " " << yMax;
         if (isEndNode()) {
-            sstr << points.size() << " points\n";
+            if (points.size()) {
+                sstr << " :  ((( " << points.size() << " )))";
+            }
         } else {
-            sstr << "BRANCH\n";
+            sstr << " : BRANCH";
         }
+        sstr << std::endl;
         if (!isEndNode()) {
             for (unsigned i = 0; i < 4; ++i) {
                 sstr << children[i]->toString(level + 1);
