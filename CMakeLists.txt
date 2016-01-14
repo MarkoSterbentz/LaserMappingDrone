@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.3)
 project(LaserMappingDrone)
 
 # Make sure the project compiles with the c++11 and thread safety flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -g -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -g -O0")
 
 #set(LIBS ${LIBS})
 
@@ -15,7 +15,7 @@ set(DUA_INCLUDE_DIR ./)
 include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
-set(SOURCE_FILES main.cpp QuadTree.cpp QuadTree.h)
+set(SOURCE_FILES main.cpp QuadTree.h)
 
 # Make an executable called LaserMappingDrone out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
