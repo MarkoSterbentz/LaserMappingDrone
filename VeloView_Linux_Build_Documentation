@@ -1,0 +1,35 @@
+What libraries/programs (may) need to be installed?
+	Note: I had a clean build of Ubuntu 14.04 LTS, so I had to install a lot. Your mileage may vary. Also, I cannot guarantee that this list is complete, or completely necessary. If there are errors, you will need to install the appropriate library. So, here's what I found that I (may have) needed:
+
+	cmake
+	flex
+	bison
+	zlib1g.dev
+	libbz2-dev
+	python2.7-dev
+	install PythonLibs
+	python-dev
+	libboost-all-dev
+	libxt-dev
+	qt4 (specifically qt 4.8.6)
+
+What was the Cmake version used?
+	cmake version 3.2.2
+
+Where is the makefile created?
+	The makefile is created within "VeloView-master/build"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+BUILD DIRECTIONS:
+Note: I used GCC Version 4.8.4.
+Note: It can take upwards of 40 minutes to build, and requires an internet connection for downloading the libraries. Use make flags like "make -j4" to speed up build time.
+
+0. Clone the project from github
+1. Make the build directory (mkdir build)
+2. Go into build directory
+3. Run "cmake -DENABLE_veloview:BOOL=ON -DUSE_SYSTEM_qt:BOOL=ON  -DUSE_SYSTEM_python=ON ../Superbuild/" in order to create the build files.
+4. Run make. Fix missing library issues as necessary.
+5. You'll encounter an Boost compatability issues when building liblas. Fix Boost compatability issues:
+	- navigate to "build/liblas/src/liblas/src/classification.cpp"
+	- find all instances of "uint64_t" (there should only be 2), and change them to "boost::uint64_t"
+6. Run make again. 
