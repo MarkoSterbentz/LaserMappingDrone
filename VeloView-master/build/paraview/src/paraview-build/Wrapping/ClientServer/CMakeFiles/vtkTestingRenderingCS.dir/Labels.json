@@ -1,0 +1,39 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkTestingClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkTestingInteractorClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkTestingObjectFactoryClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkTestingRenderingCSInit.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkTesting.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkTestingInteractor.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkTestingObjectFactory.h"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "VTKModular" ],
+		"name" : "vtkTestingRenderingCS"
+	}
+}

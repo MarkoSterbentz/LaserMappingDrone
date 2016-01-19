@@ -1,0 +1,119 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPDataSetWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPDataWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPImageDataWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPPolyDataWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPRectilinearGridWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPStructuredDataWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPStructuredGridWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPUnstructuredDataWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPUnstructuredGridWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPHierarchicalBoxDataWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPMultiBlockDataWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPUniformGridAMRWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPDataSetWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPDataWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPImageDataWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPPolyDataWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPRectilinearGridWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPStructuredDataWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPStructuredGridWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPUnstructuredDataWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPUnstructuredGridWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPHierarchicalBoxDataWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPMultiBlockDataWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/ParallelXML/vtkXMLPUniformGridAMRWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/IO/ParallelXML/vtkIOParallelXMLModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/IO/ParallelXML/vtkIOParallelXMLHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/IO/ParallelXML/vtkIOParallelXMLHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkIOParallelXML" ],
+		"name" : "vtkIOParallelXML"
+	}
+}

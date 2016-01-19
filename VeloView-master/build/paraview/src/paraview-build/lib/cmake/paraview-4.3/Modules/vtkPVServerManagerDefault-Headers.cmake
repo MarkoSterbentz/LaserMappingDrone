@@ -1,0 +1,11 @@
+set(vtkPVServerManagerDefault_HEADERS_LOADED 1)
+set(vtkPVServerManagerDefault_HEADERS "vtkPVGeneralSettings;vtkPVMultiServerDataSource;vtkSMCameraConfigurationReader;vtkSMCameraConfigurationWriter;vtkSMCSVExporterProxy;vtkSMDirectoryProxy;vtkSMExporterProxy;vtkSMInteractionUndoStackBuilder;vtkSMMultiServerSourceProxy;vtkSMPropertyModificationUndoElement;vtkSMProxyConfigurationReader;vtkSMProxyConfigurationWriter;vtkSMPSWriterProxy;vtkSMRenderViewExporterProxy;vtkSMTesting;vtkSMViewExportHelper;vtkSMGL2PSExporterProxy")
+
+foreach(header ${vtkPVServerManagerDefault_HEADERS})
+  set(vtkPVServerManagerDefault_HEADER_${header}_EXISTS 1)
+endforeach()
+
+set(vtkPVServerManagerDefault_HEADER_vtkSMExporterProxy_ABSTRACT 1)
+
+
+

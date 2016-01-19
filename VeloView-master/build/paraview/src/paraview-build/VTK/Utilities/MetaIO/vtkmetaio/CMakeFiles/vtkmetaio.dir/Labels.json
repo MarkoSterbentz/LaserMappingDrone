@@ -1,0 +1,143 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaTypes.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaUtils.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaArrow.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaBlob.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaCommand.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaCommand.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaContour.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaContour.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaDTITube.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaEllipse.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaGroup.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaGaussian.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaImage.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaImageUtils.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaLandmark.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaLine.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaMesh.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaMesh.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaObject.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaOutput.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaOutput.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaScene.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaSurface.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaTube.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaVesselTube.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaTransform.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaTubeGraph.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaForm.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaForm.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaArray.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaArray.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaFEMObject.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/MetaIO/vtkmetaio/metaFEMObject.cxx"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkMetaIO" ],
+		"name" : "vtkmetaio"
+	}
+}

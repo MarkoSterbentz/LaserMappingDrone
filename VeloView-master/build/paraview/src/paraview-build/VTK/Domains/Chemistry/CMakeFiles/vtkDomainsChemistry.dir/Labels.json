@@ -1,0 +1,119 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkBlueObeliskData.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkBlueObeliskDataParser.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkCMLMoleculeReader.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeAlgorithm.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeMapper.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeToAtomBallFilter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeToBondStickFilter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeToPolyDataFilter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkPeriodicTable.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkProgrammableElectronicData.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkProteinRibbonFilter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkSimpleBondPerceiver.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkBlueObeliskData.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkBlueObeliskDataParser.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkCMLMoleculeReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeAlgorithm.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeMapper.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeToAtomBallFilter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeToBondStickFilter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkMoleculeToPolyDataFilter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkPeriodicTable.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkProgrammableElectronicData.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkProteinRibbonFilter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Domains/Chemistry/vtkSimpleBondPerceiver.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Domains/Chemistry/vtkDomainsChemistryModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Domains/Chemistry/vtkDomainsChemistryHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Domains/Chemistry/vtkDomainsChemistryHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkDomainsChemistry" ],
+		"name" : "vtkDomainsChemistry"
+	}
+}

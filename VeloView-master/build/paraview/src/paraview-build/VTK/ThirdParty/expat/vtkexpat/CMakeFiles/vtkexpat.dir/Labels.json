@@ -1,0 +1,23 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/expat/vtkexpat/xmlparse.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/expat/vtkexpat/xmltok.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/expat/vtkexpat/xmlrole.c"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkexpat" ],
+		"name" : "vtkexpat"
+	}
+}

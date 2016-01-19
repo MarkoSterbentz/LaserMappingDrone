@@ -1,0 +1,35 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkLSDynaReaderPython.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkLSDynaSummaryParserPython.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkIOLSDynaPythonInitImpl.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkLSDynaReaderPython.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkLSDynaSummaryParserPython.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkIOLSDynaPythonInit.cxx.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "VTKModular" ],
+		"name" : "vtkIOLSDynaPythonD"
+	}
+}

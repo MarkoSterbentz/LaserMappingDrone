@@ -1,0 +1,51 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkRegressionTestImage.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkTesting.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkTestingInteractor.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkTestingObjectFactory.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkTesting.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkTestingInteractor.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Testing/Rendering/vtkTestingObjectFactory.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Testing/Rendering/vtkTestingRenderingModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Testing/Rendering/vtkTestingRenderingHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Testing/Rendering/vtkTestingRenderingHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkTestingRendering" ],
+		"name" : "vtkTestingRendering"
+	}
+}

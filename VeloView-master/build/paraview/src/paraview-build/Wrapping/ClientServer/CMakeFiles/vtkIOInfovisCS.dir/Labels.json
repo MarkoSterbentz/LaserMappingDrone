@@ -1,0 +1,143 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkBiomTableReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkChacoGraphReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkDelimitedTextReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkDIMACSGraphReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkDIMACSGraphWriterClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkFixedWidthTextReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkISIReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkMultiNewickTreeReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkNewickTreeReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkNewickTreeWriterClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkPhyloXMLTreeReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkPhyloXMLTreeWriterClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkRISReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkTulipReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkXGMLReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkXMLTreeReaderClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkIOInfovisCSInit.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkBiomTableReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkChacoGraphReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkDelimitedTextReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkDIMACSGraphReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkDIMACSGraphWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkFixedWidthTextReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkISIReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkMultiNewickTreeReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkNewickTreeReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkNewickTreeWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkPhyloXMLTreeReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkPhyloXMLTreeWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkRISReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkTulipReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkXGMLReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/Infovis/vtkXMLTreeReader.h"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "VTKModular" ],
+		"name" : "vtkIOInfovisCS"
+	}
+}

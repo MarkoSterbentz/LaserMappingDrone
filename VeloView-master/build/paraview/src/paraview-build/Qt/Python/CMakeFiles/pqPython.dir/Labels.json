@@ -1,0 +1,135 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonDebugLeaksView.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonDebugLeaksView.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonDialog.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonDialog.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonMacroSupervisor.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonMacroSupervisor.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonManager.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonManager.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonScriptEditor.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonScriptEditor.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonShell.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonShell.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonSyntaxHighlighter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonSyntaxHighlighter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonDebugLeaksView.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonDialog.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonMacroSupervisor.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonManager.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonScriptEditor.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonShell.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonSyntaxHighlighter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/ui_pqPythonDialog.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/pqPythonModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonDebugLeaksView.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonDialog.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonMacroSupervisor.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonManager.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonScriptEditor.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonShell.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonSyntaxHighlighter.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonDialog.ui"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "pqPython" ],
+		"name" : "pqPython"
+	}
+}

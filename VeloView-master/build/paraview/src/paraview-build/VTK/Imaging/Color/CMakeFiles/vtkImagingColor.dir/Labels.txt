@@ -1,0 +1,22 @@
+# Target labels
+ vtkImagingColor
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageHSIToRGB.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageHSVToRGB.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageLuminance.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageMapToRGBA.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageMapToWindowLevelColors.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageQuantizeRGBToIndex.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageRGBToHSI.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageRGBToHSV.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageHSIToRGB.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageHSVToRGB.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageLuminance.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageMapToRGBA.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageMapToWindowLevelColors.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageQuantizeRGBToIndex.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageRGBToHSI.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageRGBToHSV.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Imaging/Color/vtkImagingColorModule.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Imaging/Color/vtkImagingColorHierarchy.stamp.txt
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Imaging/Color/vtkImagingColorHierarchy.stamp.txt.rule

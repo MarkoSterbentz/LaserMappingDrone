@@ -1,0 +1,35 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/SMApplication/vtkInitializationHelper.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/SMApplication/vtkInitializationHelper.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/ParaViewCore/ServerManager/SMApplication/vtkPVServerManagerApplicationModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/ParaViewCore/ServerManager/SMApplication/vtkPVServerManagerApplicationHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/ParaViewCore/ServerManager/SMApplication/vtkSMGeneratedModules.h.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/ParaViewCore/ServerManager/SMApplication/vtkPVServerManagerApplicationHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkPVServerManagerApplication" ],
+		"name" : "vtkPVServerManagerApplication"
+	}
+}

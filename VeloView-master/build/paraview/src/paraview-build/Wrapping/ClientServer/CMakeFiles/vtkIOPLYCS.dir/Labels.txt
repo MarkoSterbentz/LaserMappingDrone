@@ -1,0 +1,8 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkPLYReaderClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkPLYWriterClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkIOPLYCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/PLY/vtkPLYReader.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/PLY/vtkPLYWriter.h

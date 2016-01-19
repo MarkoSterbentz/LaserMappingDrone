@@ -1,0 +1,79 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/CAdaptorAPI.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPAdaptorAPI.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPCxxHelper.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPDataDescription.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPInputDataDescription.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPPipeline.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPProcessor.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/CAdaptorAPI.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPAdaptorAPI.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPCxxHelper.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPDataDescription.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPInputDataDescription.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPPipeline.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/Catalyst/vtkCPProcessor.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/CoProcessing/Catalyst/vtkPVCatalystModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/CoProcessing/Catalyst/vtkPVCatalystHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/CoProcessing/Catalyst/vtkPVCatalystHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkPVCatalyst" ],
+		"name" : "vtkPVCatalyst"
+	}
+}

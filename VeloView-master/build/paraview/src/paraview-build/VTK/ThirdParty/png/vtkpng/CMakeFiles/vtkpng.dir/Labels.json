@@ -1,0 +1,79 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngget.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngrio.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngwrite.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/png.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngmem.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngrtran.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngtrans.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngwtran.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngerror.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngpread.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngrutil.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngvcrd.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngwutil.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pnggccrd.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngread.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngset.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/png/vtkpng/pngwio.c"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkpng" ],
+		"name" : "vtkpng"
+	}
+}

@@ -1,0 +1,111 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkClientServerCompositePassClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkClientServerSynchronizedRenderersClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkCompositedSynchronizedRenderersClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkCompositerClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkCompositeRenderManagerClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkCompressCompositerClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkParallelRenderManagerClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkPHardwareSelectorClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkSynchronizedRenderersClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkSynchronizedRenderWindowsClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkTreeCompositerClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkImageRenderManagerClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkRenderingParallelCSInit.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkClientServerCompositePass.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkClientServerSynchronizedRenderers.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkCompositedSynchronizedRenderers.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkCompositer.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkCompositeRenderManager.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkCompressCompositer.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkParallelRenderManager.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkPHardwareSelector.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkSynchronizedRenderers.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkSynchronizedRenderWindows.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkTreeCompositer.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Parallel/vtkImageRenderManager.h"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "VTKModular" ],
+		"name" : "vtkRenderingParallelCS"
+	}
+}

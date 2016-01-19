@@ -1,0 +1,18 @@
+# Target labels
+ vtkViewsCore
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkConvertSelectionDomain.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkDataRepresentation.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkEmptyRepresentation.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkRenderViewBase.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkView.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkViewTheme.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkConvertSelectionDomain.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkDataRepresentation.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkEmptyRepresentation.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkRenderViewBase.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkView.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Core/vtkViewTheme.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Views/Core/vtkViewsCoreModule.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Views/Core/vtkViewsCoreHierarchy.stamp.txt
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Views/Core/vtkViewsCoreHierarchy.stamp.txt.rule

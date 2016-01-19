@@ -1,0 +1,39 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Matplotlib/vtkMatplotlibMathTextUtilities.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/Matplotlib/vtkRenderingMatplotlibObjectFactory.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Matplotlib/vtkMatplotlibMathTextUtilities.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/Matplotlib/vtkRenderingMatplotlibObjectFactory.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/Matplotlib/vtkRenderingMatplotlibModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/Matplotlib/vtkRenderingMatplotlibHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/Matplotlib/vtkRenderingMatplotlibHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkRenderingMatplotlib" ],
+		"name" : "vtkRenderingMatplotlib"
+	}
+}

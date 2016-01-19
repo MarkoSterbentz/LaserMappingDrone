@@ -1,0 +1,10 @@
+vtkFiltersGenericPython
+vtkGenericClip
+vtkGenericContourFilter
+vtkGenericCutter
+vtkGenericDataSetTessellator
+vtkGenericGeometryFilter
+vtkGenericGlyph3DFilter
+vtkGenericOutlineFilter
+vtkGenericProbeFilter
+vtkGenericStreamTracer

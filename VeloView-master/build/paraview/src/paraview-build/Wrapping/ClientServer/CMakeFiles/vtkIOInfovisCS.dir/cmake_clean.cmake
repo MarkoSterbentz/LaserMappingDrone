@@ -1,0 +1,42 @@
+file(REMOVE_RECURSE
+  "vtkBiomTableReaderClientServer.cxx"
+  "vtkChacoGraphReaderClientServer.cxx"
+  "vtkDelimitedTextReaderClientServer.cxx"
+  "vtkDIMACSGraphReaderClientServer.cxx"
+  "vtkDIMACSGraphWriterClientServer.cxx"
+  "vtkFixedWidthTextReaderClientServer.cxx"
+  "vtkISIReaderClientServer.cxx"
+  "vtkMultiNewickTreeReaderClientServer.cxx"
+  "vtkNewickTreeReaderClientServer.cxx"
+  "vtkNewickTreeWriterClientServer.cxx"
+  "vtkPhyloXMLTreeReaderClientServer.cxx"
+  "vtkPhyloXMLTreeWriterClientServer.cxx"
+  "vtkRISReaderClientServer.cxx"
+  "vtkTulipReaderClientServer.cxx"
+  "vtkXGMLReaderClientServer.cxx"
+  "vtkXMLTreeReaderClientServer.cxx"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkBiomTableReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkChacoGraphReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkDelimitedTextReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkDIMACSGraphReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkDIMACSGraphWriterClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkFixedWidthTextReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkISIReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkMultiNewickTreeReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkNewickTreeReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkNewickTreeWriterClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkPhyloXMLTreeReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkPhyloXMLTreeWriterClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkRISReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkTulipReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkXGMLReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkXMLTreeReaderClientServer.cxx.o"
+  "CMakeFiles/vtkIOInfovisCS.dir/vtkIOInfovisCSInit.cxx.o"
+  "../../lib/libvtkIOInfovisCS-pv4.3.pdb"
+  "../../lib/libvtkIOInfovisCS-pv4.3.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/vtkIOInfovisCS.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

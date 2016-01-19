@@ -1,0 +1,13 @@
+vtkImagingHybridPython
+vtkBooleanTexture
+vtkShepardMethod
+vtkVoxelModeller
+vtkSurfaceReconstructionFilter
+vtkFastSplatter
+vtkGaussianSplatter
+vtkSampleFunction
+vtkPointLoad
+vtkImageCursor3D
+vtkImageRectilinearWipe
+vtkTriangularTexture
+vtkSliceCubes

@@ -1,0 +1,47 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkImageDataLIC2DClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkStructuredGridLIC2DClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkSurfaceLICDefaultPainterClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkSurfaceLICPainterClientServer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkRenderingLICCSInit.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/LIC/vtkImageDataLIC2D.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/LIC/vtkStructuredGridLIC2D.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/LIC/vtkSurfaceLICDefaultPainter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/LIC/vtkSurfaceLICPainter.h"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "VTKModular" ],
+		"name" : "vtkRenderingLICCS"
+	}
+}

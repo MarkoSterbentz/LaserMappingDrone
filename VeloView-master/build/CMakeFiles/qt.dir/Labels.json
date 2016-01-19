@@ -1,0 +1,51 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/CMakeFiles/qt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/CMakeFiles/qt.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/CMakeFiles/qt-complete.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/qt-prefix/src/qt-stamp/qt-install.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/qt-prefix/src/qt-stamp/qt-mkdir.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/qt-prefix/src/qt-stamp/qt-download.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/qt-prefix/src/qt-stamp/qt-update.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/qt-prefix/src/qt-stamp/qt-patch.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/qt-prefix/src/qt-stamp/qt-configure.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/qt-prefix/src/qt-stamp/qt-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "qt" ],
+		"name" : "qt"
+	}
+}

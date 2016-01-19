@@ -1,0 +1,3 @@
+-I"/home/marko/research/VeloView-master/build/paraview/src/paraview-build/CoProcessing/PythonCatalyst/"
+-I"/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/PythonCatalyst/"
+--hints "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/hints"

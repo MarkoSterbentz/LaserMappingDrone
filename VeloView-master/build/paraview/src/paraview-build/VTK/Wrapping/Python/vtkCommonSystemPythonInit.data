@@ -1,0 +1,8 @@
+vtkCommonSystemPython
+vtkClientSocket
+vtkDirectory
+vtkServerSocket
+vtkSocket
+vtkSocketCollection
+vtkThreadMessager
+vtkTimerLog

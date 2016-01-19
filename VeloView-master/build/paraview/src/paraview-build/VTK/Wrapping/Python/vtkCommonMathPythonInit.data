@@ -1,0 +1,14 @@
+vtkCommonMathPython
+vtkAmoebaMinimizer
+vtkFunctionSet
+vtkInitialValueProblemSolver
+vtkMatrix3x3
+vtkMatrix4x4
+vtkPolynomialSolversUnivariate
+vtkQuaternionInterpolator
+vtkRungeKutta2
+vtkRungeKutta4
+vtkRungeKutta45
+vtkQuaternion
+vtkTuple
+vtkFastNumericConversion

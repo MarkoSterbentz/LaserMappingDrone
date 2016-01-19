@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/libproj4/vtklibproj4/lib_proj.h
+proj_config.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/libproj4/vtklibproj4/proj_config.h
+math.h
+-
+stdlib.h
+-
+
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/libproj4/vtklibproj4/lproj.c
+stdio.h
+-
+stdlib.h
+-
+ctype.h
+-
+string.h
+-
+errno.h
+-
+stdarg.h
+-
+proj_config.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/libproj4/vtklibproj4/proj_config.h
+lib_proj.h
+-
+
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/libproj4/vtklibproj4/vtk_libproj4_mangle.h
+
+VTK/ThirdParty/libproj4/vtklibproj4/proj_config.h
+vtk_libproj4_mangle.h
+VTK/ThirdParty/libproj4/vtklibproj4/vtk_libproj4_mangle.h
+

@@ -1,0 +1,7 @@
+vtkRenderingFreeTypePython
+vtkFreeTypeStringToImage
+vtkMathTextFreeTypeTextRenderer
+vtkMathTextUtilities
+vtkTextRendererStringToImage
+vtkScaledTextActor
+vtkVectorText

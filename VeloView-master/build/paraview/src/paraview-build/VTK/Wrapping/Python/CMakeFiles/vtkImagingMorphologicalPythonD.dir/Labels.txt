@@ -1,0 +1,25 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageConnectorPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageContinuousDilate3DPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageContinuousErode3DPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageDilateErode3DPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageIslandRemoval2DPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageNonMaximumSuppressionPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageOpenClose3DPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageSeedConnectivityPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageSkeleton2DPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageThresholdConnectivityPython.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImagingMorphologicalPythonInitImpl.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageConnectorPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageContinuousDilate3DPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageContinuousErode3DPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageDilateErode3DPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageIslandRemoval2DPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageNonMaximumSuppressionPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageOpenClose3DPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageSeedConnectivityPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageSkeleton2DPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImageThresholdConnectivityPython.cxx.rule
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkImagingMorphologicalPythonInit.cxx.rule

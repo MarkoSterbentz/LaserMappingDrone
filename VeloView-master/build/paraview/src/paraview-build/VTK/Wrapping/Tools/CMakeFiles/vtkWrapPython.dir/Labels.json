@@ -1,0 +1,51 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPython.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPythonClass.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPythonConstant.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPythonEnum.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPythonMethod.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPythonMethodDef.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPythonNamespace.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPythonOverload.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPythonTemplate.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapPythonType.c"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkWrappingTools" ],
+		"name" : "vtkWrapPython"
+	}
+}

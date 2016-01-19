@@ -1,0 +1,1 @@
+/usr/bin/cc  -fPIC -g    CMakeFiles/pvbatch-launcher.dir/pvbatch-forward.c.o  -o launcher/pvbatch -rdynamic 

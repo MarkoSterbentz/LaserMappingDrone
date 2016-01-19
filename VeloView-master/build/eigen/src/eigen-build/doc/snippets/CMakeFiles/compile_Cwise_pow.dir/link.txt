@@ -1,0 +1,1 @@
+/usr/bin/c++   -fPIC -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -fexceptions -fno-check-new -fno-common -fstrict-aliasing -Wno-variadic-macros -Wextra -pedantic -O1 -g1 -g0 -O2    CMakeFiles/compile_Cwise_pow.dir/compile_Cwise_pow.cpp.o  -o compile_Cwise_pow -rdynamic 

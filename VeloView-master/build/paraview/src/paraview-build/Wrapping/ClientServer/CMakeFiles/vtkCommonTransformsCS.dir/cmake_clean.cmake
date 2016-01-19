@@ -1,0 +1,42 @@
+file(REMOVE_RECURSE
+  "vtkAbstractTransformClientServer.cxx"
+  "vtkCylindricalTransformClientServer.cxx"
+  "vtkGeneralTransformClientServer.cxx"
+  "vtkHomogeneousTransformClientServer.cxx"
+  "vtkIdentityTransformClientServer.cxx"
+  "vtkLinearTransformClientServer.cxx"
+  "vtkMatrixToHomogeneousTransformClientServer.cxx"
+  "vtkMatrixToLinearTransformClientServer.cxx"
+  "vtkPerspectiveTransformClientServer.cxx"
+  "vtkSphericalTransformClientServer.cxx"
+  "vtkThinPlateSplineTransformClientServer.cxx"
+  "vtkTransform2DClientServer.cxx"
+  "vtkTransformCollectionClientServer.cxx"
+  "vtkTransformClientServer.cxx"
+  "vtkWarpTransformClientServer.cxx"
+  "vtkLandmarkTransformClientServer.cxx"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkAbstractTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkCylindricalTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkGeneralTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkHomogeneousTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkIdentityTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkLinearTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkMatrixToHomogeneousTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkMatrixToLinearTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkPerspectiveTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkSphericalTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkThinPlateSplineTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkTransform2DClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkTransformCollectionClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkWarpTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkLandmarkTransformClientServer.cxx.o"
+  "CMakeFiles/vtkCommonTransformsCS.dir/vtkCommonTransformsCSInit.cxx.o"
+  "../../lib/libvtkCommonTransformsCS-pv4.3.pdb"
+  "../../lib/libvtkCommonTransformsCS-pv4.3.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/vtkCommonTransformsCS.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

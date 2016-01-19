@@ -1,0 +1,3 @@
+repository='git://github.com/commontk/PythonQt.git'
+module=''
+tag=''

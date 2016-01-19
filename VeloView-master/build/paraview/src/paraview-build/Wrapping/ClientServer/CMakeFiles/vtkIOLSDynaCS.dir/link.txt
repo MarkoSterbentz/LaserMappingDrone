@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../../lib/libvtkIOLSDynaCS-pv4.3.a  CMakeFiles/vtkIOLSDynaCS.dir/vtkLSDynaReaderClientServer.cxx.o CMakeFiles/vtkIOLSDynaCS.dir/vtkLSDynaSummaryParserClientServer.cxx.o CMakeFiles/vtkIOLSDynaCS.dir/vtkIOLSDynaCSInit.cxx.o
+/usr/bin/ranlib ../../lib/libvtkIOLSDynaCS-pv4.3.a

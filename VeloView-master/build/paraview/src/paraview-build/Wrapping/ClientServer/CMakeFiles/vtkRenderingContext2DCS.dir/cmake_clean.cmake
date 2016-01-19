@@ -1,0 +1,40 @@
+file(REMOVE_RECURSE
+  "vtkAbstractContextBufferIdClientServer.cxx"
+  "vtkAbstractContextItemClientServer.cxx"
+  "vtkBlockItemClientServer.cxx"
+  "vtkBrushClientServer.cxx"
+  "vtkContext2DClientServer.cxx"
+  "vtkContextActorClientServer.cxx"
+  "vtkContextClipClientServer.cxx"
+  "vtkContextItemClientServer.cxx"
+  "vtkContextMapper2DClientServer.cxx"
+  "vtkContextSceneClientServer.cxx"
+  "vtkContextTransformClientServer.cxx"
+  "vtkImageItemClientServer.cxx"
+  "vtkMarkerUtilitiesClientServer.cxx"
+  "vtkPenClientServer.cxx"
+  "vtkTooltipItemClientServer.cxx"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkAbstractContextBufferIdClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkAbstractContextItemClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkBlockItemClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkBrushClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkContext2DClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkContextActorClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkContextClipClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkContextItemClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkContextMapper2DClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkContextSceneClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkContextTransformClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkImageItemClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkMarkerUtilitiesClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkPenClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkTooltipItemClientServer.cxx.o"
+  "CMakeFiles/vtkRenderingContext2DCS.dir/vtkRenderingContext2DCSInit.cxx.o"
+  "../../lib/libvtkRenderingContext2DCS-pv4.3.pdb"
+  "../../lib/libvtkRenderingContext2DCS-pv4.3.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/vtkRenderingContext2DCS.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

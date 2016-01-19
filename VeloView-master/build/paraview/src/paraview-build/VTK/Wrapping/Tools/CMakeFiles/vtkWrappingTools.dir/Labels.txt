@@ -1,0 +1,15 @@
+# Target labels
+ vtkWrappingTools
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParse.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParseType.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParse.tab.c
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParseData.c
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParseMain.c
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParseExtras.c
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParseMangle.c
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParseString.c
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParseHierarchy.c
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParsePreprocess.c
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrap.c
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapText.c

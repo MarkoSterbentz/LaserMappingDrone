@@ -1,0 +1,19 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Utilities/PythonInitializer/vtkPVPythonInitializer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Utilities/PythonInitializer/vtkUtilitiesPythonInitializerModule.h"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkUtilitiesPythonInitializer" ],
+		"name" : "vtkUtilitiesPythonInitializer"
+	}
+}

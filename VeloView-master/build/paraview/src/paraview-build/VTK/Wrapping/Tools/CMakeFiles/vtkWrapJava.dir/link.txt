@@ -1,0 +1,1 @@
+/usr/bin/cc  -fPIC  -g  -Wl,--fatal-warnings -Wl,--no-undefined -lc -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  CMakeFiles/vtkWrapJava.dir/vtkWrapJava.c.o  -o ../../../bin/vtkWrapJava-pv4.3 -rdynamic ../../../lib/libvtkWrappingTools-pv4.3.a 

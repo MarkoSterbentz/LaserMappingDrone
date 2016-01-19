@@ -1,0 +1,6 @@
+# Target labels
+ vtkDICOMParser
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/DICOMParser/DICOMFile.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/DICOMParser/DICOMParser.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/DICOMParser/DICOMAppHelper.cxx

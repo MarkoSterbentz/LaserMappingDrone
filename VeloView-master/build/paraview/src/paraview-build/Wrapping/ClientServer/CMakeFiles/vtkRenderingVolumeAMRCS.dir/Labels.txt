@@ -1,0 +1,6 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkAMRVolumeMapperClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkRenderingVolumeAMRCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/VolumeAMR/vtkAMRVolumeMapper.h

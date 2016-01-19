@@ -1,0 +1,6 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkMatplotlibMathTextUtilitiesClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkRenderingMatplotlibCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/Matplotlib/vtkMatplotlibMathTextUtilities.h

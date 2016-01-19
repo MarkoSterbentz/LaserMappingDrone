@@ -1,0 +1,221 @@
+
+==Applanix Position Reader==
+
+Read Applanix data files.
+Read Applanix data files.
+
+
+{| class="PropertiesTable" border="1" cellpadding="5"
+|-
+| '''Property'''
+| '''Description'''
+| '''Default Value(s)'''
+| '''Restrictions'''
+
+|-
+|'''FileName''' (FileName)
+|
+
+This property specifies the file name for the reader.
+
+|
+
+|
+The value(s) must be a filename (or filenames).
+|-
+|'''BaseYaw''' (BaseYaw)
+|
+
+This property specifies the "base" yaw orientation of the GPS
+sensor. The value is subtracted from the reported yaw to get
+actual yaw.
+
+|
+0.0
+|
+
+|-
+|'''BaseRoll''' (BaseRoll)
+|
+
+This property specifies the "base" roll orientation of the GPS
+sensor. The value is subtracted from the reported roll to get
+actual roll.
+
+|
+0.0
+|
+
+|-
+|'''BasePitch''' (BasePitch)
+|
+
+This property specifies the "base" pitch orientation of the GPS
+sensor. The value is subtracted from the reported pitch to get
+actual pitch.
+
+|
+0.0
+|
+
+
+|}
+
+==Velodyne HDL Position Reader==
+
+Read Velodyne HDL data files.
+Read Velodyne HDL data files.
+
+
+{| class="PropertiesTable" border="1" cellpadding="5"
+|-
+| '''Property'''
+| '''Description'''
+| '''Default Value(s)'''
+| '''Restrictions'''
+
+|-
+|'''FileName''' (FileName)
+|
+
+This property specifies the file name for the reader.
+
+|
+
+|
+The value(s) must be a filename (or filenames).
+
+|}
+
+==Velodyne HDL Reader==
+
+Read Velodyne HDL data files.
+Read Velodyne HDL data files.
+
+
+{| class="PropertiesTable" border="1" cellpadding="5"
+|-
+| '''Property'''
+| '''Description'''
+| '''Default Value(s)'''
+| '''Restrictions'''
+
+|-
+|'''FileName''' (FileName)
+|
+
+This property specifies the file name for the reader.
+
+|
+
+|
+The value(s) must be a filename (or filenames).
+|-
+|'''NumberOfTrailingFrames''' (NumberOfTrailingFrames)
+|
+
+Number of frames behind the current frame to show
+
+|
+0
+|
+
+|-
+|'''DummyProperty''' (DummyProperty)
+|
+
+A dummy property to get the filter to refresh
+
+|
+0
+|
+
+|-
+|'''DualReturnFilter''' (DualReturnFilter)
+|
+
+Filter mask for dual return
+
+|
+0
+|
+
+|-
+|'''PointsSkip''' (PointsSkip)
+|
+
+Skip points set to 2 or higher
+
+|
+0
+|
+
+|-
+|'''CropReturns''' (CropReturns)
+|
+
+Crop returns
+
+|
+0
+|
+
+|-
+|'''CropInside''' (CropInside)
+|
+
+Crop inside
+
+|
+0
+|
+
+|-
+|'''CropRegion''' (CropRegion)
+|
+
+Region in which to crop (exclude) returns
+
+|
+0 0 0 0 0 0
+|
+
+|-
+|'''ApplyTransform''' (ApplyTransform)
+|
+
+Apply geolocation data
+
+|
+0
+|
+
+|-
+|'''Calibration File''' (CorrectionsFile)
+|
+
+This property specifies the corrections file for a 64 laser sensor.
+
+|
+
+|
+The value(s) must be a filename (or filenames).
+|-
+|'''TimestepValues''' (TimestepValues)
+|
+
+|
+
+|
+
+|-
+|'''NumberOfChannels''' (NumberOfChannels)
+|
+
+|
+
+|
+
+
+|}
+

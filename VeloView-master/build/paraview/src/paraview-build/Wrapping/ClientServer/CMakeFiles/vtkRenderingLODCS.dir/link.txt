@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../../lib/libvtkRenderingLODCS-pv4.3.a  CMakeFiles/vtkRenderingLODCS.dir/vtkLODActorClientServer.cxx.o CMakeFiles/vtkRenderingLODCS.dir/vtkQuadricLODActorClientServer.cxx.o CMakeFiles/vtkRenderingLODCS.dir/vtkRenderingLODCSInit.cxx.o
+/usr/bin/ranlib ../../lib/libvtkRenderingLODCS-pv4.3.a

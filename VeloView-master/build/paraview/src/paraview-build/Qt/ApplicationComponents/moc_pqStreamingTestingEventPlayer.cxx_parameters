@@ -1,0 +1,7 @@
+-I/home/marko/research/VeloView-master/build/paraview/src/paraview-build
+-DVTK_IN_VTK
+-I
+/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/ApplicationComponents/../Components
+-o
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/ApplicationComponents/moc_pqStreamingTestingEventPlayer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/ApplicationComponents/pqStreamingTestingEventPlayer.h

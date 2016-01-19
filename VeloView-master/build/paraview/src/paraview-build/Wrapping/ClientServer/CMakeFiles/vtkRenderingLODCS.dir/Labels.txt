@@ -1,0 +1,8 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkLODActorClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkQuadricLODActorClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkRenderingLODCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/LOD/vtkLODActor.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/LOD/vtkQuadricLODActor.h

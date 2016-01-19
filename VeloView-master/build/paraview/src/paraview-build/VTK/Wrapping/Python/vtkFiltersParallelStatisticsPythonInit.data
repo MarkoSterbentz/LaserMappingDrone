@@ -1,0 +1,10 @@
+vtkFiltersParallelStatisticsPython
+vtkPAutoCorrelativeStatistics
+vtkPContingencyStatistics
+vtkPCorrelativeStatistics
+vtkPDescriptiveStatistics
+vtkPKMeansStatistics
+vtkPMultiCorrelativeStatistics
+vtkPOrderStatistics
+vtkPPCAStatistics
+vtkPBivariateLinearTableThreshold

@@ -1,0 +1,13 @@
+vtkRenderingParallelPython
+vtkClientServerCompositePass
+vtkClientServerSynchronizedRenderers
+vtkCompositedSynchronizedRenderers
+vtkCompositer
+vtkCompositeRenderManager
+vtkCompressCompositer
+vtkParallelRenderManager
+vtkPHardwareSelector
+vtkSynchronizedRenderers
+vtkSynchronizedRenderWindows
+vtkTreeCompositer
+vtkImageRenderManager

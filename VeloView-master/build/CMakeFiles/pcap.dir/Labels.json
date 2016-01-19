@@ -1,0 +1,51 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/CMakeFiles/pcap"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/CMakeFiles/pcap.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/CMakeFiles/pcap-complete.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/pcap/src/pcap-stamp/pcap-install.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/pcap/src/pcap-stamp/pcap-mkdir.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/pcap/src/pcap-stamp/pcap-download.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/pcap/src/pcap-stamp/pcap-update.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/pcap/src/pcap-stamp/pcap-patch.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/pcap/src/pcap-stamp/pcap-configure.rule"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/pcap/src/pcap-stamp/pcap-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "pcap" ],
+		"name" : "pcap"
+	}
+}

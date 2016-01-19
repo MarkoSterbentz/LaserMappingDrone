@@ -1,0 +1,115 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/base/ftbase.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/base/ftbbox.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/base/ftbitmap.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/base/ftglyph.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/base/ftinit.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/base/ftmm.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/bdf/bdf.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/cache/ftcache.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/cff/cff.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/cid/type1cid.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/gzip/ftgzip.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/lzw/ftlzw.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/pcf/pcf.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/pfr/pfr.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/psaux/psaux.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/pshinter/pshinter.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/psnames/psmodule.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/raster/raster.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/sfnt/sfnt.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/smooth/smooth.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/truetype/truetype.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/type1/type1.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/type42/type42.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/winfonts/winfnt.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/src/base/ftdebug.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/freetype/vtkfreetype/builds/unix/ftsystem.c"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkfreetype" ],
+		"name" : "vtkfreetype"
+	}
+}

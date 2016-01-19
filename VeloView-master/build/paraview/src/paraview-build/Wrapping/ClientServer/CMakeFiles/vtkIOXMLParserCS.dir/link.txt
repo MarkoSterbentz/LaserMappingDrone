@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../../lib/libvtkIOXMLParserCS-pv4.3.a  CMakeFiles/vtkIOXMLParserCS.dir/vtkXMLDataParserClientServer.cxx.o CMakeFiles/vtkIOXMLParserCS.dir/vtkXMLParserClientServer.cxx.o CMakeFiles/vtkIOXMLParserCS.dir/vtkXMLUtilitiesClientServer.cxx.o CMakeFiles/vtkIOXMLParserCS.dir/vtkIOXMLParserCSInit.cxx.o
+/usr/bin/ranlib ../../lib/libvtkIOXMLParserCS-pv4.3.a

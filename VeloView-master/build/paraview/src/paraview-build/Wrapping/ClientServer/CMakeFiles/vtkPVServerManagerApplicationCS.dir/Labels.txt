@@ -1,0 +1,6 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInitializationHelperClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkPVServerManagerApplicationCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/SMApplication/vtkInitializationHelper.h

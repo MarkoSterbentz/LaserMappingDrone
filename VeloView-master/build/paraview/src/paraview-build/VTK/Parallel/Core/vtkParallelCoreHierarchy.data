@@ -1,0 +1,14 @@
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkCommunicator.h;vtkParallelCore;ABSTRACT
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkDummyCommunicator.h;vtkParallelCore
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkDummyController.h;vtkParallelCore
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkMultiProcessController.h;vtkParallelCore;ABSTRACT
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkMultiProcessStream.h;vtkParallelCore;WRAP_EXCLUDE
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkProcess.h;vtkParallelCore;ABSTRACT
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkProcessGroup.h;vtkParallelCore
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkSocketCommunicator.h;vtkParallelCore
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkSocketController.h;vtkParallelCore
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkSubCommunicator.h;vtkParallelCore
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkSubGroup.h;vtkParallelCore
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Parallel/Core/vtkFieldDataSerializer.h;vtkParallelCore
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Parallel/Core/vtkSocketCommunicatorHash.h;vtkParallelCore;WRAP_EXCLUDE
+

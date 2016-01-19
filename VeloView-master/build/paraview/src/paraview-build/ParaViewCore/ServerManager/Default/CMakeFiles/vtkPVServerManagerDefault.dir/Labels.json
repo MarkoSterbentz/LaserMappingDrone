@@ -1,0 +1,159 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkPVGeneralSettings.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkPVMultiServerDataSource.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMCameraConfigurationReader.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMCameraConfigurationWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMCSVExporterProxy.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMDirectoryProxy.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMExporterProxy.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMInteractionUndoStackBuilder.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMMultiServerSourceProxy.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMPropertyModificationUndoElement.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMProxyConfigurationReader.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMProxyConfigurationWriter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMPSWriterProxy.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMRenderViewExporterProxy.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMTesting.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMViewExportHelper.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMGL2PSExporterProxy.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkPVGeneralSettings.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkPVMultiServerDataSource.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMCameraConfigurationReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMCameraConfigurationWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMCSVExporterProxy.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMDirectoryProxy.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMExporterProxy.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMInteractionUndoStackBuilder.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMMultiServerSourceProxy.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMPropertyModificationUndoElement.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMProxyConfigurationReader.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMProxyConfigurationWriter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMPSWriterProxy.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMRenderViewExporterProxy.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMTesting.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMViewExportHelper.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/ParaViewCore/ServerManager/Default/vtkSMGL2PSExporterProxy.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/ParaViewCore/ServerManager/Default/vtkPVServerManagerDefaultModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/ParaViewCore/ServerManager/Default/vtkPVServerManagerDefaultHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/ParaViewCore/ServerManager/Default/vtkPVServerManagerDefaultHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkPVServerManagerDefault" ],
+		"name" : "vtkPVServerManagerDefault"
+	}
+}

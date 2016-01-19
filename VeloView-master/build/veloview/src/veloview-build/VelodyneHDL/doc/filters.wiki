@@ -1,0 +1,26 @@
+
+==Processing Sample==
+
+Apply example of processing to point cloud data.
+
+{| class="PropertiesTable" border="1" cellpadding="5"
+|-
+| '''Property'''
+| '''Description'''
+| '''Default Value(s)'''
+| '''Restrictions'''
+
+|-
+|'''Input''' (Input)
+|
+
+Set the input poly data
+
+|
+
+|
+Accepts input of following types:
+* vtkPolyData
+
+|}
+

@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../../lib/libvtkTestingRenderingCS-pv4.3.a  CMakeFiles/vtkTestingRenderingCS.dir/vtkTestingClientServer.cxx.o CMakeFiles/vtkTestingRenderingCS.dir/vtkTestingInteractorClientServer.cxx.o CMakeFiles/vtkTestingRenderingCS.dir/vtkTestingObjectFactoryClientServer.cxx.o CMakeFiles/vtkTestingRenderingCS.dir/vtkTestingRenderingCSInit.cxx.o
+/usr/bin/ranlib ../../lib/libvtkTestingRenderingCS-pv4.3.a

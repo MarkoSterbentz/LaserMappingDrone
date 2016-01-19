@@ -1,0 +1,39 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/FreeTypeOpenGL/vtkOpenGLFreeTypeTextMapper.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/FreeTypeOpenGL/vtkRenderingFreeTypeOpenGLObjectFactory.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/FreeTypeOpenGL/vtkOpenGLFreeTypeTextMapper.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/FreeTypeOpenGL/vtkRenderingFreeTypeOpenGLObjectFactory.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/FreeTypeOpenGL/vtkRenderingFreeTypeOpenGLModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/FreeTypeOpenGL/vtkRenderingFreeTypeOpenGLHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/FreeTypeOpenGL/vtkRenderingFreeTypeOpenGLHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkRenderingFreeTypeOpenGL" ],
+		"name" : "vtkRenderingFreeTypeOpenGL"
+	}
+}

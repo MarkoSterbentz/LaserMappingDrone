@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../../lib/libvtkCommonColorCS-pv4.3.a  CMakeFiles/vtkCommonColorCS.dir/vtkColorSeriesClientServer.cxx.o CMakeFiles/vtkCommonColorCS.dir/vtkNamedColorsClientServer.cxx.o CMakeFiles/vtkCommonColorCS.dir/vtkCommonColorCSInit.cxx.o
+/usr/bin/ranlib ../../lib/libvtkCommonColorCS-pv4.3.a

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>paraview.org</namespace>
+    <virtualFolder>paraview</virtualFolder>
+    <filterSection>
+        <toc>
+       <section title="ParaView User Manual" ref="index.html">
+         <section title="Sources" ref="Sources.html"/>
+         <section title="Filters" ref="Filters.html"/>
+         <section title="Readers" ref="Readers.html"/>
+         <section title="Writers" ref="Writers.html"/>
+       </section>
+     </toc>
+        <keywords>
+          <!-- how to handle keywords? -->
+        </keywords>
+        <files>
+          <file>*.html</file>
+<file>*.css</file>
+<file>*.png</file>
+<file>*.jpg</file>
+<file>images/*.jpg</file>
+
+        </files>
+    </filterSection>
+</QtHelpProject>

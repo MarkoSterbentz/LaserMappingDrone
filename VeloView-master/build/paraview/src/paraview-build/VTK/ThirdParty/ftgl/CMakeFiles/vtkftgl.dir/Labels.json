@@ -1,0 +1,71 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTBitmapGlyph.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTBitmapGlyphRenderOpenGL.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTCharmap.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTFace.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTFont.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGLBitmapFont.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGLBitmapFontRenderOpenGL.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGLPixmapFont.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGLPixmapFontRenderOpenGL.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGlyph.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGlyphContainer.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTLibrary.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTPixmapGlyph.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTPixmapGlyphRenderOpenGL.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTSize.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkftgl" ],
+		"name" : "vtkftgl"
+	}
+}

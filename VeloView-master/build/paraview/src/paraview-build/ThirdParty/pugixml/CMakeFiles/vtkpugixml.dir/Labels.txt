@@ -1,0 +1,4 @@
+# Target labels
+ vtkpugixml
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview/ThirdParty/pugixml/pugixml.cxx

@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../../../lib/libvtkParaViewDocumentation.a  CMakeFiles/vtkParaViewDocumentation.dir/ParaViewDocumentationInitializer.cxx.o CMakeFiles/vtkParaViewDocumentation.dir/qrc_paraview_documentation.cxx.o
+/usr/bin/ranlib ../../../lib/libvtkParaViewDocumentation.a

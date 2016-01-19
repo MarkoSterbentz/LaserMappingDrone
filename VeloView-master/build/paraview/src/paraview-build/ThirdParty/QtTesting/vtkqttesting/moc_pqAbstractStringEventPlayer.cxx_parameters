@@ -1,0 +1,7 @@
+-DVTK_IN_VTK
+-D$<$<NOT:$<CONFIG:Debug>>:QT_NO_DEBUG>
+-DQT_GUI_LIB
+-DQT_CORE_LIB
+-o
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/ThirdParty/QtTesting/vtkqttesting/moc_pqAbstractStringEventPlayer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/ThirdParty/QtTesting/vtkqttesting/pqAbstractStringEventPlayer.h

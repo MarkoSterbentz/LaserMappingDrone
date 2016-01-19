@@ -1,0 +1,8 @@
+vtkImagingSourcesPython
+vtkImageCanvasSource2D
+vtkImageEllipsoidSource
+vtkImageGaussianSource
+vtkImageGridSource
+vtkImageMandelbrotSource
+vtkImageNoiseSource
+vtkImageSinusoidSource

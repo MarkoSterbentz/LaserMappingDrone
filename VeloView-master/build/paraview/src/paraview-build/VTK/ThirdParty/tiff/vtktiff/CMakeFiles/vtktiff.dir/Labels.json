@@ -1,0 +1,159 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_aux.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_close.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_codec.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_compress.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_dir.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_dirinfo.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_dirread.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_dirwrite.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_dumpmode.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_error.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_fax3.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_flush.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_getimage.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_jpeg.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_luv.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_lzw.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_next.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_ojpeg.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_open.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_packbits.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_pixarlog.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_predict.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_print.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_read.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_strip.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_swab.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_thunder.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_tile.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_version.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_warning.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_write.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_zip.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_color.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_extension.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/tiff/vtktiff/tif_unix.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/ThirdParty/tiff/vtktiff/tif_fax3sm.c"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/ThirdParty/tiff/vtktiff/tif_fax3sm.c.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtktiff" ],
+		"name" : "vtktiff"
+	}
+}

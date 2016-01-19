@@ -1,0 +1,15 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/Utilities/ProcessXML/ProcessXML.cxx"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkUtilitiesProcessXML" ],
+		"name" : "kwProcessXML"
+	}
+}

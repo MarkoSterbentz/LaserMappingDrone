@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../../lib/libvtkRenderingGL2PSCS-pv4.3.a  CMakeFiles/vtkRenderingGL2PSCS.dir/vtkGL2PSUtilitiesClientServer.cxx.o CMakeFiles/vtkRenderingGL2PSCS.dir/vtkRenderingGL2PSCSInit.cxx.o
+/usr/bin/ranlib ../../lib/libvtkRenderingGL2PSCS-pv4.3.a

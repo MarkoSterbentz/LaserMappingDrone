@@ -1,0 +1,47 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/PythonCatalyst/CPythonAdaptorAPI.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/PythonCatalyst/vtkCPPythonAdaptorAPI.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/PythonCatalyst/vtkCPPythonScriptPipeline.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/PythonCatalyst/CPythonAdaptorAPI.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/PythonCatalyst/vtkCPPythonAdaptorAPI.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/CoProcessing/PythonCatalyst/vtkCPPythonScriptPipeline.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/CoProcessing/PythonCatalyst/vtkPVPythonCatalystModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/CoProcessing/PythonCatalyst/vtkPVPythonCatalystHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/CoProcessing/PythonCatalyst/vtkPVPythonCatalystHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkPVPythonCatalyst" ],
+		"name" : "vtkPVPythonCatalyst"
+	}
+}

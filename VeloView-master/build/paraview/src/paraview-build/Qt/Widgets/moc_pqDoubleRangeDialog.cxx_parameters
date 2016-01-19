@@ -1,0 +1,5 @@
+-I/home/marko/research/VeloView-master/build/paraview/src/paraview-build
+-DVTK_IN_VTK
+-o
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Widgets/moc_pqDoubleRangeDialog.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Widgets/pqDoubleRangeDialog.h

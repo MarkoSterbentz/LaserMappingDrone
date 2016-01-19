@@ -1,0 +1,8 @@
+vtkFiltersTexturePython
+vtkTextureMapToCylinder
+vtkTextureMapToPlane
+vtkTextureMapToSphere
+vtkImplicitTextureCoords
+vtkThresholdTextureCoords
+vtkTransformTextureCoords
+vtkTriangularTCoords

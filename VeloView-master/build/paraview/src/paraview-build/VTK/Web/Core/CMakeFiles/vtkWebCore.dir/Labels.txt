@@ -1,0 +1,16 @@
+# Target labels
+ vtkWebCore
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkDataEncoder.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkWebApplication.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkWebInteractionEvent.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkWebUtilities.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkObjectIdMap.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkDataEncoder.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkWebApplication.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkWebInteractionEvent.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkWebUtilities.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkObjectIdMap.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Web/Core/vtkWebCoreModule.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Web/Core/vtkWebCoreHierarchy.stamp.txt
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Web/Core/vtkWebCoreHierarchy.stamp.txt.rule

@@ -1,0 +1,15 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkWrapJava.c"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkWrappingTools" ],
+		"name" : "vtkWrapJava"
+	}
+}

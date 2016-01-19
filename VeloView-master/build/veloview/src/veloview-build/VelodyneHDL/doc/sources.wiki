@@ -1,0 +1,160 @@
+
+==Velodyne HDL Grid Source==
+
+Generates a vtkPolyData measurement grid plane.
+Generates a vtkPolyData measurement grid plane.
+
+
+{| class="PropertiesTable" border="1" cellpadding="5"
+|-
+| '''Property'''
+| '''Description'''
+| '''Default Value(s)'''
+| '''Restrictions'''
+
+|-
+|'''GridSize''' (GridSize)
+|
+
+|
+10
+|
+
+|-
+|'''Scale''' (Scale)
+|
+
+|
+10.0
+|
+
+|-
+|'''Origin''' (Origin)
+|
+
+|
+0.0 0.0 0.0
+|
+
+|-
+|'''Normal''' (Normal)
+|
+
+|
+0.0 0.0 1.0
+|
+
+
+|}
+
+==Velodyne HDL Source==
+
+Velodyne HDL Source
+
+{| class="PropertiesTable" border="1" cellpadding="5"
+|-
+| '''Property'''
+| '''Description'''
+| '''Default Value(s)'''
+| '''Restrictions'''
+
+|-
+|'''Calibration File''' (CorrectionsFile)
+|
+
+This property specifies the corrections file for a 64 laser sensor.
+
+|
+
+|
+The value(s) must be a filename (or filenames).
+|-
+|'''OutputFile''' (OutputFile)
+|
+
+This property specifies the output packet file for writing.
+
+|
+
+|
+The value(s) must be a filename (or filenames).
+|-
+|'''CropReturns''' (CropReturns)
+|
+
+Crop returns
+
+|
+0
+|
+
+|-
+|'''CropInside''' (CropInside)
+|
+
+Crop inside
+
+|
+0
+|
+
+|-
+|'''CropRegion''' (CropRegion)
+|
+
+Region in which to crop (exclude) returns
+
+|
+0 0 0 0 0 0
+|
+
+|-
+|'''DummyProperty''' (DummyProperty)
+|
+
+A hack to get the filter to refresh, since I cant get the LaserSelection to wrap correctly
+
+|
+0
+|
+
+|-
+|'''DualReturnFilter''' (DualReturnFilter)
+|
+
+Filter mask for dual return
+
+|
+0
+|
+
+|-
+|'''TimestepValues''' (TimestepValues)
+|
+
+|
+
+|
+
+|-
+|'''CacheSize''' (CacheSize)
+|
+
+The cache size determines how many timesteps of data will be saved
+by this source. A cache size of zero indicates an unlimited size.
+
+|
+500
+|
+
+|-
+|'''NumberOfChannels''' (NumberOfChannels)
+|
+
+|
+
+|
+
+
+|}
+

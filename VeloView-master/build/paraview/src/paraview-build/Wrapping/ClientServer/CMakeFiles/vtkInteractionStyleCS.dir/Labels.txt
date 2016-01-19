@@ -1,0 +1,40 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleDrawPolygonClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleFlightClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleImageClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleJoystickActorClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleJoystickCameraClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleMultiTouchCameraClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleRubberBand2DClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleRubberBand3DClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleRubberBandPickClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleRubberBandZoomClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleTerrainClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleTrackballActorClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleTrackballCameraClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleTrackballClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleUnicamClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleUserClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractorStyleSwitchClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkParallelCoordinatesInteractorStyleClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkInteractionStyleCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleDrawPolygon.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleFlight.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleImage.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleJoystickActor.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleJoystickCamera.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleMultiTouchCamera.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleRubberBand2D.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleRubberBand3D.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleRubberBandPick.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleRubberBandZoom.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleTerrain.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleTrackballActor.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleTrackballCamera.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleTrackball.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleUnicam.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleUser.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkInteractorStyleSwitch.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Interaction/Style/vtkParallelCoordinatesInteractorStyle.h

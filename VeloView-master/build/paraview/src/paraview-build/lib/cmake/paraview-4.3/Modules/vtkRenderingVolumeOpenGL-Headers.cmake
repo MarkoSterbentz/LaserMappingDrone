@@ -1,0 +1,10 @@
+set(vtkRenderingVolumeOpenGL_HEADERS_LOADED 1)
+set(vtkRenderingVolumeOpenGL_HEADERS "vtkOpenGLHAVSVolumeMapper;vtkOpenGLProjectedAAHexahedraMapper;vtkOpenGLProjectedTetrahedraMapper;vtkOpenGLRayCastImageDisplayHelper;vtkOpenGLVolumeTextureMapper2D;vtkOpenGLVolumeTextureMapper3D;vtkSmartVolumeMapper;vtkOpenGLGPUVolumeRayCastMapper")
+
+foreach(header ${vtkRenderingVolumeOpenGL_HEADERS})
+  set(vtkRenderingVolumeOpenGL_HEADER_${header}_EXISTS 1)
+endforeach()
+
+
+
+

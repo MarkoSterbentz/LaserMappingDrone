@@ -1,0 +1,23 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/DICOMParser/DICOMFile.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/DICOMParser/DICOMParser.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/DICOMParser/DICOMAppHelper.cxx"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkDICOMParser" ],
+		"name" : "vtkDICOMParser"
+	}
+}

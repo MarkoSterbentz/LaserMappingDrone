@@ -1,0 +1,51 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/V_EdgeMetric.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/V_GaussIntegration.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/V_HexMetric.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/V_KnifeMetric.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/V_PyramidMetric.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/V_QuadMetric.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/V_TetMetric.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/V_TriMetric.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/VerdictVector.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/verdict/vtkverdict/V_WedgeMetric.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkverdict" ],
+		"name" : "verdict"
+	}
+}

@@ -1,0 +1,43 @@
+
+==Random Streaming Points==
+
+This source creates random points in an octree of blocks to be
+used with the Streaming Particles representation
+
+{| class="PropertiesTable" border="1" cellpadding="5"
+|-
+| '''Property'''
+| '''Description'''
+| '''Default Value(s)'''
+| '''Restrictions'''
+
+|-
+|'''NumberOfLevels''' (NumberOfLevels)
+|
+Set the number of levels in the octree of blocks
+
+|
+5
+|
+
+|-
+|'''PointsPerBlock''' (PointsPerBlock)
+|
+Set the number of points generated in each block
+
+|
+100
+|
+
+|-
+|'''Seed''' (Seed)
+|
+Set the seed of the random number generator
+
+|
+1
+|
+
+
+|}
+

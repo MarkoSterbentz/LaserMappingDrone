@@ -1,0 +1,1 @@
+/usr/bin/cc  -fPIC -g    CMakeFiles/pvdataserver-launcher.dir/pvdataserver-forward.c.o  -o launcher/pvdataserver -rdynamic 

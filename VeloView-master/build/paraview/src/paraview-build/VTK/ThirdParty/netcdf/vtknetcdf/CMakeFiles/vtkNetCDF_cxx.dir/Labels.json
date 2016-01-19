@@ -1,0 +1,19 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/netcdf/vtknetcdf/cxx/netcdf.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/netcdf/vtknetcdf/cxx/ncvalues.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtknetcdf" ],
+		"name" : "vtkNetCDF_cxx"
+	}
+}

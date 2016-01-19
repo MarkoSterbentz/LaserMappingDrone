@@ -1,0 +1,8 @@
+-I/home/marko/research/VeloView-master/build/eigen/src/eigen
+-I/home/marko/research/VeloView-master/build/eigen/src/eigen-build
+-I/usr/include/qt4
+-DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS
+-DNDEBUG
+-o
+/home/marko/research/VeloView-master/build/eigen/src/eigen-build/demos/mandelbrot/mandelbrot.moc
+/home/marko/research/VeloView-master/build/eigen/src/eigen/demos/mandelbrot/mandelbrot.h

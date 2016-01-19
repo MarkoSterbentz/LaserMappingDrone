@@ -1,0 +1,38 @@
+
+#ifndef VTKPVSERVERMANAGERAPPLICATION_EXPORT_H
+#define VTKPVSERVERMANAGERAPPLICATION_EXPORT_H
+
+#ifdef VTKPVSERVERMANAGERAPPLICATION_STATIC_DEFINE
+#  define VTKPVSERVERMANAGERAPPLICATION_EXPORT
+#  define VTKPVSERVERMANAGERAPPLICATION_NO_EXPORT
+#else
+#  ifndef VTKPVSERVERMANAGERAPPLICATION_EXPORT
+#    ifdef vtkPVServerManagerApplication_EXPORTS
+        /* We are building this library */
+#      define VTKPVSERVERMANAGERAPPLICATION_EXPORT __attribute__((visibility("default")))
+#    else
+        /* We are using this library */
+#      define VTKPVSERVERMANAGERAPPLICATION_EXPORT __attribute__((visibility("default")))
+#    endif
+#  endif
+
+#  ifndef VTKPVSERVERMANAGERAPPLICATION_NO_EXPORT
+#    define VTKPVSERVERMANAGERAPPLICATION_NO_EXPORT __attribute__((visibility("hidden")))
+#  endif
+#endif
+
+#ifndef VTKPVSERVERMANAGERAPPLICATION_DEPRECATED
+#  define VTKPVSERVERMANAGERAPPLICATION_DEPRECATED __attribute__ ((__deprecated__))
+#  define VTKPVSERVERMANAGERAPPLICATION_DEPRECATED_EXPORT VTKPVSERVERMANAGERAPPLICATION_EXPORT __attribute__ ((__deprecated__))
+#  define VTKPVSERVERMANAGERAPPLICATION_DEPRECATED_NO_EXPORT VTKPVSERVERMANAGERAPPLICATION_NO_EXPORT __attribute__ ((__deprecated__))
+#endif
+
+#define DEFINE_NO_DEPRECATED 0
+#if DEFINE_NO_DEPRECATED
+# define VTKPVSERVERMANAGERAPPLICATION_NO_DEPRECATED
+#endif
+
+/* AutoInit dependencies.  */
+#include "vtkPVServerManagerCoreModule.h"
+
+#endif

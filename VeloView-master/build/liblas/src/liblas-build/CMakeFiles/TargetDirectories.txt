@@ -1,0 +1,12 @@
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/apps/CMakeFiles/lasinfo.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/apps/CMakeFiles/las2las.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/src/CMakeFiles/las.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/apps/CMakeFiles/ts2las.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/apps/CMakeFiles/lasindex_test.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/apps/CMakeFiles/txt2las.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/src/CMakeFiles/las_c.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/apps/CMakeFiles/lasblock.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/test/unit/CMakeFiles/liblas_test.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/apps/CMakeFiles/las2txt.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/apps/CMakeFiles/bigfile_test.dir
+/home/marko/research/VeloView-master/build/liblas/src/liblas-build/CMakeFiles/dist.dir

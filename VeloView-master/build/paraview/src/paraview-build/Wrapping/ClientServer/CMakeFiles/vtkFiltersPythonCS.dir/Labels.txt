@@ -1,0 +1,6 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkPythonAlgorithmClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkFiltersPythonCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/Python/vtkPythonAlgorithm.h

@@ -1,0 +1,118 @@
+
+<html>
+    <head>
+        <title>Velodyne HDL Source</title>
+        <meta name="proxy_name" contents="sources.VelodyneHDLSource"/>
+        <meta name="filename" contents="sources.VelodyneHDLSource.html"/>
+    </head>
+    <body>
+        <h2>Velodyne HDL Source (VelodyneHDLSource)</h2>
+        <i>
+            <p>Velodyne HDL Source</p>
+        </i>
+        <div class="description"/>
+        <table width="97%" border="2px">
+            <tr bgcolor="#9acd32">
+                <th>Property</th>
+                <th width="60%">Description</th>
+                <th width="5%">Default(s)</th>
+                <th width="20%">Restrictions</th>
+            </tr>
+            <tr>
+                <th>Calibration File</th>
+                <td>
+            This property specifies the corrections file for a 64 laser sensor.
+          </td>
+                <td>
+                    <span/>
+                </td>
+                <td>
+                    <p> The value(s) must be a filename (or filenames).</p>
+                </td>
+            </tr>
+            <tr>
+                <th>OutputFile</th>
+                <td>
+            This property specifies the output packet file for writing.
+          </td>
+                <td>
+                    <span/>
+                </td>
+                <td>
+                    <p> The value(s) must be a filename (or filenames).</p>
+                </td>
+            </tr>
+            <tr>
+                <th>CropReturns</th>
+                <td>
+          Crop returns
+        </td>
+                <td>0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>CropInside</th>
+                <td>
+          Crop inside
+        </td>
+                <td>0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>CropRegion</th>
+                <td>
+          Region in which to crop (exclude) returns
+        </td>
+                <td>0 0 0 0 0 0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>DummyProperty</th>
+                <td>
+          A hack to get the filter to refresh, since I cant get the LaserSelection to wrap correctly
+        </td>
+                <td>0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>DualReturnFilter</th>
+                <td>
+          Filter mask for dual return
+        </td>
+                <td>0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>TimestepValues</th>
+                <td/>
+                <td>
+                    <span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>CacheSize</th>
+                <td>
+        The cache size determines how many timesteps of data will be saved
+        by this source.  A cache size of zero indicates an unlimited size.
+        </td>
+                <td>500<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>NumberOfChannels</th>
+                <td/>
+                <td>
+                    <span/>
+                </td>
+                <td/>
+            </tr>
+        </table>
+    </body>
+</html>

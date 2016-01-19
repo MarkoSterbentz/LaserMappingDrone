@@ -1,0 +1,151 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfArray.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDOM.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDataDesc.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfExpression.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfValues.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfValuesXML.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfValuesHDF.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfValuesBinary.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfHeavyData.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfHDF.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfHDFSupport.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfLightData.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfInformation.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDataItem.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDataStructure.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDataTransform.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfElement.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfObject.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfExprLex.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfExprYacc.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfRoot.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDomain.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfAttribute.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfGrid.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfTopology.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfTime.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfRegion.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfSet.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfMap.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfGeometry.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfH5Driver.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDsm.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDsmBuffer.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDsmComm.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/XdmfDsmMsg.cxx"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkxdmf2" ],
+		"name" : "vtkxdmf2"
+	}
+}

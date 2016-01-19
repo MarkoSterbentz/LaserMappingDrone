@@ -1,0 +1,6 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkOpenGLContextActorClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkRenderingContextOpenGLCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/ContextOpenGL/vtkOpenGLContextActor.h

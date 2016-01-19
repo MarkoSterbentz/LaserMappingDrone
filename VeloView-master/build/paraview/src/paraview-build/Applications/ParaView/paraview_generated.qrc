@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/paraview">
+    <file alias="SplashImage.img">SplashImage.img</file>
+  </qresource>
+</RCC>
+

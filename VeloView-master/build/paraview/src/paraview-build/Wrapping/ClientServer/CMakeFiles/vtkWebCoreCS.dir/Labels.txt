@@ -1,0 +1,14 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkDataEncoderClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkWebApplicationClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkWebInteractionEventClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkWebUtilitiesClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkObjectIdMapClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkWebCoreCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkDataEncoder.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkWebApplication.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkWebInteractionEvent.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkWebUtilities.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Web/Core/vtkObjectIdMap.h

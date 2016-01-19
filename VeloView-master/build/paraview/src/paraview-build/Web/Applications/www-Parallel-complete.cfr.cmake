@@ -1,0 +1,7 @@
+
+        file(COPY "/home/marko/research/VeloView-master/build/paraview/src/paraview/Web/Applications/Parallel/www/index.html" DESTINATION "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/www/apps/Parallel")
+        file(COPY "/home/marko/research/VeloView-master/build/paraview/src/paraview/Web/Applications/Parallel/www/resource.json" DESTINATION "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/www/apps/Parallel")
+        file(COPY "/home/marko/research/VeloView-master/build/paraview/src/paraview/Web/Applications/Parallel/www/js/jquery.backstretch.min.js" DESTINATION "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/www/apps/Parallel/js")
+        file(COPY "/home/marko/research/VeloView-master/build/paraview/src/paraview/Web/Applications/Parallel/www/file.json" DESTINATION "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/www/apps/Parallel")
+        file(COPY "/home/marko/research/VeloView-master/build/paraview/src/paraview/Web/Applications/Parallel/www/client.json" DESTINATION "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/www/apps/Parallel")
+        file(COPY "/home/marko/research/VeloView-master/build/paraview/src/paraview/Web/Applications/Parallel/www/main.css" DESTINATION "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/www/apps/Parallel")

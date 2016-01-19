@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/VeloView">
+    <file alias="SplashImage.img">SplashImage.img</file>
+  </qresource>
+</RCC>
+

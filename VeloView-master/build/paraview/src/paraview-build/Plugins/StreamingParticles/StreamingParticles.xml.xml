@@ -1,0 +1,49 @@
+<xml>
+    <proxy>
+        <group>sources</group>
+        <name>RandomPoints</name>
+        <label>Random Streaming Points</label>
+        <documentation>
+            <brief/>
+            <long>This source creates random points in an octree of blocks to be
+        used with the Streaming Particles representation</long>
+        </documentation>
+        <property>
+            <name>NumberOfLevels</name>
+            <label>NumberOfLevels</label>
+            <documentation>
+                <brief/>
+                <long>Set the number of levels in the octree of blocks
+        </long>
+            </documentation>
+            <defaults>5</defaults>
+            <domains>
+  Value(s) must be in the range (
+    1,
+    6).
+</domains>
+        </property>
+        <property>
+            <name>PointsPerBlock</name>
+            <label>PointsPerBlock</label>
+            <documentation>
+                <brief/>
+                <long>Set the number of points generated in each block
+        </long>
+            </documentation>
+            <defaults>100</defaults>
+            <domains/>
+        </property>
+        <property>
+            <name>Seed</name>
+            <label>Seed</label>
+            <documentation>
+                <brief/>
+                <long>Set the seed of the random number generator
+        </long>
+            </documentation>
+            <defaults>1</defaults>
+            <domains/>
+        </property>
+    </proxy>
+</xml>

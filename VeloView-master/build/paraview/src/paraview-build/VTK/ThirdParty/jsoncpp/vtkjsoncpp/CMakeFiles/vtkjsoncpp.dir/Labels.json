@@ -1,0 +1,35 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/jsoncpp/vtkjsoncpp/json_tool.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/jsoncpp/vtkjsoncpp/json_reader.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/jsoncpp/vtkjsoncpp/json_batchallocator.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/jsoncpp/vtkjsoncpp/json_valueiterator.inl"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/jsoncpp/vtkjsoncpp/json_value.cpp"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/jsoncpp/vtkjsoncpp/json_writer.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkjsoncpp" ],
+		"name" : "vtkjsoncpp"
+	}
+}

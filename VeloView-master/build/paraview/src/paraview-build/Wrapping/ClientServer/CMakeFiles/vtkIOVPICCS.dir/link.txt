@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../../lib/libvtkIOVPICCS-pv4.3.a  CMakeFiles/vtkIOVPICCS.dir/vtkVPICReaderClientServer.cxx.o CMakeFiles/vtkIOVPICCS.dir/vtkIOVPICCSInit.cxx.o
+/usr/bin/ranlib ../../lib/libvtkIOVPICCS-pv4.3.a

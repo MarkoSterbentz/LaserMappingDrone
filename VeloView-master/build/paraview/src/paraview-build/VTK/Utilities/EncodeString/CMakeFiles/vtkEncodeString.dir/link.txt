@@ -1,0 +1,1 @@
+/usr/bin/c++   -fPIC  -g  -Wl,--fatal-warnings -Wl,--no-undefined -lc -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  CMakeFiles/vtkEncodeString.dir/vtkEncodeString.cxx.o  -o ../../../bin/vtkEncodeString-pv4.3 -rdynamic 

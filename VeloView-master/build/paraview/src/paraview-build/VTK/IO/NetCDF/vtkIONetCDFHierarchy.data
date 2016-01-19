@@ -1,0 +1,8 @@
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/NetCDF/vtkMPASReader.h;vtkIONetCDF
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/NetCDF/vtkNetCDFCAMReader.h;vtkIONetCDF
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/NetCDF/vtkNetCDFCFReader.h;vtkIONetCDF
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/NetCDF/vtkNetCDFPOPReader.h;vtkIONetCDF
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/NetCDF/vtkNetCDFReader.h;vtkIONetCDF
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/NetCDF/vtkSLACParticleReader.h;vtkIONetCDF
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/NetCDF/vtkSLACReader.h;vtkIONetCDF
+

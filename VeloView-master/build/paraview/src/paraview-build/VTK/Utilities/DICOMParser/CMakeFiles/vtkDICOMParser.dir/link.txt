@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC -fPIC  -g -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  -shared -Wl,-soname,libvtkDICOMParser-pv4.3.so.1 -o ../../../lib/libvtkDICOMParser-pv4.3.so.1 CMakeFiles/vtkDICOMParser.dir/DICOMFile.cxx.o CMakeFiles/vtkDICOMParser.dir/DICOMParser.cxx.o CMakeFiles/vtkDICOMParser.dir/DICOMAppHelper.cxx.o 

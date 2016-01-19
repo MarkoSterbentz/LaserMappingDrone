@@ -1,0 +1,10 @@
+VelodyneHDLPluginPython
+vtkPlaneFitter
+vtkVelodyneTransformInterpolator
+vtkWrappedTupleInterpolator
+vtkApplanixPositionReader
+vtkProcessingSample
+vtkVelodyneHDLGridSource
+vtkVelodyneHDLReader
+vtkVelodyneHDLPositionReader
+vtkVelodyneHDLSource

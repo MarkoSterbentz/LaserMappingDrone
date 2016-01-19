@@ -1,0 +1,10 @@
+set(vtkGUISupportQt_HEADERS_LOADED 1)
+set(vtkGUISupportQt_HEADERS "vtkEventQtSlotConnect;vtkQtConnection;QVTKApplication;QVTKInteractor;QVTKInteractorAdapter;QVTKWidget;QFilterTreeProxyModel;QVTKPaintEngine;QVTKPaintEngine;vtkQtAbstractModelAdapter;vtkQtAnnotationLayersModelAdapter;vtkQtDebugLeaksModel;vtkQtDebugLeaksView;vtkQtTableModelAdapter;vtkQtTreeModelAdapter;QVTKWin32Header;vtkEventQtSlotConnect;QVTKInteractor;QVTKApplication;QVTKInteractorAdapter;QVTKInteractorInternal;QVTKWidget;vtkQtConnection;QFilterTreeProxyModel;vtkQtAbstractModelAdapter;vtkQtAnnotationLayersModelAdapter;vtkQtDebugLeaksModel;vtkQtDebugLeaksView;vtkQtTableModelAdapter;vtkQtTreeModelAdapter")
+
+foreach(header ${vtkGUISupportQt_HEADERS})
+  set(vtkGUISupportQt_HEADER_${header}_EXISTS 1)
+endforeach()
+
+
+
+

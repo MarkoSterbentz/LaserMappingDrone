@@ -1,0 +1,8 @@
+-I/home/marko/research/VeloView-master/build/paraview/src/paraview-build
+-I/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Python
+-I/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python
+-I/usr/include/python2.7
+-DVTK_IN_VTK
+-o
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Qt/Python/moc_pqPythonShell.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/Qt/Python/pqPythonShell.h

@@ -1,0 +1,4 @@
+vtkFiltersProgrammablePython
+vtkProgrammableAttributeDataFilter
+vtkProgrammableFilter
+vtkProgrammableGlyphFilter

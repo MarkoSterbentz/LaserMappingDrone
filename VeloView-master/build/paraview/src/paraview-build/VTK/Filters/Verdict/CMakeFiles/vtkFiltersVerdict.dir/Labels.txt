@@ -1,0 +1,12 @@
+# Target labels
+ vtkFiltersVerdict
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/Verdict/vtkCellQuality.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/Verdict/vtkMatrixMathFilter.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/Verdict/vtkMeshQuality.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/Verdict/vtkCellQuality.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/Verdict/vtkMatrixMathFilter.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/Verdict/vtkMeshQuality.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Filters/Verdict/vtkFiltersVerdictModule.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Filters/Verdict/vtkFiltersVerdictHierarchy.stamp.txt
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Filters/Verdict/vtkFiltersVerdictHierarchy.stamp.txt.rule

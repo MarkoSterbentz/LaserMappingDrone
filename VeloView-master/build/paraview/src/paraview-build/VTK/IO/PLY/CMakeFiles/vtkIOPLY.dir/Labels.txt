@@ -1,0 +1,12 @@
+# Target labels
+ vtkIOPLY
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/PLY/vtkPLY.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/PLY/vtkPLYReader.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/PLY/vtkPLYWriter.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/PLY/vtkPLY.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/PLY/vtkPLYReader.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/PLY/vtkPLYWriter.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/IO/PLY/vtkIOPLYModule.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/IO/PLY/vtkIOPLYHierarchy.stamp.txt
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/IO/PLY/vtkIOPLYHierarchy.stamp.txt.rule

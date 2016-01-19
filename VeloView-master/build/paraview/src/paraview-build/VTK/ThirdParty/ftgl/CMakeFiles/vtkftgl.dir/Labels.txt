@@ -1,0 +1,18 @@
+# Target labels
+ vtkftgl
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTBitmapGlyph.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTBitmapGlyphRenderOpenGL.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTCharmap.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTFace.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTFont.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGLBitmapFont.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGLBitmapFontRenderOpenGL.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGLPixmapFont.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGLPixmapFontRenderOpenGL.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGlyph.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTGlyphContainer.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTLibrary.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTPixmapGlyph.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTPixmapGlyphRenderOpenGL.cpp
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/ftgl/src/FTSize.cpp

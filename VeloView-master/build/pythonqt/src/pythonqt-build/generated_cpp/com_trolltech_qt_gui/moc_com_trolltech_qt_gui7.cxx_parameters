@@ -1,0 +1,16 @@
+-I/usr/include/python2.7
+-I/usr/include/qt4
+-I/usr/include/qt4/QtUiTools
+-I/usr/include/qt4/QtGui
+-I/usr/include/qt4/QtCore
+-DPYTHONQT_USE_RELEASE_PYTHON_FALLBACK
+-D$<$<NOT:$<CONFIG:Debug>>:QT_NO_DEBUG>
+-DQT_UITOOLS_LIB
+-DQT_GUI_LIB
+-DQT_CORE_LIB
+-DPYTHONQT_WRAP_Qtcore
+-DPYTHONQT_WRAP_Qtgui
+-DPYTHONQT_WRAP_Qtuitools
+-o
+/home/marko/research/VeloView-master/build/pythonqt/src/pythonqt-build/generated_cpp/com_trolltech_qt_gui/moc_com_trolltech_qt_gui7.cxx
+/home/marko/research/VeloView-master/build/pythonqt/src/pythonqt/generated_cpp/com_trolltech_qt_gui/com_trolltech_qt_gui7.h

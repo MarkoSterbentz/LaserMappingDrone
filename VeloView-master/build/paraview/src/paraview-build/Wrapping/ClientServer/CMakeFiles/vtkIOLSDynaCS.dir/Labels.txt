@@ -1,0 +1,8 @@
+# Target labels
+ VTKModular
+# Source files and their labels
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkLSDynaReaderClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkLSDynaSummaryParserClientServer.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkIOLSDynaCSInit.cxx
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/LSDyna/vtkLSDynaReader.h
+/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/LSDyna/vtkLSDynaSummaryParser.h

@@ -1,0 +1,43 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/PythonInterpreter/vtkPythonInterpreter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/PythonInterpreter/vtkPythonInteractiveInterpreter.cxx"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/PythonInterpreter/vtkPythonStdStreamCaptureHelper.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/PythonInterpreter/vtkPythonInterpreter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Utilities/PythonInterpreter/vtkPythonInteractiveInterpreter.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Utilities/PythonInterpreter/vtkPythonInterpreterModule.h"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Utilities/PythonInterpreter/vtkPythonInterpreterHierarchy.stamp.txt"
+		},
+		
+		{
+			"file" : "/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Utilities/PythonInterpreter/vtkPythonInterpreterHierarchy.stamp.txt.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "vtkPythonInterpreter" ],
+		"name" : "vtkPythonInterpreter"
+	}
+}
