@@ -43,13 +43,13 @@ int main() {
     if (!initGL()) { // if init fails, exit
         return 1;
     }
-    square.init();
+    OUTSTREAM << square.init();
 
-//    QuadTree<DummyPoint> quadTree(2);
-//    quadTree.addPoint({0.5f, 0.5f});
-//    quadTree.addPoint({0.5f, -0.5f});
-//    quadTree.addPoint({5.0f, 0.5f});
-//    std::cout << quadTree.toString();
+    QuadTree<DummyPoint> quadTree(2);
+    quadTree.addPoint({0.5f, 0.5f});
+    quadTree.addPoint({0.5f, -0.5f});
+    quadTree.addPoint({5.0f, 0.5f});
+    OUTSTREAM << quadTree.toString();
 
     previousTime = SDL_GetTicks();
     mainLoop();

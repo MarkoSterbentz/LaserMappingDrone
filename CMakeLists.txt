@@ -27,14 +27,21 @@ find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
-set(DUA_INCLUDE_DIR ./)
+set(DUA_INCLUDE_DIR QuadTree AssetManagement)
 include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
-set(SOURCE_FILES main.cpp QuadTree.h SimpleSquare.h SimpleSquare.cpp LoadShaders.h LoadShaders.cpp)
+set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/SimpleSquare.h QuadTree/SimpleSquare.cpp
+        AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp)
 
 # Make an executable called LaserMappingDrone out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 # Link to external libraries that were found above
 target_link_libraries(${PROJECT_NAME} ${LIBS})
+
+# Copy assets into build tree
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/Shaders
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders)

@@ -16,7 +16,7 @@ std::string SimpleSquare::init() {
     glBindVertexArray(VAO);
 
     // set up a simple shader that shades any triangle a single solid color.
-    shader = loadShaders("colorShader.vert", "colorShader.frag", log);
+    shader = loadShaders("Shaders/colorShader.vert", "Shaders/colorShader.frag", log);
     GLint shader_vertex = glGetAttribLocation(shader, "vertex");
     shader_modelMat = glGetUniformLocation(shader, "modelMat");
     shader_color = glGetUniformLocation(shader, "color");
