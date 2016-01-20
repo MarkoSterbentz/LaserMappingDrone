@@ -13,7 +13,7 @@
 #define RESOLUTION_Y 600
 #define GLVERSION_MAJOR 3
 #define GLVERSION_MINOR 0
-#define FULLSCREEN
+//#define FULLSCREEN
 /*******************************/
 #ifdef FULLSCREEN
 #define SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -38,7 +38,7 @@ struct DummyPoint {
 SDL_Window* pWindow;    // The SDL window
 SDL_GLContext context;  // The openGL context
 QuadTree<DummyPoint> quadTree;   // The quad tree
-float aspectRatio;
+float xRes, yRes, aspectRatio;
 QuadTreeDrawer treeDrawer;
 float dotZoomLevel;
 unsigned previousTime, currentTime, deltaTime; // Used to regulate physics time step
@@ -51,6 +51,8 @@ void cleanup();
 
 int main() {
     dotZoomLevel = 0.01;
+    xRes = RESOLUTION_X;
+    yRes = RESOLUTION_Y;
     if (!initGL()) { // if init fails, exit
         return 1;
     }
@@ -87,7 +89,9 @@ void mainLoop() {
                 }
             } else if (event.type == SDL_MOUSEBUTTONDOWN) {
                 if (event.button.button == SDL_BUTTON_LEFT) {
-                    treeDrawer.clickEventHandler(quadTree, event.button.x, event.button.y);
+                    float xPos = (float)event.button.x / (xRes * 0.5f) - 1.0f;
+                    float yPos = -(float)event.button.y / (yRes * 0.5f) + 1.0f;
+                    treeDrawer.clickEventHandler(quadTree, xPos, yPos);
                 }
             }
         }
@@ -98,27 +102,27 @@ void mainLoop() {
         // Get current keyboard state ( this is used for smooth controls rather than key press event controls above )
         const Uint8* keyStates = SDL_GetKeyboardState(NULL);
         // apply movement according to which keys are down
-        float moveSpeed = 0.001f * deltaTime;
+        float moveSpeed = 0.2f * deltaTime;
 
         if (keyStates[SDL_SCANCODE_UP]) {
-            treeDrawer.translate(0.0f, moveSpeed);
+            treeDrawer.translate(-0.0f, -moveSpeed * dotZoomLevel);
         }
         if (keyStates[SDL_SCANCODE_DOWN]) {
-            treeDrawer.translate(0.0f, -moveSpeed);
+            treeDrawer.translate(-0.0f, moveSpeed * dotZoomLevel);
         }
         if (keyStates[SDL_SCANCODE_LEFT]) {
-            treeDrawer.translate(-moveSpeed, 0.0f);
+            treeDrawer.translate(moveSpeed * dotZoomLevel, -0.0f);
         }
         if (keyStates[SDL_SCANCODE_RIGHT]) {
-            treeDrawer.translate(moveSpeed, 0.0f);
+            treeDrawer.translate(-moveSpeed * dotZoomLevel, -0.0f);
         }
         if (keyStates[SDL_SCANCODE_LSHIFT]) {
-            float zoomSpeed = 1.f + moveSpeed;
+            float zoomSpeed = 1.f + moveSpeed * 0.005f;
             dotZoomLevel /= zoomSpeed;
             treeDrawer.scale(zoomSpeed, zoomSpeed);
         }
         if (keyStates[SDL_SCANCODE_LCTRL]) {
-            float zoomSpeed = 1.f - moveSpeed;
+            float zoomSpeed = 1.f - moveSpeed * 0.005f;
             dotZoomLevel /= zoomSpeed;
             treeDrawer.scale(zoomSpeed, zoomSpeed);
         }
@@ -164,16 +168,13 @@ bool initGL() {
         return false;
     }
 
-    int resX = RESOLUTION_X;
-    int resY = RESOLUTION_Y;
 #ifdef FULLSCREEN /************ GET ASPECT RATIO ********************************/
     // struct for holding sdl display information
     SDL_DisplayMode current;
     if(!SDL_GetCurrentDisplayMode(0, &current)) {
         aspectRatio = (float)current.h / (float)current.w;
-        resX = current.w;
-        resY = current.h;
-        OUTSTREAM << resX << "x" << resY << std::endl;
+        xRes = current.w;
+        yRes = current.h;
     } else {
         OUTSTREAM << "<!>    Could not get display information!\n";
         aspectRatio = 1.f;
@@ -197,7 +198,7 @@ bool initGL() {
     pWindow = SDL_CreateWindow("OpenGL Window",	// name of window
                                SDL_WINDOWPOS_CENTERED,		// x position of window
                                SDL_WINDOWPOS_CENTERED,		// y position of window
-                               resX, resY,	                // x and y width of window
+                               xRes, yRes,	                // x and y width of window
                                SCREENOPTIONS);    			// options (fullscreen, etc)
 
     // If the window couldn't be created for whatever reason

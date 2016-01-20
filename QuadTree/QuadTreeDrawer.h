@@ -24,7 +24,7 @@ namespace LaserMappingDrone {
         void translate(float x, float y);
         void scale(float x, float y);
         template<class P>
-        void clickEventHandler(QuadTree<P>& tree, int x, int y);
+        void clickEventHandler(QuadTree<P>& tree, float x, float y);
 
     private:
         GLuint shader;
@@ -34,7 +34,6 @@ namespace LaserMappingDrone {
         float currentColor[3];
         std::vector<glm::mat4> matrixStack;
         glm::mat4 localModelMat;
-        glm::mat4 lastTreeToWorldSpaceMat;
 
         void pushMat(glm::mat4&& mat);
         void popMat();
@@ -60,8 +59,7 @@ namespace LaserMappingDrone {
                                {0.f,     yScale,  0.f,     0.f},
                                {0.f,     0.f,     1.f,     0.f},
                                {xCenter, yCenter, 0.f,     1.f}};
-        lastTreeToWorldSpaceMat = localModelMat * sizingMat;
-        matrixStack.push_back(localModelMat);
+        matrixStack.push_back(localModelMat * sizingMat);
         drawBorder();
         drawNode(tree.head, dotScale);
     }
@@ -90,11 +88,12 @@ namespace LaserMappingDrone {
     }
 
     template<class P>
-    void QuadTreeDrawer::clickEventHandler(QuadTree<P> &tree, int x, int y) {
-        glm::mat4 invMat = glm::inverse(lastTreeToWorldSpaceMat);
-        glm::vec4 scrSpaceClick = {(float)x, (float)y, 0.f, 1.f};
-        glm::vec4 treeSpaceClick = lastTreeToWorldSpaceMat * scrSpaceClick;
-        tree.addPoint(P{scrSpaceClick.x, scrSpaceClick.y});
+    void QuadTreeDrawer::clickEventHandler(QuadTree<P> &tree, float x, float y) {
+        glm::mat4 invMat = glm::inverse(localModelMat);
+        glm::vec4 scrSpaceClick = {x, y, 0.f, 1.f};
+        glm::vec4 treeSpaceClick = invMat * scrSpaceClick;
+        tree.addPoint(P{treeSpaceClick.x, treeSpaceClick.y});
+
     }
 }
 

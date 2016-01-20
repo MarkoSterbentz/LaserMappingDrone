@@ -24,6 +24,9 @@
  * If two points with exactly the same x and y are inserted, something bad might happen.
  * I'm trying to account for all cases where the user can provide an empty list of points or an unexpected zero, making
  * sure that no problems are produced, but I might have missed one or two cases.
+ *
+ * Currently points that are added that have an x and a y that an existing point shares (duplicate points) are
+ * discarded. This might not be optimal.
  */
 
 #ifndef LASERMAPPINGDRONE_QUADTREE_H
@@ -163,6 +166,11 @@ namespace LaserMappingDrone {
             if (wherePoint == containsCases::INSIDE) { //point is inside node
                 if (node->isEndNode()) { // node is an end-node
                     if (node->points.size() < maxPointsPerNode) { //there is room in the node
+//                        for (auto pointAlreadyThere : node->points) {
+//                            if (point.x == pointAlreadyThere.x && point.y == pointAlreadyThere.y) {
+//                                return; // DUPLICATE POINT
+//                            }
+//                        }
                         node->points.push_back(point);
                     } else { //there is no room - split the node
                         if (node->isEndNode()) {
