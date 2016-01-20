@@ -7,13 +7,20 @@
 #include <GL/glew.h>
 
 #include "QuadTree.h"
-#include "SimpleSquare.h"
+#include "QuadTreeDrawer.h"
 
 #define RESOLUTION_X 800
 #define RESOLUTION_Y 600
 #define GLVERSION_MAJOR 3
 #define GLVERSION_MINOR 0
-#define SCREENOPTIONS SDL_WINDOW_OPENGL // | SDL_WINDOW_FULLSCREEN_DESKTOP
+#define FULLSCREEN
+/*******************************/
+#ifdef FULLSCREEN
+#define SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
+#else
+#define SCREENOPTIONS SDL_WINDOW_OPENGL
+#endif
+/*******************************/
 #define USE_VSYNC
 #define CLEARCOLOR 0.0f,0.0f,0.0f,1.0f
 #define USE_TRANSPARENCY
@@ -30,7 +37,10 @@ struct DummyPoint {
 
 SDL_Window* pWindow;    // The SDL window
 SDL_GLContext context;  // The openGL context
-SimpleSquare square;    // The square object to render
+QuadTree<DummyPoint> quadTree;   // The quad tree
+float aspectRatio;
+QuadTreeDrawer treeDrawer;
+float dotZoomLevel;
 unsigned previousTime, currentTime, deltaTime; // Used to regulate physics time step
 
 void mainLoop();
@@ -40,15 +50,17 @@ void checkSDLError(int line = -1);
 void cleanup();
 
 int main() {
+    dotZoomLevel = 0.01;
     if (!initGL()) { // if init fails, exit
         return 1;
     }
-    OUTSTREAM << square.init();
+    OUTSTREAM << treeDrawer.init(aspectRatio);
 
-    QuadTree<DummyPoint> quadTree(2);
-    quadTree.addPoint({0.5f, 0.5f});
-    quadTree.addPoint({0.5f, -0.5f});
-    quadTree.addPoint({5.0f, 0.5f});
+    std::vector<DummyPoint> pointList;
+    for (unsigned i = 0; i < 10; ++i) {
+        pointList.push_back({(0.4f - (i % 2) * 0.8f) * (float)i, (0.2f - (i % 3) * 0.08f) * (float)i});
+    }
+    quadTree.addPoints(pointList);
     OUTSTREAM << quadTree.toString();
 
     previousTime = SDL_GetTicks();
@@ -73,35 +85,48 @@ void mainLoop() {
                     default:
                         break;
                 }
+            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    treeDrawer.clickEventHandler(quadTree, event.button.x, event.button.y);
+                }
             }
         }
         /**************************** HANDLE KEY STATE *********************************/
-        // calculate square movement speed with appropriate time step:
         currentTime = SDL_GetTicks();
         deltaTime = currentTime - previousTime;
         previousTime = currentTime;
         // Get current keyboard state ( this is used for smooth controls rather than key press event controls above )
         const Uint8* keyStates = SDL_GetKeyboardState(NULL);
         // apply movement according to which keys are down
-        float squareSpeed = 0.001f * deltaTime;
+        float moveSpeed = 0.001f * deltaTime;
 
         if (keyStates[SDL_SCANCODE_UP]) {
-            square.translate(0.0f, squareSpeed, 0.0f);
+            treeDrawer.translate(0.0f, moveSpeed);
         }
         if (keyStates[SDL_SCANCODE_DOWN]) {
-            square.translate(0.0f, -squareSpeed, 0.0f);
+            treeDrawer.translate(0.0f, -moveSpeed);
         }
         if (keyStates[SDL_SCANCODE_LEFT]) {
-            square.translate(-squareSpeed, 0.0f, 0.0f);
+            treeDrawer.translate(-moveSpeed, 0.0f);
         }
         if (keyStates[SDL_SCANCODE_RIGHT]) {
-            square.translate(squareSpeed, 0.0f, 0.0f);
+            treeDrawer.translate(moveSpeed, 0.0f);
+        }
+        if (keyStates[SDL_SCANCODE_LSHIFT]) {
+            float zoomSpeed = 1.f + moveSpeed;
+            dotZoomLevel /= zoomSpeed;
+            treeDrawer.scale(zoomSpeed, zoomSpeed);
+        }
+        if (keyStates[SDL_SCANCODE_LCTRL]) {
+            float zoomSpeed = 1.f - moveSpeed;
+            dotZoomLevel /= zoomSpeed;
+            treeDrawer.scale(zoomSpeed, zoomSpeed);
         }
         /**************************** DO THE DRAWING *********************************/
         // clear the buffer
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-        // draw the square
-        square.draw();
+        // draw the tree
+        treeDrawer.drawQuadTree(quadTree, dotZoomLevel);
         // swap frame buffers (back buffer was drawn, will now be shown)
         SDL_GL_SwapWindow(pWindow);
     }
@@ -139,6 +164,24 @@ bool initGL() {
         return false;
     }
 
+    int resX = RESOLUTION_X;
+    int resY = RESOLUTION_Y;
+#ifdef FULLSCREEN /************ GET ASPECT RATIO ********************************/
+    // struct for holding sdl display information
+    SDL_DisplayMode current;
+    if(!SDL_GetCurrentDisplayMode(0, &current)) {
+        aspectRatio = (float)current.h / (float)current.w;
+        resX = current.w;
+        resY = current.h;
+        OUTSTREAM << resX << "x" << resY << std::endl;
+    } else {
+        OUTSTREAM << "<!>    Could not get display information!\n";
+        aspectRatio = 1.f;
+    }
+#else /************************** GET ASPECT RATIO ******************************/
+    aspectRatio = (float)RESOLUTION_Y / (float)RESOLUTION_X;
+#endif /************************** GET ASPECT RATIO *****************************/
+
     // SDL_GL_CONTEXT_CORE gives us only the newer version, deprecated functions are disabled
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
@@ -154,7 +197,7 @@ bool initGL() {
     pWindow = SDL_CreateWindow("OpenGL Window",	// name of window
                                SDL_WINDOWPOS_CENTERED,		// x position of window
                                SDL_WINDOWPOS_CENTERED,		// y position of window
-                               RESOLUTION_X, RESOLUTION_Y,	// x and y width of window
+                               resX, resY,	                // x and y width of window
                                SCREENOPTIONS);    			// options (fullscreen, etc)
 
     // If the window couldn't be created for whatever reason

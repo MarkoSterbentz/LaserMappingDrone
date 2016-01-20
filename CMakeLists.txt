@@ -31,7 +31,7 @@ set(DUA_INCLUDE_DIR QuadTree AssetManagement)
 include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
-set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/SimpleSquare.h QuadTree/SimpleSquare.cpp
+set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree/QuadTreeDrawer.cpp
         AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp)
 
 # Make an executable called LaserMappingDrone out of all the above source files
