@@ -21,12 +21,9 @@
  * expansion can create som very unbalanced ugly trees.
  *
  * PROBLEMS:
- * If two points with exactly the same x and y are inserted, something bad might happen.
+ * If two points with exactly the same x and y are inserted, the program crashes
  * I'm trying to account for all cases where the user can provide an empty list of points or an unexpected zero, making
  * sure that no problems are produced, but I might have missed one or two cases.
- *
- * Currently points that are added that have an x and a y that an existing point shares (duplicate points) are
- * discarded. This might not be optimal.
  */
 
 #ifndef LASERMAPPINGDRONE_QUADTREE_H
@@ -230,7 +227,7 @@ namespace LaserMappingDrone {
                 }
                 float centerX = minX + (maxX - minX) * 0.5f;
                 float centerY = minY + (maxY - minY) * 0.5f;
-                width *= 0.5;
+                width *= 0.55; // 0.55 instead of 0.5 to add a little margin. Probably ok. Makes results more deterministic.
                 minX = centerX - width;
                 maxX = centerX + width;
                 minY = centerY - width;

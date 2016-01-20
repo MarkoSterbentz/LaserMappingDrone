@@ -23,8 +23,7 @@ namespace LaserMappingDrone {
         void drawQuadTree(QuadTree<P>& tree, float dotScale);
         void translate(float x, float y);
         void scale(float x, float y);
-        template<class P>
-        void clickEventHandler(QuadTree<P>& tree, float x, float y);
+        glm::mat4 getTransformMat();
 
     private:
         GLuint shader;
@@ -41,7 +40,6 @@ namespace LaserMappingDrone {
         void preDrawCommon();
         void drawBorder();
         void drawCross();
-        void drawDot();
         void enterBranch(int whichQuadrant);
 
         template<class P>
@@ -50,18 +48,20 @@ namespace LaserMappingDrone {
 
     template<class P>
     void QuadTreeDrawer::drawQuadTree(QuadTree<P>& tree, float dotScale) {
-        matrixStack.clear();
-        float xScale = (tree.head->xMax - tree.head->xMin) * 0.5f;
-        float yScale = (tree.head->yMax - tree.head->yMin) * 0.5f;
-        float xCenter = tree.head->xMin + (xScale);
-        float yCenter = tree.head->yMin + (yScale);
-        glm::mat4 sizingMat = {{xScale,  0.f,     0.f,     0.f},
-                               {0.f,     yScale,  0.f,     0.f},
-                               {0.f,     0.f,     1.f,     0.f},
-                               {xCenter, yCenter, 0.f,     1.f}};
-        matrixStack.push_back(localModelMat * sizingMat);
-        drawBorder();
-        drawNode(tree.head, dotScale);
+        if (tree.head) {
+            matrixStack.clear();
+            float xScale = (tree.head->xMax - tree.head->xMin) * 0.5f;
+            float yScale = (tree.head->yMax - tree.head->yMin) * 0.5f;
+            float xCenter = tree.head->xMin + (xScale);
+            float yCenter = tree.head->yMin + (yScale);
+            glm::mat4 sizingMat = {{xScale,  0.f,     0.f, 0.f},
+                                   {0.f,     yScale,  0.f, 0.f},
+                                   {0.f,     0.f,     1.f, 0.f},
+                                   {xCenter, yCenter, 0.f, 1.f}};
+            matrixStack.push_back(localModelMat * sizingMat);
+            drawBorder();
+            drawNode(tree.head, dotScale);
+        }
     }
 
     template<class P>
@@ -80,20 +80,11 @@ namespace LaserMappingDrone {
                                                   {0.f, dotScale, 0.f, 0.f},
                                                   {0.f, 0.f, 1.f, 0.f},
                                                   {point.x, point.y, 0.f, 1.f}});
+                drawCross();
+                popMat();
             }
-            drawCross();
-            popMat();
             setColor(0.f, 1.f, 0.f);
         }
-    }
-
-    template<class P>
-    void QuadTreeDrawer::clickEventHandler(QuadTree<P> &tree, float x, float y) {
-        glm::mat4 invMat = glm::inverse(localModelMat);
-        glm::vec4 scrSpaceClick = {x, y, 0.f, 1.f};
-        glm::vec4 treeSpaceClick = invMat * scrSpaceClick;
-        tree.addPoint(P{treeSpaceClick.x, treeSpaceClick.y});
-
     }
 }
 

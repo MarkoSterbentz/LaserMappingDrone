@@ -36,10 +36,8 @@ namespace LaserMappingDrone {
 
                              0.0f, -1.0f, 0.5f, 1.0f,
                              0.0f, 1.0f, 0.5f, 1.0f,  // This part forms the endpoints of a cross
-                             -1.0f, 0.0f, 0.5f, 1.0f,
-                             1.0f, 0.0f, 0.5f, 1.0f,
-
-                             0.0f, 0.0f, 0.5f, 1.0f}; // This part is just a for drawing a dot
+                             -1.0f, 0.0f, 0.5f, 1.0f, // that subdivides the above square
+                             1.0f, 0.0f, 0.5f, 1.0f };
 
         // Fill the vertex buff in GPU memory with the data from corners
         glBindBuffer(GL_ARRAY_BUFFER, vertices);
@@ -80,18 +78,15 @@ namespace LaserMappingDrone {
         glDrawArrays(GL_LINES, 6, 4);
     }
 
-    void QuadTreeDrawer::drawDot() {
-        preDrawCommon();
-        // Execute the shader on the GPU (draw) for the vertices of the cross
-        glDrawArrays(GL_POINTS, 10, 1);
-    }
-
     void QuadTreeDrawer::translate(float x, float y) {
-        localModelMat = glm::translate(localModelMat, {x, y, 0.f});
+//        localModelMat = glm::translate(localModelMat, {x, y, 0.f});
+        localModelMat *= glm::mat4{{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {x, y, 0.f, 1.f}};
     }
 
     void QuadTreeDrawer::scale(float x, float y) {
-        localModelMat = glm::scale(localModelMat, {x, y, 1.f});
+        //localModelMat = glm::scale(localModelMat, {x, y, 1.f});
+        localModelMat = glm::mat4{{x, 0.f, 0.f, 0.f}, {0.f, y, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f}} *
+                        localModelMat;
     }
 
     void QuadTreeDrawer::setColor(float r, float g, float b) {
@@ -135,5 +130,9 @@ namespace LaserMappingDrone {
         glm::mat4 scaleMat = {{0.5f, 0.f, 0.f, 0.f}, {0.f, 0.5f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f}};
         glm::mat4 transMat = {{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {x, y, 0.f, 1.f}};
         pushMat(matrixStack.back() * transMat * scaleMat);
+    }
+
+    glm::mat4 QuadTreeDrawer::getTransformMat() {
+        return localModelMat;
     }
 }

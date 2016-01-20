@@ -9,11 +9,11 @@
 #include "QuadTree.h"
 #include "QuadTreeDrawer.h"
 
-#define RESOLUTION_X 800
-#define RESOLUTION_Y 600
+#define RESOLUTION_X 1200
+#define RESOLUTION_Y 700
 #define GLVERSION_MAJOR 3
 #define GLVERSION_MINOR 0
-//#define FULLSCREEN
+#define FULLSCREEN
 /*******************************/
 #ifdef FULLSCREEN
 #define SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -58,12 +58,12 @@ int main() {
     }
     OUTSTREAM << treeDrawer.init(aspectRatio);
 
-    std::vector<DummyPoint> pointList;
-    for (unsigned i = 0; i < 10; ++i) {
-        pointList.push_back({(0.4f - (i % 2) * 0.8f) * (float)i, (0.2f - (i % 3) * 0.08f) * (float)i});
-    }
-    quadTree.addPoints(pointList);
-    OUTSTREAM << quadTree.toString();
+//    std::vector<DummyPoint> pointList;
+//    for (unsigned i = 0; i < 10; ++i) {
+//        pointList.push_back({(0.4f - (i % 2) * 0.8f) * (float)i, (0.2f - (i % 3) * 0.08f) * (float)i});
+//    }
+//    quadTree.addPoints(pointList);
+//    OUTSTREAM << quadTree.toString();
 
     previousTime = SDL_GetTicks();
     mainLoop();
@@ -91,7 +91,10 @@ void mainLoop() {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     float xPos = (float)event.button.x / (xRes * 0.5f) - 1.0f;
                     float yPos = -(float)event.button.y / (yRes * 0.5f) + 1.0f;
-                    treeDrawer.clickEventHandler(quadTree, xPos, yPos);
+                    glm::mat4 invMat = glm::inverse(treeDrawer.getTransformMat());
+                    glm::vec4 scrSpaceClick = {xPos, yPos, 0.f, 1.f};
+                    glm::vec4 treeSpaceClick = invMat * scrSpaceClick;
+                    quadTree.addPoint({treeSpaceClick.x, treeSpaceClick.y});
                 }
             }
         }
@@ -195,7 +198,7 @@ bool initGL() {
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     // Create the SDL window
-    pWindow = SDL_CreateWindow("OpenGL Window",	// name of window
+    pWindow = SDL_CreateWindow("QuadTree Viewer",	// name of window
                                SDL_WINDOWPOS_CENTERED,		// x position of window
                                SDL_WINDOWPOS_CENTERED,		// y position of window
                                xRes, yRes,	                // x and y width of window
