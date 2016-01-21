@@ -29,10 +29,8 @@ namespace LaserMappingDrone {
         // this is the data that will be buffered up as vertices
         float corners[44] = {-1.0f, -1.0f, 0.5f, 1.0f,
                              1.0f, -1.0f, 0.5f, 1.0f,
-                             1.0f, 1.0f, 0.5f, 1.0f,
                              1.0f, 1.0f, 0.5f, 1.0f,  // This part forms the corners of a square
                              -1.0f, 1.0f, 0.5f, 1.0f,
-                             -1.0f, -1.0f, 0.5f, 1.0f,
 
                              0.0f, -1.0f, 0.5f, 1.0f,
                              0.0f, 1.0f, 0.5f, 1.0f,  // This part forms the endpoints of a cross
@@ -68,23 +66,19 @@ namespace LaserMappingDrone {
 
     void QuadTreeDrawer::drawBorder() {
         preDrawCommon();
-        // Execute the shader on the GPU (draw) for the vertices of the square
-        glDrawArrays(GL_LINE_LOOP, 0, 6);
+        glDrawArrays(GL_LINE_LOOP, 0, 4);
     }
 
     void QuadTreeDrawer::drawCross() {
         preDrawCommon();
-        // Execute the shader on the GPU (draw) for the vertices of the cross
-        glDrawArrays(GL_LINES, 6, 4);
+        glDrawArrays(GL_LINES, 4, 4);
     }
 
     void QuadTreeDrawer::translate(float x, float y) {
-//        localModelMat = glm::translate(localModelMat, {x, y, 0.f});
         localModelMat *= glm::mat4{{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {x, y, 0.f, 1.f}};
     }
 
     void QuadTreeDrawer::scale(float x, float y) {
-        //localModelMat = glm::scale(localModelMat, {x, y, 1.f});
         localModelMat = glm::mat4{{x, 0.f, 0.f, 0.f}, {0.f, y, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f}} *
                         localModelMat;
     }

@@ -13,7 +13,7 @@
 #define RESOLUTION_Y 700
 #define GLVERSION_MAJOR 3
 #define GLVERSION_MINOR 0
-#define FULLSCREEN
+//#define FULLSCREEN
 /*******************************/
 #ifdef FULLSCREEN
 #define SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -64,6 +64,15 @@ int main() {
 //    }
 //    quadTree.addPoints(pointList);
 //    OUTSTREAM << quadTree.toString();
+
+    float invPi = 1.f / 3.14159265358979f;
+    unsigned i;
+    float startTime = SDL_GetTicks();
+    for (i = 0; i < 1000; ++i) {
+        quadTree.addPoint({(float)i * (float)sin(i * invPi) * 0.1f, (float)i * (float)cos(i * invPi) * 0.1f});
+        //quadTree.addPoint({(float)i, (float)i});
+    }
+    OUTSTREAM << SDL_GetTicks() - startTime << "ms to add " << i << " points individually.";
 
     previousTime = SDL_GetTicks();
     mainLoop();

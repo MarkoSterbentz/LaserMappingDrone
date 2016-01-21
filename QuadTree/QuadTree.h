@@ -162,12 +162,14 @@ namespace LaserMappingDrone {
             int wherePoint = node->contains(point);
             if (wherePoint == containsCases::INSIDE) { //point is inside node
                 if (node->isEndNode()) { // node is an end-node
+                    if (!node->points.empty()) {
+                        for (auto pointAlreadyThere : node->points) {
+                            if (pointAlreadyThere.x == point.x && pointAlreadyThere.y == point.y) {
+                                return; // DUPLICATE POINT
+                            }
+                        }
+                    }
                     if (node->points.size() < maxPointsPerNode) { //there is room in the node
-//                        for (auto pointAlreadyThere : node->points) {
-//                            if (point.x == pointAlreadyThere.x && point.y == pointAlreadyThere.y) {
-//                                return; // DUPLICATE POINT
-//                            }
-//                        }
                         node->points.push_back(point);
                     } else { //there is no room - split the node
                         if (node->isEndNode()) {

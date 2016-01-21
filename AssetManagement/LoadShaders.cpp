@@ -62,7 +62,7 @@ GLuint loadShaders(const char * vertFilePath,const char * fragFilePath, std::str
         glDeleteShader(vertShaderID);
         return GL_FALSE;
     } else {
-        out << vertFilePath << " compiled successfully.\n\n";
+        out << vertFilePath << " compiled successfully.\n";
     }
 
     // Compile Fragment Shader
@@ -85,10 +85,10 @@ GLuint loadShaders(const char * vertFilePath,const char * fragFilePath, std::str
         glDeleteShader(fragShaderID);
         return GL_FALSE;
     } else {
-        out << fragFilePath << " compiled successfully.\n\n";
+        out << fragFilePath << " compiled successfully.\n";
     }
 
-    out << "Linking Program...\n";
+    out << "Linking Program...";
 
     glAttachShader(progID, vertShaderID);
     glAttachShader(progID, fragShaderID);
