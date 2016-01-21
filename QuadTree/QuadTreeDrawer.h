@@ -14,6 +14,8 @@
 #include <glm/gtx/transform.hpp>
 #include "QuadTree.h"
 
+#define OPTIMIZATION_THRESHOLD 0.05f
+
 namespace LaserMappingDrone {
 
     struct QuadTreeDrawer {
@@ -23,7 +25,8 @@ namespace LaserMappingDrone {
         void drawQuadTree(QuadTree<P>& tree, float dotScale);
         void translate(float x, float y);
         void scale(float x, float y);
-        glm::mat4 getTransformMat();
+        glm::dmat4 getTransformMat();
+		void toggleOptimization();
 
     private:
         GLuint shader;
@@ -31,10 +34,12 @@ namespace LaserMappingDrone {
         GLint shader_modelMat;
         GLint shader_color;
         float currentColor[3];
-        std::vector<glm::mat4> matrixStack;
-        glm::mat4 localModelMat;
+		float dotScale;
+        std::vector<glm::dmat4> matrixStack;
+        glm::dmat4 localModelMat;
+		bool useOptimization;
 
-        void pushMat(glm::mat4&& mat);
+        void pushMat(glm::dmat4&& mat);
         void popMat();
         void setColor(float r, float g, float b);
         void preDrawCommon();
@@ -43,7 +48,7 @@ namespace LaserMappingDrone {
         void enterBranch(int whichQuadrant);
 
         template<class P>
-        void drawNode(Node<P>* node, float dotScale);
+        void drawNode(Node<P>* node);
     };
 
     template<class P>
@@ -54,37 +59,51 @@ namespace LaserMappingDrone {
             float yScale = (tree.head->yMax - tree.head->yMin) * 0.5f;
             float xCenter = tree.head->xMin + (xScale);
             float yCenter = tree.head->yMin + (yScale);
-            glm::mat4 sizingMat = {{xScale,  0.f,     0.f, 0.f},
+            glm::dmat4 sizingMat = {{xScale,  0.f,     0.f, 0.f},
                                    {0.f,     yScale,  0.f, 0.f},
                                    {0.f,     0.f,     1.f, 0.f},
                                    {xCenter, yCenter, 0.f, 1.f}};
             matrixStack.push_back(localModelMat * sizingMat);
             drawBorder();
-            drawNode(tree.head, dotScale);
+			this->dotScale = dotScale;
+            drawNode(tree.head);
         }
     }
 
     template<class P>
-    void QuadTreeDrawer::drawNode(Node<P> *node, float dotScale) {
-        if (!node->isEndNode()) {
-            drawCross();
-            for (unsigned i = 0; i < 4; ++i) {
-                enterBranch(i);
-                drawNode(node->children[i], dotScale);
-                popMat();
-            }
-        } else if (!node->points.empty()) {
-            setColor(1.f, 0.f, 1.f);
-            for (auto point: node->points) {
-                pushMat(localModelMat * glm::mat4{{dotScale, 0.f, 0.f, 0.f},
-                                                  {0.f, dotScale, 0.f, 0.f},
-                                                  {0.f, 0.f, 1.f, 0.f},
-                                                  {point.x, point.y, 0.f, 1.f}});
-                drawCross();
-                popMat();
-            }
-            setColor(0.f, 1.f, 0.f);
-        }
+    void QuadTreeDrawer::drawNode(Node<P> *node) {
+		float xMinNDC = node->xMin * localModelMat[0][0] + localModelMat[3][0];
+		float xMaxNDC = node->xMax * localModelMat[0][0] + localModelMat[3][0];		
+		if (!(xMaxNDC < -1.f || xMinNDC >  1.f ||	// This test is to cull nodes that are off-screen
+			  node->yMax * localModelMat[1][1] + localModelMat[3][1] < -1.f ||
+			  node->yMin * localModelMat[1][1] + localModelMat[3][1] >  1.f )) {
+			if (!node->isEndNode()) {	// This test is to cull nodes that are very small
+				if (!useOptimization || xMaxNDC - xMinNDC > OPTIMIZATION_THRESHOLD) {
+					drawCross();
+					for (unsigned i = 0; i < 4; ++i) {
+						enterBranch(i);
+						drawNode(node->children[i]);
+						popMat();
+					}
+				} else {
+					setColor(1.f, 0.f, 1.f);
+					drawCross();
+					setColor(0.f, 1.f, 0.f);
+				}
+			}
+			else if (!node->points.empty()) {
+				setColor(1.f, 0.f, 1.f);
+				for (auto point : node->points) {
+					pushMat(localModelMat * glm::dmat4{ {dotScale, 0.f,      0.f,    0.f},
+													   {0.f,      dotScale, 0.f,    0.f},
+													   {0.f,      0.f,      1.f,    0.f},
+													   {point.x,  point.y,  0.f,    1.f} });
+					drawCross();
+					popMat();
+				}
+				setColor(0.f, 1.f, 0.f);
+			}
+		}
     }
 }
 

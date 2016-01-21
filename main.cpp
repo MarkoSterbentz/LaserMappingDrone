@@ -13,7 +13,7 @@
 #define RESOLUTION_Y 700
 #define GLVERSION_MAJOR 3
 #define GLVERSION_MINOR 0
-//#define FULLSCREEN
+#define FULLSCREEN
 /*******************************/
 #ifdef FULLSCREEN
 #define SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -27,6 +27,7 @@
 #define USE_DEPTHBUFFER
 #define USE_BACKFACE_CULLING
 //#define DEBUG_DRIVERS
+//#define BENCHMARK
 #define OUTSTREAM std::cout
 
 using namespace LaserMappingDrone;
@@ -37,10 +38,10 @@ struct DummyPoint {
 
 SDL_Window* pWindow;    // The SDL window
 SDL_GLContext context;  // The openGL context
-QuadTree<DummyPoint> quadTree;   // The quad tree
+QuadTree<DummyPoint> quadTree(1);   // The quad tree
 float xRes, yRes, aspectRatio;
 QuadTreeDrawer treeDrawer;
-float dotZoomLevel;
+long double dotZoomLevel;
 unsigned previousTime, currentTime, deltaTime; // Used to regulate physics time step
 
 void mainLoop();
@@ -49,7 +50,7 @@ void checkGlError(int line = -1);
 void checkSDLError(int line = -1);
 void cleanup();
 
-int main() {
+int main(int argc, char* argv[]) {
     dotZoomLevel = 0.01;
     xRes = RESOLUTION_X;
     yRes = RESOLUTION_Y;
@@ -58,21 +59,17 @@ int main() {
     }
     OUTSTREAM << treeDrawer.init(aspectRatio);
 
-//    std::vector<DummyPoint> pointList;
-//    for (unsigned i = 0; i < 10; ++i) {
-//        pointList.push_back({(0.4f - (i % 2) * 0.8f) * (float)i, (0.2f - (i % 3) * 0.08f) * (float)i});
-//    }
-//    quadTree.addPoints(pointList);
-//    OUTSTREAM << quadTree.toString();
-
+#ifdef BENCHMARK
+	// Benchmark point insertion
+	quadTree.setMaxPointsPerNode(50);
     float invPi = 1.f / 3.14159265358979f;
-    unsigned i;
     float startTime = SDL_GetTicks();
-    for (i = 0; i < 1000; ++i) {
+    for (unsigned i = 0; i < 1000000; ++i) {
         quadTree.addPoint({(float)i * (float)sin(i * invPi) * 0.1f, (float)i * (float)cos(i * invPi) * 0.1f});
-        //quadTree.addPoint({(float)i, (float)i});
     }
-    OUTSTREAM << SDL_GetTicks() - startTime << "ms to add " << i << " points individually.";
+    OUTSTREAM << SDL_GetTicks() - startTime;
+#endif
+	
 
     previousTime = SDL_GetTicks();
     mainLoop();
@@ -93,6 +90,9 @@ void mainLoop() {
                     case SDLK_ESCAPE:
                         loop = false;
                         break;
+					case SDLK_SPACE:	// turn on or off the small-node culling optimization
+						treeDrawer.toggleOptimization();
+						break;
                     default:
                         break;
                 }
@@ -117,32 +117,32 @@ void mainLoop() {
         float moveSpeed = 0.2f * deltaTime;
 
         if (keyStates[SDL_SCANCODE_UP]) {
-            treeDrawer.translate(-0.0f, -moveSpeed * dotZoomLevel);
+            treeDrawer.translate(-0.0f, -moveSpeed * (float)dotZoomLevel);
         }
         if (keyStates[SDL_SCANCODE_DOWN]) {
-            treeDrawer.translate(-0.0f, moveSpeed * dotZoomLevel);
+            treeDrawer.translate(-0.0f, moveSpeed * (float)dotZoomLevel);
         }
         if (keyStates[SDL_SCANCODE_LEFT]) {
-            treeDrawer.translate(moveSpeed * dotZoomLevel, -0.0f);
+            treeDrawer.translate(moveSpeed * (float)dotZoomLevel, -0.0f);
         }
         if (keyStates[SDL_SCANCODE_RIGHT]) {
-            treeDrawer.translate(-moveSpeed * dotZoomLevel, -0.0f);
+            treeDrawer.translate(-moveSpeed * (float)dotZoomLevel, -0.0f);
         }
         if (keyStates[SDL_SCANCODE_LSHIFT]) {
             float zoomSpeed = 1.f + moveSpeed * 0.005f;
             dotZoomLevel /= zoomSpeed;
-            treeDrawer.scale(zoomSpeed, zoomSpeed);
+			treeDrawer.scale(zoomSpeed, zoomSpeed);
         }
         if (keyStates[SDL_SCANCODE_LCTRL]) {
             float zoomSpeed = 1.f - moveSpeed * 0.005f;
             dotZoomLevel /= zoomSpeed;
-            treeDrawer.scale(zoomSpeed, zoomSpeed);
+			treeDrawer.scale(zoomSpeed, zoomSpeed);
         }
         /**************************** DO THE DRAWING *********************************/
         // clear the buffer
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         // draw the tree
-        treeDrawer.drawQuadTree(quadTree, dotZoomLevel);
+        treeDrawer.drawQuadTree(quadTree, (float)dotZoomLevel);
         // swap frame buffers (back buffer was drawn, will now be shown)
         SDL_GL_SwapWindow(pWindow);
     }
@@ -327,12 +327,12 @@ void checkSDLError(int line /*= -1*/) {
 }
 
 void cleanup() {
-    // There is probably more cleanup to do.  This
+    // There may be more clean-up to do...?
 
-    // Delete our OpengL context
+    // Delete OpengL context
     SDL_GL_DeleteContext(context);
 
-    // Destroy our window
+    // Destroy window
     SDL_DestroyWindow(pWindow);
 
     // Shutdown SDL 2

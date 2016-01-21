@@ -47,8 +47,10 @@ namespace LaserMappingDrone {
         currentColor[1] = 1.f;
         currentColor[2] = 0.f;
 
-        localModelMat = glm::mat4();
+        localModelMat = glm::dmat4();
         localModelMat = glm::scale(localModelMat, {aspectRatio, 1.f, 1.f});
+
+		useOptimization = true;
 
         return log.str();
     }
@@ -59,7 +61,7 @@ namespace LaserMappingDrone {
         // Tell GPU to use the colorShader program for following draw calls
         glUseProgram(shader);
         // Upload the model matrix to the colorShader program on the GPU
-        glUniformMatrix4fv(shader_modelMat, 1, GL_FALSE, &matrixStack.back()[0][0]);
+        glUniformMatrix4fv(shader_modelMat, 1, GL_FALSE, &((glm::mat4)(matrixStack.back()))[0][0]);
         // Upload the color you want to the colorShader program on the GPU
         glUniform3f(shader_color, currentColor[0], currentColor[1], currentColor[2]);
     }
@@ -75,11 +77,11 @@ namespace LaserMappingDrone {
     }
 
     void QuadTreeDrawer::translate(float x, float y) {
-        localModelMat *= glm::mat4{{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {x, y, 0.f, 1.f}};
+        localModelMat *= glm::dmat4{{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {x, y, 0.f, 1.f}};
     }
 
     void QuadTreeDrawer::scale(float x, float y) {
-        localModelMat = glm::mat4{{x, 0.f, 0.f, 0.f}, {0.f, y, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f}} *
+        localModelMat = glm::dmat4{{x, 0.f, 0.f, 0.f}, {0.f, y, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f}} *
                         localModelMat;
     }
 
@@ -89,7 +91,7 @@ namespace LaserMappingDrone {
         currentColor[2] = b;
     }
 
-    void QuadTreeDrawer::pushMat(glm::mat4&& mat) {
+    void QuadTreeDrawer::pushMat(glm::dmat4&& mat) {
         matrixStack.push_back(mat);
     }
 
@@ -121,12 +123,16 @@ namespace LaserMappingDrone {
                 y = 1.f;
                 break;
         }
-        glm::mat4 scaleMat = {{0.5f, 0.f, 0.f, 0.f}, {0.f, 0.5f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f}};
-        glm::mat4 transMat = {{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {x, y, 0.f, 1.f}};
+        glm::dmat4 scaleMat = {{0.5, 0., 0., 0.}, {0., 0.5, 0., 0.}, {0., 0., 1., 0.}, {0., 0., 0., 1.}};
+        glm::dmat4 transMat = {{1., 0., 0., 0.}, {0., 1., 0., 0.}, {0., 0., 1., 0.}, {x, y, 0., 1.}};
         pushMat(matrixStack.back() * transMat * scaleMat);
     }
 
-    glm::mat4 QuadTreeDrawer::getTransformMat() {
+    glm::dmat4 QuadTreeDrawer::getTransformMat() {
         return localModelMat;
     }
+
+	void QuadTreeDrawer::toggleOptimization() {
+		useOptimization = !useOptimization;
+	}
 }
