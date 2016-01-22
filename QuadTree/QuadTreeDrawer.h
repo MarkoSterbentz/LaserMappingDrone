@@ -72,8 +72,8 @@ namespace LaserMappingDrone {
 
     template<class P>
     void QuadTreeDrawer::drawNode(Node<P> *node) {
-		float xMinNDC = node->xMin * localModelMat[0][0] + localModelMat[3][0];
-		float xMaxNDC = node->xMax * localModelMat[0][0] + localModelMat[3][0];		
+		float xMinNDC = node->xMin * (float)localModelMat[0][0] + (float)localModelMat[3][0];
+		float xMaxNDC = node->xMax * (float)localModelMat[0][0] + (float)localModelMat[3][0];
 		if (!(xMaxNDC < -1.f || xMinNDC >  1.f ||	// This test is to cull nodes that are off-screen
 			  node->yMax * localModelMat[1][1] + localModelMat[3][1] < -1.f ||
 			  node->yMin * localModelMat[1][1] + localModelMat[3][1] >  1.f )) {

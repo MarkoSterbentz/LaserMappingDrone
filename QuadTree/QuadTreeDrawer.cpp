@@ -123,8 +123,8 @@ namespace LaserMappingDrone {
                 y = 1.f;
                 break;
         }
-        glm::dmat4 scaleMat = {{0.5, 0., 0., 0.}, {0., 0.5, 0., 0.}, {0., 0., 1., 0.}, {0., 0., 0., 1.}};
-        glm::dmat4 transMat = {{1., 0., 0., 0.}, {0., 1., 0., 0.}, {0., 0., 1., 0.}, {x, y, 0., 1.}};
+        glm::dmat4 scaleMat(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+        glm::dmat4 transMat(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, x, y, 0.0, 1.0);
         pushMat(matrixStack.back() * transMat * scaleMat);
     }
 

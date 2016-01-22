@@ -100,10 +100,10 @@ void mainLoop() {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     float xPos = (float)event.button.x / (xRes * 0.5f) - 1.0f;
                     float yPos = -(float)event.button.y / (yRes * 0.5f) + 1.0f;
-                    glm::mat4 invMat = glm::inverse(treeDrawer.getTransformMat());
-                    glm::vec4 scrSpaceClick = {xPos, yPos, 0.f, 1.f};
-                    glm::vec4 treeSpaceClick = invMat * scrSpaceClick;
-                    quadTree.addPoint({treeSpaceClick.x, treeSpaceClick.y});
+                    glm::dmat4 invMat = glm::inverse(treeDrawer.getTransformMat());
+                    glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
+                    glm::dvec4 treeSpaceClick = invMat * scrSpaceClick;
+                    quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y});
                 }
             }
         }
@@ -210,7 +210,7 @@ bool initGL() {
     pWindow = SDL_CreateWindow("QuadTree Viewer",	// name of window
                                SDL_WINDOWPOS_CENTERED,		// x position of window
                                SDL_WINDOWPOS_CENTERED,		// y position of window
-                               xRes, yRes,	                // x and y width of window
+                               (int)xRes, (int)yRes,	    // x and y width of window
                                SCREENOPTIONS);    			// options (fullscreen, etc)
 
     // If the window couldn't be created for whatever reason
