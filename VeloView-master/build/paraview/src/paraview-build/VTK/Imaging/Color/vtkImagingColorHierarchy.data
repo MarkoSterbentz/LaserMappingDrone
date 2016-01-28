@@ -1,9 +1,0 @@
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageHSIToRGB.h;vtkImagingColor
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageHSVToRGB.h;vtkImagingColor
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageLuminance.h;vtkImagingColor
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageMapToRGBA.h;vtkImagingColor
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageMapToWindowLevelColors.h;vtkImagingColor
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageQuantizeRGBToIndex.h;vtkImagingColor
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageRGBToHSI.h;vtkImagingColor
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Imaging/Color/vtkImageRGBToHSV.h;vtkImagingColor
-

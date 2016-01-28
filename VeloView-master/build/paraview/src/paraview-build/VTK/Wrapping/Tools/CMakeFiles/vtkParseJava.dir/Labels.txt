@@ -1,4 +1,0 @@
-# Target labels
- vtkWrappingTools
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Wrapping/Tools/vtkParseJava.c

@@ -1,2 +1,0 @@
-/usr/bin/ar cq ../../lib/libvtkRenderingLICCS-pv4.3.a  CMakeFiles/vtkRenderingLICCS.dir/vtkImageDataLIC2DClientServer.cxx.o CMakeFiles/vtkRenderingLICCS.dir/vtkStructuredGridLIC2DClientServer.cxx.o CMakeFiles/vtkRenderingLICCS.dir/vtkSurfaceLICDefaultPainterClientServer.cxx.o CMakeFiles/vtkRenderingLICCS.dir/vtkSurfaceLICPainterClientServer.cxx.o CMakeFiles/vtkRenderingLICCS.dir/vtkRenderingLICCSInit.cxx.o
-/usr/bin/ranlib ../../lib/libvtkRenderingLICCS-pv4.3.a

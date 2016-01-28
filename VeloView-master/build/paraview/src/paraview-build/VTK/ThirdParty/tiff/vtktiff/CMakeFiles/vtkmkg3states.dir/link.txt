@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC  -w -w -g  -Wl,--fatal-warnings -Wl,--no-undefined -lc -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  CMakeFiles/vtkmkg3states.dir/mkg3states.c.o  -o ../../../../bin/vtkmkg3states-pv4.3 -rdynamic 

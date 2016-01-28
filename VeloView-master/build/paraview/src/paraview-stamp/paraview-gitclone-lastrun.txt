@@ -1,3 +1,0 @@
-repository='git://github.com/gcasey/ParaView.git'
-module=''
-tag=''

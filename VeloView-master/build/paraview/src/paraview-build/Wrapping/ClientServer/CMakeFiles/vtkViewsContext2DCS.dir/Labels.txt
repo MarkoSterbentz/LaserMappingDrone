@@ -1,8 +1,0 @@
-# Target labels
- VTKModular
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkContextViewClientServer.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkContextInteractorStyleClientServer.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkViewsContext2DCSInit.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Context2D/vtkContextView.h
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Views/Context2D/vtkContextInteractorStyle.h

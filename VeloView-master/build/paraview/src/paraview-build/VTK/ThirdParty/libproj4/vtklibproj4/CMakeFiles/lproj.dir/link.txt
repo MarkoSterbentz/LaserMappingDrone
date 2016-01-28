@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC  -w -w -g  -Wl,--fatal-warnings -Wl,--no-undefined -lc -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  CMakeFiles/lproj.dir/lproj.c.o  -o ../../../../bin/lproj -rdynamic ../../../../lib/libvtkproj4-pv4.3.so.1 -lm -Wl,-rpath,/home/marko/research/VeloView-master/build/paraview/src/paraview-build/lib 

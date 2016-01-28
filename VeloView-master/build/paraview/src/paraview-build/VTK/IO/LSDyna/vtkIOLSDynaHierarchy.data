@@ -1,7 +1,0 @@
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/LSDyna/vtkLSDynaPart.h;vtkIOLSDyna;WRAP_EXCLUDE
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/LSDyna/vtkLSDynaPartCollection.h;vtkIOLSDyna;WRAP_EXCLUDE
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/LSDyna/vtkLSDynaReader.h;vtkIOLSDyna
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/LSDyna/vtkLSDynaSummaryParser.h;vtkIOLSDyna
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/LSDyna/private/LSDynaFamily.h;vtkIOLSDyna;WRAP_EXCLUDE
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/LSDyna/private/LSDynaMetaData.h;vtkIOLSDyna;WRAP_EXCLUDE
-

@@ -1,2 +1,0 @@
-/usr/bin/ar cq ../../lib/libvtkRenderingContextOpenGLCS-pv4.3.a  CMakeFiles/vtkRenderingContextOpenGLCS.dir/vtkOpenGLContextActorClientServer.cxx.o CMakeFiles/vtkRenderingContextOpenGLCS.dir/vtkRenderingContextOpenGLCSInit.cxx.o
-/usr/bin/ranlib ../../lib/libvtkRenderingContextOpenGLCS-pv4.3.a

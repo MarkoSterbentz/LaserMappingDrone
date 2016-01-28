@@ -1,8 +1,0 @@
-# Target labels
- vtkRenderingVolumeAMR
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/VolumeAMR/vtkAMRVolumeMapper.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/VolumeAMR/vtkAMRVolumeMapper.h
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/VolumeAMR/vtkRenderingVolumeAMRModule.h
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/VolumeAMR/vtkRenderingVolumeAMRHierarchy.stamp.txt
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/VolumeAMR/vtkRenderingVolumeAMRHierarchy.stamp.txt.rule

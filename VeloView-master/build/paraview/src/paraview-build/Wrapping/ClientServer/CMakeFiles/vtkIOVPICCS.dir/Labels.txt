@@ -1,6 +1,0 @@
-# Target labels
- VTKModular
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkVPICReaderClientServer.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkIOVPICCSInit.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/IO/VPIC/vtkVPICReader.h

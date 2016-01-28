@@ -1,2 +1,0 @@
-/usr/bin/ar cq ../../lib/libvtkIOParallelExodusCS-pv4.3.a  CMakeFiles/vtkIOParallelExodusCS.dir/vtkPExodusIIReaderClientServer.cxx.o CMakeFiles/vtkIOParallelExodusCS.dir/vtkPExodusIIWriterClientServer.cxx.o CMakeFiles/vtkIOParallelExodusCS.dir/vtkIOParallelExodusCSInit.cxx.o
-/usr/bin/ranlib ../../lib/libvtkIOParallelExodusCS-pv4.3.a

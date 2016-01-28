@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/ParaView/Documentation">
-    <file alias="paraview.qch">paraview.qch</file>
-  </qresource>
-</RCC>
-

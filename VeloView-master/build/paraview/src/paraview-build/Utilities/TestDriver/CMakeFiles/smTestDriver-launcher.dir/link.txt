@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC  -g  -Wl,--fatal-warnings -Wl,--no-undefined -lc -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  CMakeFiles/smTestDriver-launcher.dir/smTestDriver-forward.c.o  -o launcher/smTestDriver -rdynamic 

@@ -1,2 +1,0 @@
-/usr/bin/ar cq ../../lib/libvtkWebCoreCS-pv4.3.a  CMakeFiles/vtkWebCoreCS.dir/vtkDataEncoderClientServer.cxx.o CMakeFiles/vtkWebCoreCS.dir/vtkWebApplicationClientServer.cxx.o CMakeFiles/vtkWebCoreCS.dir/vtkWebInteractionEventClientServer.cxx.o CMakeFiles/vtkWebCoreCS.dir/vtkWebUtilitiesClientServer.cxx.o CMakeFiles/vtkWebCoreCS.dir/vtkObjectIdMapClientServer.cxx.o CMakeFiles/vtkWebCoreCS.dir/vtkWebCoreCSInit.cxx.o
-/usr/bin/ranlib ../../lib/libvtkWebCoreCS-pv4.3.a

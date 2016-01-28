@@ -1,7 +1,0 @@
-# Target labels
- VTKModular
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkOpenGLContextActorPython.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkRenderingContextOpenGLPythonInitImpl.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkOpenGLContextActorPython.cxx.rule
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkRenderingContextOpenGLPythonInit.cxx.rule

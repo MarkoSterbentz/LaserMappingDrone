@@ -1,6 +1,0 @@
-# Target labels
- VTKModular
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkPVWebApplicationClientServer.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkParaViewWebCoreCSInit.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview/Web/Core/vtkPVWebApplication.h

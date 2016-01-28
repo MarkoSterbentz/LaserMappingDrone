@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC -g    CMakeFiles/paraview-config-launcher.dir/paraview-config-forward.c.o  -o launcher/paraview-config -rdynamic 

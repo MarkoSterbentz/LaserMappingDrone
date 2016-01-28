@@ -1,8 +1,0 @@
-vtkIONetCDFPython
-vtkMPASReader
-vtkNetCDFCAMReader
-vtkNetCDFCFReader
-vtkNetCDFPOPReader
-vtkNetCDFReader
-vtkSLACParticleReader
-vtkSLACReader

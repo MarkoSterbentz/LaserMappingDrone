@@ -1,8 +1,0 @@
-# Target labels
- vtkFiltersPython
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/Python/vtkPythonAlgorithm.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/Python/vtkPythonAlgorithm.h
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Filters/Python/vtkFiltersPythonModule.h
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Filters/Python/vtkFiltersPythonHierarchy.stamp.txt
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Filters/Python/vtkFiltersPythonHierarchy.stamp.txt.rule

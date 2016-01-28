@@ -1,8 +1,0 @@
-vtkFiltersAMRPython
-vtkAMRCutPlane
-vtkAMRGaussianPulseSource
-vtkAMRResampleFilter
-vtkAMRSliceFilter
-vtkAMRToMultiBlockFilter
-vtkImageToAMR
-vtkParallelAMRUtilities

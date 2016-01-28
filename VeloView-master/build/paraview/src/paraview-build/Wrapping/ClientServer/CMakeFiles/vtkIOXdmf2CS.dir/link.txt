@@ -1,2 +1,0 @@
-/usr/bin/ar cq ../../lib/libvtkIOXdmf2CS-pv4.3.a  CMakeFiles/vtkIOXdmf2CS.dir/vtkSILBuilderClientServer.cxx.o CMakeFiles/vtkIOXdmf2CS.dir/vtkXdmfReaderClientServer.cxx.o CMakeFiles/vtkIOXdmf2CS.dir/vtkXdmfWriterClientServer.cxx.o CMakeFiles/vtkIOXdmf2CS.dir/vtkIOXdmf2CSInit.cxx.o
-/usr/bin/ranlib ../../lib/libvtkIOXdmf2CS-pv4.3.a

@@ -1,9 +1,0 @@
-# Target labels
- VTKModular
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkPLYReaderPython.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkPLYWriterPython.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkIOPLYPythonInitImpl.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkPLYReaderPython.cxx.rule
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkPLYWriterPython.cxx.rule
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkIOPLYPythonInit.cxx.rule

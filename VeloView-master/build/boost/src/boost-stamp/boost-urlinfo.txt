@@ -1,3 +1,0 @@
-repository='external project URL'
-module='http://downloads.sourceforge.net/project/boost/boost/1.50.0/boost_1_50_0.tar.gz'
-tag='MD5=dbc07ab0254df3dda6300fd737b3f264'

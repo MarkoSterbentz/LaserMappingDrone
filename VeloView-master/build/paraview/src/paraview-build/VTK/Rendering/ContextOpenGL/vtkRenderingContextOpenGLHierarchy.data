@@ -1,7 +1,0 @@
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/ContextOpenGL/vtkOpenGLContextActor.h;vtkRenderingContextOpenGL
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/ContextOpenGL/vtkOpenGL2ContextDevice2D.h;vtkRenderingContextOpenGL;WRAP_EXCLUDE
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/ContextOpenGL/vtkOpenGLContextBufferId.h;vtkRenderingContextOpenGL;WRAP_EXCLUDE
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/ContextOpenGL/vtkOpenGLContextDevice2D.h;vtkRenderingContextOpenGL;WRAP_EXCLUDE
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Rendering/ContextOpenGL/vtkOpenGLContextDevice3D.h;vtkRenderingContextOpenGL;WRAP_EXCLUDE
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Rendering/ContextOpenGL/vtkRenderingContextOpenGLObjectFactory.h;vtkRenderingContextOpenGL;WRAP_EXCLUDE
-

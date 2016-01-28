@@ -1,8 +1,0 @@
-# Target labels
- VTKModular
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkColorSeriesClientServer.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkNamedColorsClientServer.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Wrapping/ClientServer/vtkCommonColorCSInit.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Common/Color/vtkColorSeries.h
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Common/Color/vtkNamedColors.h

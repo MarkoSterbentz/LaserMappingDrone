@@ -1,2 +1,0 @@
-/usr/bin/ar cq ../../lib/libvtkIOPLYCS-pv4.3.a  CMakeFiles/vtkIOPLYCS.dir/vtkPLYReaderClientServer.cxx.o CMakeFiles/vtkIOPLYCS.dir/vtkPLYWriterClientServer.cxx.o CMakeFiles/vtkIOPLYCS.dir/vtkIOPLYCSInit.cxx.o
-/usr/bin/ranlib ../../lib/libvtkIOPLYCS-pv4.3.a

@@ -1,9 +1,0 @@
-vtkImagingColorPython
-vtkImageHSIToRGB
-vtkImageHSVToRGB
-vtkImageLuminance
-vtkImageMapToRGBA
-vtkImageMapToWindowLevelColors
-vtkImageQuantizeRGBToIndex
-vtkImageRGBToHSI
-vtkImageRGBToHSV

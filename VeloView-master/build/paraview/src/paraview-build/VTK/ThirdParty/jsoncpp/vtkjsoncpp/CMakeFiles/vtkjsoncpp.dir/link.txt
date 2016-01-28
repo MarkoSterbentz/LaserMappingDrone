@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC -fPIC  -w -w -w -g -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  -shared -Wl,-soname,libvtkjsoncpp-pv4.3.so.1 -o ../../../../lib/libvtkjsoncpp-pv4.3.so.1 CMakeFiles/vtkjsoncpp.dir/json_reader.cpp.o CMakeFiles/vtkjsoncpp.dir/json_value.cpp.o CMakeFiles/vtkjsoncpp.dir/json_writer.cpp.o 

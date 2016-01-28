@@ -1,1 +1,0 @@
-cmd='/usr/bin/cmake;-P;/home/marko/research/VeloView-master/build/pv-qt-configure.cmake'

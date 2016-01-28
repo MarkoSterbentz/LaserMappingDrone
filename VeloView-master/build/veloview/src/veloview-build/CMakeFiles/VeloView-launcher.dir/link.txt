@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC      CMakeFiles/VeloView-launcher.dir/VeloView-forward.c.o  -o launcher/VeloView -rdynamic 

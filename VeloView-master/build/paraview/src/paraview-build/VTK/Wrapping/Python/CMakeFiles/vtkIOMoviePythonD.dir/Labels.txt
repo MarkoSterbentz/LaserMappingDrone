@@ -1,9 +1,0 @@
-# Target labels
- VTKModular
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkGenericMovieWriterPython.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkOggTheoraWriterPython.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkIOMoviePythonInitImpl.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkGenericMovieWriterPython.cxx.rule
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkOggTheoraWriterPython.cxx.rule
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/VTK/Wrapping/Python/vtkIOMoviePythonInit.cxx.rule

@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC -fPIC  -w -w -g -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  -shared -Wl,-soname,libvtkexpat-pv4.3.so.1 -o ../../../../lib/libvtkexpat-pv4.3.so.1 CMakeFiles/vtkexpat.dir/xmlparse.c.o CMakeFiles/vtkexpat.dir/xmltok.c.o CMakeFiles/vtkexpat.dir/xmlrole.c.o 

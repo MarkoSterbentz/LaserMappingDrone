@@ -1,7 +1,0 @@
-vtkIOExodusPython
-vtkCPExodusIIElementBlock
-vtkCPExodusIIInSituReader
-vtkExodusIICache
-vtkExodusIIReader
-vtkExodusIIWriter
-vtkModelMetadata

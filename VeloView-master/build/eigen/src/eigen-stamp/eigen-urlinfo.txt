@@ -1,3 +1,0 @@
-repository='external project URL'
-module='http://vtk.org/files/support/eigen-3.1.2.tar.gz'
-tag='MD5=bb639388192cb80f1ee797f5dbdbe74f'

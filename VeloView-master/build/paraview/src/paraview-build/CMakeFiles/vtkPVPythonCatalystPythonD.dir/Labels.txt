@@ -1,7 +1,0 @@
-# Target labels
- vtkPVPythonCatalyst
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/vtkCPPythonScriptPipelinePython.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/vtkPVPythonCatalystPythonInitImpl.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/vtkCPPythonScriptPipelinePython.cxx.rule
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/vtkPVPythonCatalystPythonInit.cxx.rule

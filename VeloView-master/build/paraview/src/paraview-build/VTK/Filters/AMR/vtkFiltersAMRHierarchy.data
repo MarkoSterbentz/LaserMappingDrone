@@ -1,8 +1,0 @@
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/AMR/vtkAMRCutPlane.h;vtkFiltersAMR
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/AMR/vtkAMRGaussianPulseSource.h;vtkFiltersAMR
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/AMR/vtkAMRResampleFilter.h;vtkFiltersAMR
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/AMR/vtkAMRSliceFilter.h;vtkFiltersAMR
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/AMR/vtkAMRToMultiBlockFilter.h;vtkFiltersAMR
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/AMR/vtkImageToAMR.h;vtkFiltersAMR
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/Filters/AMR/vtkParallelAMRUtilities.h;vtkFiltersAMR
-

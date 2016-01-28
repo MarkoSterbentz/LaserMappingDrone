@@ -1,1 +1,0 @@
-/usr/bin/c++   -fPIC -g    CMakeFiles/paraview-config.dir/paraview-config.cxx.o  -o ../bin/paraview-config -rdynamic ../lib/libvtksys-pv4.3.so.1 -ldl -Wl,-rpath,/home/marko/research/VeloView-master/build/paraview/src/paraview-build/lib: 

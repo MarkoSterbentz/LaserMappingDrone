@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC -fPIC  -g -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  -shared -Wl,-soname,libQVTKWidgetPlugin.so -o ../../../lib/libQVTKWidgetPlugin.so CMakeFiles/QVTKWidgetPlugin.dir/Q4VTKWidgetPlugin.cxx.o CMakeFiles/QVTKWidgetPlugin.dir/moc_Q4VTKWidgetPlugin.cxx.o -lQtGui -lQtCore 

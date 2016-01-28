@@ -1,7 +1,0 @@
-vtkViewsCorePython
-vtkConvertSelectionDomain
-vtkDataRepresentation
-vtkEmptyRepresentation
-vtkRenderViewBase
-vtkView
-vtkViewTheme

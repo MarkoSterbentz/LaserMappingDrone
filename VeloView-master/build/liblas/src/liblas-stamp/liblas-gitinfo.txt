@@ -1,3 +1,0 @@
-repository='git://github.com/mwoehlke-kitware/libLAS.git'
-module=''
-tag=''

@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC  -g  -Wl,--fatal-warnings -Wl,--no-undefined -lc -Wl,--fatal-warnings -Wl,--no-undefined -lc -L/home/marko/research/VeloView-master/build/install/lib  CMakeFiles/vtkWrapPythonInit.dir/vtkWrapPythonInit.c.o  -o ../../../bin/vtkWrapPythonInit-pv4.3 -rdynamic 

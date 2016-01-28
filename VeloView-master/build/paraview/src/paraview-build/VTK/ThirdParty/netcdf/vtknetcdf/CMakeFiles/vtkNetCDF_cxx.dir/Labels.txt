@@ -1,5 +1,0 @@
-# Target labels
- vtknetcdf
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/netcdf/vtknetcdf/cxx/netcdf.cpp
-/home/marko/research/VeloView-master/build/paraview/src/paraview/VTK/ThirdParty/netcdf/vtknetcdf/cxx/ncvalues.cpp

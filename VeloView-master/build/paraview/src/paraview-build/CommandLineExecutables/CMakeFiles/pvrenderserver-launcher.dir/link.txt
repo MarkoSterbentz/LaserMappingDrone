@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC -g    CMakeFiles/pvrenderserver-launcher.dir/pvrenderserver-forward.c.o  -o launcher/pvrenderserver -rdynamic 

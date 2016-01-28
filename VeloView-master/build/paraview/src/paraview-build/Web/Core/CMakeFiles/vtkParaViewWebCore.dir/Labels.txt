@@ -1,8 +1,0 @@
-# Target labels
- vtkParaViewWebCore
-# Source files and their labels
-/home/marko/research/VeloView-master/build/paraview/src/paraview/Web/Core/vtkPVWebApplication.cxx
-/home/marko/research/VeloView-master/build/paraview/src/paraview/Web/Core/vtkPVWebApplication.h
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Web/Core/vtkParaViewWebCoreModule.h
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Web/Core/vtkParaViewWebCoreHierarchy.stamp.txt
-/home/marko/research/VeloView-master/build/paraview/src/paraview-build/Web/Core/vtkParaViewWebCoreHierarchy.stamp.txt.rule

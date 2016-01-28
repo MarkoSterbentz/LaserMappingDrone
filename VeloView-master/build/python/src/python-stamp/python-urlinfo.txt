@@ -1,3 +1,0 @@
-repository='external project URL'
-module='http://paraview.org/files/v3.98/dependencies/Python-2.7.2.tgz'
-tag='MD5=0ddfe265f1b3d0a8c2459f5bf66894c7'

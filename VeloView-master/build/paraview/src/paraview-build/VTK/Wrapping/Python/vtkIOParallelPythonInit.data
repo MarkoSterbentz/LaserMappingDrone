@@ -1,8 +1,0 @@
-vtkIOParallelPython
-vtkEnSightWriter
-vtkPChacoReader
-vtkPDataSetReader
-vtkPDataSetWriter
-vtkPImageWriter
-vtkPOpenFOAMReader
-vtkPSLACReader
