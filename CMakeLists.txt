@@ -31,12 +31,13 @@ find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
-set(DUA_INCLUDE_DIR QuadTree AssetManagement)
+set(DUA_INCLUDE_DIR QuadTree AssetManagement Grid Utilities)
 include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
 set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree/QuadTreeDrawer.cpp
-        AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp Grid/Grid.h Grid/GridDrawer.cpp Grid/GridDrawer.h)
+        AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp Grid/Grid.h Grid/GridDrawer.h
+        Utilities/Delegate.h)
 
 # Make an executable called LaserMappingDrone out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

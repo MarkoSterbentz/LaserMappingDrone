@@ -64,6 +64,12 @@ namespace LaserMappingDrone {
                                    {0.f,     0.f,     1.f, 0.f},
                                    {xCenter, yCenter, 0.f, 1.f}};
             matrixStack.push_back(localModelMat * sizingMat);
+
+			// Bind the VAO
+			glBindVertexArray(vao);
+			// Tell GPU to use the colorShader program for following draw calls
+			glUseProgram(shader);
+
             drawBorder();
 			this->dotScale = dotScale;
             drawNode(tree.head);

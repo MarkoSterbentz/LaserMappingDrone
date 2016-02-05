@@ -56,10 +56,6 @@ namespace LaserMappingDrone {
     }
 
     void QuadTreeDrawer::preDrawCommon() {
-        // Bind the VAO
-        glBindVertexArray(vao);
-        // Tell GPU to use the colorShader program for following draw calls
-        glUseProgram(shader);
         // Upload the model matrix to the colorShader program on the GPU
         glUniformMatrix4fv(shader_modelMat, 1, GL_FALSE, &((glm::mat4)(matrixStack.back()))[0][0]);
         // Upload the color you want to the colorShader program on the GPU
