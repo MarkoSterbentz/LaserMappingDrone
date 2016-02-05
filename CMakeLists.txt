@@ -36,7 +36,7 @@ include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
 set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree/QuadTreeDrawer.cpp
-        AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp)
+        AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp Grid/Grid.h Grid/GridDrawer.cpp Grid/GridDrawer.h)
 
 # Make an executable called LaserMappingDrone out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
