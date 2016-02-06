@@ -67,7 +67,7 @@ namespace LaserMappingDrone {
 
 			// Bind the VAO
 			glBindVertexArray(vao);
-			// Tell GPU to use the colorShader program for following draw calls
+			// Tell GPU to use the colorShader program
 			glUseProgram(shader);
 
             drawBorder();

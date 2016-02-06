@@ -34,7 +34,7 @@ namespace LaserMappingDrone {
         bool operator==(const Delegate& rhs) const {
             return (calleePtr == rhs.calleePtr) && (callbackFuncPtr == rhs.callbackFuncPtr);
         }
-        bool operator!=(const Delegate& rhs const) {
+        bool operator!=(const Delegate& rhs) const {
             return !(this->operator==(rhs));
         }
     private:

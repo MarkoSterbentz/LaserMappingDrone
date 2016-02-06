@@ -8,12 +8,14 @@
 
 #include "QuadTree.h"
 #include "QuadTreeDrawer.h"
+#include "Grid.h"
+#include "GridDrawer.h"
 
 #define RESOLUTION_X 1200
 #define RESOLUTION_Y 700
 #define GLVERSION_MAJOR 3
 #define GLVERSION_MINOR 0
-#define FULLSCREEN
+//#define FULLSCREEN
 /*******************************/
 #ifdef FULLSCREEN
 #define SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -36,11 +38,13 @@ struct DummyPoint {
     float x, y;
 };
 
-SDL_Window* pWindow;    // The SDL window
-SDL_GLContext context;  // The openGL context
+SDL_Window* pWindow;                // The SDL window
+SDL_GLContext context;              // The openGL context
 QuadTree<DummyPoint> quadTree(1);   // The quad tree
+Grid<DummyPoint> grid(-100.f, 100.f, -100.f, 100.f, 10, 10);
 float xRes, yRes, aspectRatio;
 QuadTreeDrawer treeDrawer;
+GridDrawer<DummyPoint> gridDrawer;
 long double dotZoomLevel;
 unsigned previousTime, currentTime, deltaTime; // Used to regulate physics time step
 
@@ -51,6 +55,7 @@ void checkSDLError(int line = -1);
 void cleanup();
 
 int main(int argc, char* argv[]) {
+
     dotZoomLevel = 0.01;
     xRes = RESOLUTION_X;
     yRes = RESOLUTION_Y;
@@ -58,6 +63,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     OUTSTREAM << treeDrawer.init(aspectRatio);
+    OUTSTREAM << gridDrawer.init(aspectRatio, &grid);
 
 #ifdef BENCHMARK
 	// Benchmark point insertion
@@ -100,10 +106,19 @@ void mainLoop() {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     float xPos = (float)event.button.x / (xRes * 0.5f) - 1.0f;
                     float yPos = -(float)event.button.y / (yRes * 0.5f) + 1.0f;
+                    glm::dmat4 invMat = glm::inverse(gridDrawer.getTransformMat());
+                    glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
+                    glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
+                    grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y});
+                    printf("[%f, %f]\n", gridSpaceClick.x, gridSpaceClick.y);
+                } else if (event.button.button == SDL_BUTTON_RIGHT) {
+                    float xPos = (float)event.button.x / (xRes * 0.5f) - 1.0f;
+                    float yPos = -(float)event.button.y / (yRes * 0.5f) + 1.0f;
                     glm::dmat4 invMat = glm::inverse(treeDrawer.getTransformMat());
                     glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                     glm::dvec4 treeSpaceClick = invMat * scrSpaceClick;
                     quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y});
+                    printf("[%f, %f]\n", treeSpaceClick.x, treeSpaceClick.y);
                 }
             }
         }
@@ -118,31 +133,40 @@ void mainLoop() {
 
         if (keyStates[SDL_SCANCODE_UP]) {
             treeDrawer.translate(-0.0f, -moveSpeed * (float)dotZoomLevel);
+            gridDrawer.translate(-0.0f, -moveSpeed * (float)dotZoomLevel);
         }
         if (keyStates[SDL_SCANCODE_DOWN]) {
             treeDrawer.translate(-0.0f, moveSpeed * (float)dotZoomLevel);
+            gridDrawer.translate(-0.0f, moveSpeed * (float)dotZoomLevel);
         }
         if (keyStates[SDL_SCANCODE_LEFT]) {
             treeDrawer.translate(moveSpeed * (float)dotZoomLevel, -0.0f);
+            gridDrawer.translate(moveSpeed * (float)dotZoomLevel, -0.0f);
         }
         if (keyStates[SDL_SCANCODE_RIGHT]) {
             treeDrawer.translate(-moveSpeed * (float)dotZoomLevel, -0.0f);
+            gridDrawer.translate(-moveSpeed * (float)dotZoomLevel, -0.0f);
         }
         if (keyStates[SDL_SCANCODE_LSHIFT]) {
             float zoomSpeed = 1.f + moveSpeed * 0.005f;
             dotZoomLevel /= zoomSpeed;
 			treeDrawer.scale(zoomSpeed, zoomSpeed);
+            gridDrawer.scale(zoomSpeed, zoomSpeed);
         }
         if (keyStates[SDL_SCANCODE_LCTRL]) {
             float zoomSpeed = 1.f - moveSpeed * 0.005f;
             dotZoomLevel /= zoomSpeed;
 			treeDrawer.scale(zoomSpeed, zoomSpeed);
+            gridDrawer.scale(zoomSpeed, zoomSpeed);
         }
         /**************************** DO THE DRAWING *********************************/
         // clear the buffer
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         // draw the tree
         treeDrawer.drawQuadTree(quadTree, (float)dotZoomLevel);
+
+        gridDrawer.drawGrid((float)dotZoomLevel);
+
         // swap frame buffers (back buffer was drawn, will now be shown)
         SDL_GL_SwapWindow(pWindow);
     }

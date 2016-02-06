@@ -38,6 +38,7 @@ namespace LaserMappingDrone {
         std::vector<glm::dmat4> matrixStack;
         glm::dmat4 localModelMat;
         unsigned long numGridVerts;
+        float pointSizeX, pointSizeY;
 
         void addPoint(P& point);
 
@@ -50,9 +51,9 @@ namespace LaserMappingDrone {
     };
 
     template <class P>
-    std::string GridDrawer::init(float aspectRatio, Grid<P> *grid) {
+    std::string GridDrawer<P>::init(float aspectRatio, Grid<P> *grid) {
         this->grid = grid;
-        grid->specifyPointAdditionCallback(DELEGATE(&GridDrawer::addPoint, this));
+        //grid->specifyPointAdditionCallback(DELEGATE(&GridDrawer<P>::addPoint, this));
 
         std::stringstream log;
 
@@ -77,27 +78,27 @@ namespace LaserMappingDrone {
                 -0.01f, 0.0f, 0.5f, 1.0f,
                 0.01f, 0.0f, 0.5f, 1.0f
         };
-        float xStep = 1.f / grid->resX;
-        for (unsigned x = 0; x < grid->resX; ++x) {
-            verts.emplace_back(x * xStep);
+        float xStep = 2.f / grid->xRes;
+        for (unsigned x = 0; x <= grid->xRes; ++x) {
+            verts.emplace_back(x * xStep - 1.f);
             verts.emplace_back(-1.f);
             verts.emplace_back(0.5f);
             verts.emplace_back(1.f);
 
-            verts.emplace_back(x * xStep);
+            verts.emplace_back(x * xStep - 1.f);
             verts.emplace_back(1.f);
             verts.emplace_back(0.5f);
             verts.emplace_back(1.f);
         }
-        float yStep = 1.f / grid->resY;
-        for (unsigned y = 0; y < grid->resY; ++y) {
+        float yStep = 2.f / grid->yRes;
+        for (unsigned y = 0; y <= grid->yRes; ++y) {
             verts.emplace_back(-1.f);
-            verts.emplace_back(1.f / y);
+            verts.emplace_back(y * yStep - 1.f);
             verts.emplace_back(0.5f);
             verts.emplace_back(1.f);
 
             verts.emplace_back(1.f);
-            verts.emplace_back(1.f / y);
+            verts.emplace_back(y * yStep - 1.f);
             verts.emplace_back(0.5f);
             verts.emplace_back(1.f);
         }
@@ -112,57 +113,109 @@ namespace LaserMappingDrone {
 
         currentColor[0] = 0.f;
         currentColor[1] = 1.f;
-        currentColor[2] = 0.f;
+        currentColor[2] = 1.f;
 
         localModelMat = glm::dmat4();
-        localModelMat = glm::scale(localModelMat, {aspectRatio, 1.f, 1.f});
+        localModelMat = glm::scale(localModelMat, {aspectRatio * (1.9f / (grid->yMax - grid->yMin)),
+                                                   (1.9f / (grid->yMax - grid->yMin)),
+                                                   1.f});
+
+        pointSizeX = (grid->xMax - grid->xMin) * 0.5f;
+        pointSizeY = (grid->yMax - grid->yMin) * 0.5f;
 
         return log.str();
     }
 
-    void GridDrawer::drawGrid(float dotScale) {
+    template <class P>
+    void GridDrawer<P>::drawGrid(float dotScale) {
+        matrixStack.clear();
+        float xScale = (grid->xMax - grid->xMin) * 0.5f;
+        float yScale = (grid->yMax - grid->yMin) * 0.5f;
+        float xCenter = grid->xMin + (xScale);
+        float yCenter = grid->yMin + (yScale);
+        glm::dmat4 sizingMat = {{xScale,  0.f,     0.f, 0.f},
+                                {0.f,     yScale,  0.f, 0.f},
+                                {0.f,     0.f,     1.f, 0.f},
+                                {xCenter, yCenter, 0.f, 1.f}};
+        matrixStack.push_back(localModelMat * sizingMat);
 
-    }
+        // Bind the VAO
+        glBindVertexArray(vao);
+        // Tell GPU to use the colorShader program for following draw calls
+        glUseProgram(shader);
 
-    void GridDrawer::translate(float x, float y) {
-
-    }
-
-    void GridDrawer::scale(float x, float y) {
-
-    }
-
-    glm::dmat4 GridDrawer::getTransformMat() {
-        return glm::dmat4();
+        drawBorders();
+        drawPoints();
     }
 
     template <class P>
-    void GridDrawer::addPoint(P &point) {
-
+    void GridDrawer<P>::translate(float x, float y) {
+        localModelMat *= glm::dmat4{{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {x, y, 0.f, 1.f}};
     }
 
-    void GridDrawer::pushMat(glm::dmat4 &&mat) {
-
+    template <class P>
+    void GridDrawer<P>::scale(float x, float y) {
+        localModelMat = glm::dmat4{{x, 0.f, 0.f, 0.f}, {0.f, y, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f}} *
+                        localModelMat;
     }
 
-    void GridDrawer::popMat() {
-
+    template <class P>
+    glm::dmat4 GridDrawer<P>::getTransformMat() {
+        return localModelMat;
     }
 
-    void GridDrawer::setColor(float r, float g, float b) {
-
+    template <class P>
+    void GridDrawer<P>::addPoint(P &point) {
+        // NOT IMPLEMENTED - GOING TO BE USED FOR OPTIMIZATION
     }
 
-    void GridDrawer::drawBorders() {
-
+    template <class P>
+    void GridDrawer<P>::pushMat(glm::dmat4 &&mat) {
+        matrixStack.push_back(mat);
     }
 
-    void GridDrawer::preDrawCommon() {
-
+    template <class P>
+    void GridDrawer<P>::popMat() {
+        matrixStack.pop_back();
     }
 
-    void GridDrawer::drawPoints() {
+    template <class P>
+    void GridDrawer<P>::setColor(float r, float g, float b) {
+        currentColor[0] = r;
+        currentColor[1] = g;
+        currentColor[2] = b;
+    }
 
+    template <class P>
+    void GridDrawer<P>::drawBorders() {
+        preDrawCommon();
+        glDrawArrays(GL_LINES, 4, (GLsizei)numGridVerts);
+    }
+
+    template <class P>
+    void GridDrawer<P>::preDrawCommon() {
+        // Upload the model matrix to the colorShader program on the GPU
+        glUniformMatrix4fv(shader_modelMat, 1, GL_FALSE, &((glm::mat4)(matrixStack.back()))[0][0]);
+        // Upload the color you want to the colorShader program on the GPU
+        glUniform3f(shader_color, currentColor[0], currentColor[1], currentColor[2]);
+    }
+
+    template <class P>
+    void GridDrawer<P>::drawPoints() {
+        setColor(1.f, 1.f, 0.f);
+        for (unsigned i = 0; i < grid->cells.size(); ++i) {
+            for (unsigned j = 0; j < grid->cells[i].points.size(); ++j) {
+                pushMat(localModelMat *
+                        glm::dmat4{{pointSizeX,                  0.f,                          0.f,    0.f},
+                                   {0.f,                         pointSizeY,                   0.f,    0.f},
+                                   {0.f,                         0.f,                          1.f,    0.f},
+                                   {grid->cells[i].points[j].x,  grid->cells[i].points[j].y,   0.f,    1.f} });
+                preDrawCommon();
+                glDrawArrays(GL_LINES, 0, 4);
+                popMat();
+            }
+        }
+        setColor(0.f, 1.f, 1.f);
     }
 }
 
