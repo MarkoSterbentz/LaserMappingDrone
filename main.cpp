@@ -1,5 +1,5 @@
 //
-// Created by adayoldbagel on 1/13/16.
+// Created by Galen on 1/13/16.
 //
 
 #include <iostream>
@@ -38,7 +38,7 @@ unsigned previousTime, currentTime, deltaTime; // Used to regulate controls/phys
 
 // Function prototypes
 void mainLoop();
-int handleControls();
+int handleEvents();
 
 int main(int argc, char* argv[]) {
 
@@ -73,7 +73,7 @@ void mainLoop() {
     while (loop) {
 
         /**************************** HANDLE CONTROLS ********************************/
-        int timeToQuit = handleControls();
+        int timeToQuit = handleEvents(); // returns non-zero if quit events happen
         if (timeToQuit) {
             loop = false;
         }
@@ -88,7 +88,7 @@ void mainLoop() {
     }
 }
 
-int handleControls() {
+int handleEvents() {
     /**************************** HANDLE EVENTS *********************************/
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // process all accumulated events
@@ -98,21 +98,21 @@ int handleControls() {
             switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE:
                     return 1;
-                case SDLK_SPACE:	// turn on or off the small-node culling optimization
+                case SDLK_SPACE:	// turn on or off the small-node culling optimization for the quad tree
                     treeDrawer.toggleOptimization();
                     break;
                 default:
                     break;
             }
         } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-            if (event.button.button == SDL_BUTTON_LEFT) {
+            if (event.button.button == SDL_BUTTON_LEFT) {   // add point to grid
                 float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
                 float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
                 glm::dmat4 invMat = glm::inverse(gridDrawer.getTransformMat());
                 glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                 glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
                 grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y});
-            } else if (event.button.button == SDL_BUTTON_RIGHT) {
+            } else if (event.button.button == SDL_BUTTON_RIGHT) {   // add point to quad tree
                 float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
                 float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
                 glm::dmat4 invMat = glm::inverse(treeDrawer.getTransformMat());
@@ -123,14 +123,15 @@ int handleControls() {
         }
     }
     /**************************** HANDLE KEY STATE *********************************/
+    // Determine the time step since last time
     currentTime = SDL_GetTicks();
     deltaTime = currentTime - previousTime;
     previousTime = currentTime;
     // Get current keyboard state ( this is used for smooth controls rather than key press event controls above )
     const Uint8* keyStates = SDL_GetKeyboardState(NULL);
-    // apply movement according to which keys are down
+    // this is a "sensitivity" value
     float moveSpeed = 0.2f * deltaTime;
-
+    // apply movement according to which keys are down
     if (keyStates[SDL_SCANCODE_UP]) {
         treeDrawer.translate(-0.0f, -moveSpeed * (float) zoomLevel);
         gridDrawer.translate(-0.0f, -moveSpeed * gridDrawer.getMovementScaleY() * (float) zoomLevel);
