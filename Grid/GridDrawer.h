@@ -24,9 +24,11 @@ namespace LaserMappingDrone {
         void drawGrid();
         void translate(float x, float y);
         void scale (float x, float y);
+        void transform(glm::dmat4& transform);
+        void zoomAtPoint(float x, float y, float amount);
         glm::dmat4 getTransformMat();
-        float getMovementScaleX();
-        float getMovementScaleY();
+        inline float getMovementScaleX() { return pointSizeX; }
+        inline float getMovementScaleY() { return pointSizeY; }
 
     private:
         Grid<P>* grid;
@@ -36,11 +38,10 @@ namespace LaserMappingDrone {
         GLint shader_modelMat;
         GLint shader_color;
         float currentColor[3];
-        float dotScale;
         std::vector<glm::dmat4> matrixStack;
         glm::dmat4 localModelMat;
         unsigned long numGridVerts;
-        float pointSizeX, pointSizeY;
+        float pointSizeX, pointSizeY, centerX, centerY, scaleX, scaleY;
 
         void addPoint(P& point);
 
@@ -117,18 +118,23 @@ namespace LaserMappingDrone {
         currentColor[1] = 1.f;
         currentColor[2] = 1.f;
 
+        scaleX = (grid->xMax - grid->xMin) * 0.5f;
+        scaleY = (grid->yMax - grid->yMin) * 0.5f;
+        centerX = grid->xMin + (scaleX);
+        centerY = grid->yMin + (scaleY);
+
         localModelMat = glm::dmat4();
         localModelMat = glm::scale(localModelMat, {aspectRatio * (1.9f / (grid->yMax - grid->yMin)),
                                                    (1.9f / (grid->yMax - grid->yMin)),
                                                    1.f});
-        float xScale = (grid->xMax - grid->xMin) * 0.5f;
-        float yScale = (grid->yMax - grid->yMin) * 0.5f;
-        float xCenter = grid->xMin + (xScale);
-        float yCenter = grid->yMin + (yScale);
-        localModelMat = glm::translate(localModelMat, {-xCenter, -yCenter, 0.f});
 
-        pointSizeX = (grid->xMax - grid->xMin) * 0.5f;
-        pointSizeY = (grid->yMax - grid->yMin) * 0.5f;
+        localModelMat = glm::translate(localModelMat, {-centerX, -centerY, 0.f});
+
+        centerX = grid->xMin + ((grid->xMax - grid->xMin) * 0.5f);
+        centerY = grid->yMin + ((grid->yMax - grid->yMin) * 0.5f);
+
+        pointSizeX = scaleX;
+        pointSizeY = scaleY;
 
         return log.str();
     }
@@ -136,14 +142,10 @@ namespace LaserMappingDrone {
     template <class P>
     void GridDrawer<P>::drawGrid() {
         matrixStack.clear();
-        float xScale = (grid->xMax - grid->xMin) * 0.5f;
-        float yScale = (grid->yMax - grid->yMin) * 0.5f;
-        float xCenter = grid->xMin + (xScale);
-        float yCenter = grid->yMin + (yScale);
-        glm::dmat4 sizingMat = {{xScale,  0.f,     0.f, 0.f},
-                                {0.f,     yScale,  0.f, 0.f},
+        glm::dmat4 sizingMat = {{scaleX,  0.f,     0.f, 0.f},
+                                {0.f,     scaleY,  0.f, 0.f},
                                 {0.f,     0.f,     1.f, 0.f},
-                                {xCenter, yCenter, 0.f, 1.f}};
+                                {centerX, centerY, 0.f, 1.f}};
         matrixStack.push_back(localModelMat * sizingMat);
 
         // Bind the VAO
@@ -164,6 +166,20 @@ namespace LaserMappingDrone {
     void GridDrawer<P>::scale(float x, float y) {
         localModelMat = glm::dmat4{{x, 0.f, 0.f, 0.f}, {0.f, y, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f}} *
                         localModelMat;
+    }
+
+    template <class P>
+    void GridDrawer<P>::transform(glm::dmat4 &transform) {
+        localModelMat = localModelMat * transform;
+    }
+
+    template <class P>
+    void GridDrawer<P>::zoomAtPoint(float x, float y, float amount) {
+        glm::dmat4 transToCenter = glm::translate(glm::dmat4(), {-x, -y, 0.0});
+        glm::dmat4 transBackOut  = glm::translate(glm::dmat4(), {x, y, 0.0});
+        glm::dmat4 scale = glm::scale(glm::dmat4(), {amount, amount, 1.0});
+
+        localModelMat = transBackOut * scale * transToCenter * localModelMat;
     }
 
     template <class P>
@@ -223,16 +239,6 @@ namespace LaserMappingDrone {
             }
         }
         setColor(0.f, 1.f, 1.f);
-    }
-
-    template<class P>
-    float GridDrawer<P>::getMovementScaleX() {
-        return pointSizeX;
-    }
-
-    template<class P>
-    float GridDrawer<P>::getMovementScaleY() {
-        return pointSizeY;
     }
 }
 

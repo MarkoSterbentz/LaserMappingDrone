@@ -25,6 +25,7 @@ namespace LaserMappingDrone {
         void drawQuadTree(QuadTree<P>& tree, float dotScale);
         void translate(float x, float y);
         void scale(float x, float y);
+		void zoomAtPoint(float x, float y, float amount);
         glm::dmat4 getTransformMat();
 		void toggleOptimization();
 

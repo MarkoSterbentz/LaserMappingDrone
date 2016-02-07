@@ -18,7 +18,7 @@ using namespace LaserMappingDrone;
 
 // placeholder struct that represents the eventual data received from the lidar device
 struct DummyPoint {
-    float x, y;
+    float x, y, z;
 };
 
 // The quadtree and drawer
@@ -38,7 +38,7 @@ unsigned previousTime, currentTime, deltaTime; // Used to regulate controls/phys
 
 // Function prototypes
 void mainLoop();
-int handleEvents();
+int handleControls();
 
 int main(int argc, char* argv[]) {
 
@@ -73,7 +73,7 @@ void mainLoop() {
     while (loop) {
 
         /**************************** HANDLE CONTROLS ********************************/
-        int timeToQuit = handleEvents(); // returns non-zero if quit events happen
+        int timeToQuit = handleControls(); // returns non-zero if quit events happen
         if (timeToQuit) {
             loop = false;
         }
@@ -88,7 +88,7 @@ void mainLoop() {
     }
 }
 
-int handleEvents() {
+int handleControls() {
     /**************************** HANDLE EVENTS *********************************/
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // process all accumulated events
@@ -120,6 +120,16 @@ int handleEvents() {
                 glm::dvec4 treeSpaceClick = invMat * scrSpaceClick;
                 quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y});
             }
+        } else if (event.type == SDL_MOUSEWHEEL) {
+            int xPosInt, yPosInt;
+            SDL_GetMouseState(&xPosInt, &yPosInt);
+            float xPos = (float)xPosInt / (graphics.getResX() * 0.5f) - 1.0f;
+            float yPos = -(float)yPosInt / (graphics.getResY() * 0.5f) + 1.0f;
+            glm::dvec4 scrSpacePos(xPos, yPos, 0.0, 1.0);
+            float zoomSpeed = 1.f + event.wheel.y * 0.08f;
+            zoomLevel /= zoomSpeed;
+            gridDrawer.zoomAtPoint((float)scrSpacePos.x, (float)scrSpacePos.y, zoomSpeed);
+            treeDrawer.zoomAtPoint((float)scrSpacePos.x, (float)scrSpacePos.y, zoomSpeed);
         }
     }
     /**************************** HANDLE KEY STATE *********************************/

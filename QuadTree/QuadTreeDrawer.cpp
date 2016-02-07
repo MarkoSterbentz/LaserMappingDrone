@@ -81,6 +81,14 @@ namespace LaserMappingDrone {
                         localModelMat;
     }
 
+    void QuadTreeDrawer::zoomAtPoint(float x, float y, float amount) {
+        glm::dmat4 transToCenter = glm::translate(glm::dmat4(), {-x, -y, 0.0});
+        glm::dmat4 transBackOut  = glm::translate(glm::dmat4(), {x, y, 0.0});
+        glm::dmat4 scale = glm::scale(glm::dmat4(), {amount, amount, 1.0});
+
+        localModelMat = transBackOut * scale * transToCenter * localModelMat;
+    }
+
     void QuadTreeDrawer::setColor(float r, float g, float b) {
         currentColor[0] = r;
         currentColor[1] = g;
