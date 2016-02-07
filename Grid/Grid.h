@@ -28,6 +28,7 @@ namespace LaserMappingDrone {
     private:
         std::vector<Cell<P>> cells;
         float xMin, xMax, yMin, yMax;
+        float xIndexFactor, yIndexFactor;
         unsigned xRes, yRes;
 
         Delegate<void(P&)> pointAdditionCallback;
@@ -45,6 +46,8 @@ namespace LaserMappingDrone {
     template<class P>
     Grid<P>::Grid(float xMin, float xMax, float yMin, float yMax, unsigned xRes, unsigned yRes) :
             xMin(xMin), xMax(xMax), yMin(yMin), yMax(yMax), xRes(xRes), yRes(yRes), pointAdditionCallbackExists(false) {
+        xIndexFactor = xRes / (xMax - xMin);
+        yIndexFactor = yRes / (yMax - yMin);
         unsigned long numCells = xRes * yRes;
         for (unsigned long i = 0; i < numCells; ++i) {
             cells.push_back(Cell<P>());
@@ -59,9 +62,12 @@ namespace LaserMappingDrone {
     template<class P>
     void Grid<P>::addPoint(P point) {
         if (point.x < xMax && point.x > xMin && point.y < yMax && point.y > yMin) {
-            int cellIndex = (int)(((point.x - xMin) / (xRes * 2))) + (int)(((point.y - yMin) / (yRes * 2))) * xRes;
-            cells[cellIndex].points.push_back(point);
-            printf("[%f, %f] : cell %d : has %lu\n", point.x, point.y, cellIndex, cells[cellIndex].points.size());
+            unsigned cellIndex = (int)((point.x - xMin) * xIndexFactor) + (int)((point.y - yMin) * yIndexFactor) * xRes;
+            if (cellIndex >= 0 && cellIndex < cells.size()) {
+                cells[cellIndex].points.push_back(point);
+            }
+//            printf("[%f, %f] (%f, %f) : cell %d : has %lu\n", point.x, point.y, (point.x - xMin) * xIndexFactor,
+//                   (point.y - yMin) * yIndexFactor, cellIndex, cells[cellIndex].points.size());
             if (pointAdditionCallbackExists) {
                 pointAdditionCallback(point);
             }

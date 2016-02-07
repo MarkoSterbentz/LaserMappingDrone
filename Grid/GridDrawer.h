@@ -21,10 +21,12 @@ namespace LaserMappingDrone {
     struct GridDrawer {
 
         std::string init(float aspectRatio, Grid<P>* grid);
-        void drawGrid(float dotScale);
+        void drawGrid();
         void translate(float x, float y);
         void scale (float x, float y);
         glm::dmat4 getTransformMat();
+        float getMovementScaleX();
+        float getMovementScaleY();
 
     private:
         Grid<P>* grid;
@@ -119,6 +121,11 @@ namespace LaserMappingDrone {
         localModelMat = glm::scale(localModelMat, {aspectRatio * (1.9f / (grid->yMax - grid->yMin)),
                                                    (1.9f / (grid->yMax - grid->yMin)),
                                                    1.f});
+        float xScale = (grid->xMax - grid->xMin) * 0.5f;
+        float yScale = (grid->yMax - grid->yMin) * 0.5f;
+        float xCenter = grid->xMin + (xScale);
+        float yCenter = grid->yMin + (yScale);
+        localModelMat = glm::translate(localModelMat, {-xCenter, -yCenter, 0.f});
 
         pointSizeX = (grid->xMax - grid->xMin) * 0.5f;
         pointSizeY = (grid->yMax - grid->yMin) * 0.5f;
@@ -127,7 +134,7 @@ namespace LaserMappingDrone {
     }
 
     template <class P>
-    void GridDrawer<P>::drawGrid(float dotScale) {
+    void GridDrawer<P>::drawGrid() {
         matrixStack.clear();
         float xScale = (grid->xMax - grid->xMin) * 0.5f;
         float yScale = (grid->yMax - grid->yMin) * 0.5f;
@@ -216,6 +223,16 @@ namespace LaserMappingDrone {
             }
         }
         setColor(0.f, 1.f, 1.f);
+    }
+
+    template<class P>
+    float GridDrawer<P>::getMovementScaleX() {
+        return pointSizeX;
+    }
+
+    template<class P>
+    float GridDrawer<P>::getMovementScaleY() {
+        return pointSizeY;
     }
 }
 
