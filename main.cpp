@@ -12,6 +12,9 @@
 #include "Grid.h"
 #include "GridDrawer.h"
 
+#define SCROLL_ZOOM_SENSITIVITY 0.08f
+#define KEY_ZOOM_EXTRA_SENSITIVITY 0.005f
+#define KEY_MOVE_SENSITIVITY 0.2f
 //#define BENCHMARK_QUADTREE_POINT_INSERTION
 
 using namespace LaserMappingDrone;
@@ -63,12 +66,12 @@ int main(int argc, char* argv[]) {
     std::cout << SDL_GetTicks() - startTime;
     #endif
 
-    previousTime = SDL_GetTicks();
     mainLoop();
     return 0;
 }
 
 void mainLoop() {
+    previousTime = SDL_GetTicks();
     bool loop = true;
     while (loop) {
 
@@ -126,7 +129,7 @@ int handleControls() {
             float xPos = (float)xPosInt / (graphics.getResX() * 0.5f) - 1.0f;
             float yPos = -(float)yPosInt / (graphics.getResY() * 0.5f) + 1.0f;
             glm::dvec4 scrSpacePos(xPos, yPos, 0.0, 1.0);
-            float zoomSpeed = 1.f + event.wheel.y * 0.08f;
+            float zoomSpeed = 1.f + event.wheel.y * SCROLL_ZOOM_SENSITIVITY;
             zoomLevel /= zoomSpeed;
             gridDrawer.zoomAtPoint((float)scrSpacePos.x, (float)scrSpacePos.y, zoomSpeed);
             treeDrawer.zoomAtPoint((float)scrSpacePos.x, (float)scrSpacePos.y, zoomSpeed);
@@ -139,33 +142,32 @@ int handleControls() {
     previousTime = currentTime;
     // Get current keyboard state ( this is used for smooth controls rather than key press event controls above )
     const Uint8* keyStates = SDL_GetKeyboardState(NULL);
-    // this is a "sensitivity" value
-    float moveSpeed = 0.2f * deltaTime;
+    float moveSpeed = KEY_MOVE_SENSITIVITY * deltaTime;
     // apply movement according to which keys are down
     if (keyStates[SDL_SCANCODE_UP]) {
-        treeDrawer.translate(-0.0f, -moveSpeed * (float) zoomLevel);
-        gridDrawer.translate(-0.0f, -moveSpeed * gridDrawer.getMovementScaleY() * (float) zoomLevel);
+        treeDrawer.translate(0.0f, -moveSpeed * (float) zoomLevel);
+        gridDrawer.translate(0.0f, -moveSpeed * gridDrawer.getMovementScaleY() * (float) zoomLevel);
     }
     if (keyStates[SDL_SCANCODE_DOWN]) {
-        treeDrawer.translate(-0.0f, moveSpeed * (float) zoomLevel);
-        gridDrawer.translate(-0.0f, moveSpeed * gridDrawer.getMovementScaleY() * (float) zoomLevel);
+        treeDrawer.translate(0.0f, moveSpeed * (float) zoomLevel);
+        gridDrawer.translate(0.0f, moveSpeed * gridDrawer.getMovementScaleY() * (float) zoomLevel);
     }
     if (keyStates[SDL_SCANCODE_LEFT]) {
-        treeDrawer.translate(moveSpeed * (float) zoomLevel, -0.0f);
-        gridDrawer.translate(moveSpeed * gridDrawer.getMovementScaleX() * (float) zoomLevel, -0.0f);
+        treeDrawer.translate(moveSpeed * (float) zoomLevel, 0.0f);
+        gridDrawer.translate(moveSpeed * gridDrawer.getMovementScaleX() * (float) zoomLevel, 0.0f);
     }
     if (keyStates[SDL_SCANCODE_RIGHT]) {
-        treeDrawer.translate(-moveSpeed * (float) zoomLevel, -0.0f);
-        gridDrawer.translate(-moveSpeed * gridDrawer.getMovementScaleX() * (float) zoomLevel, -0.0f);
+        treeDrawer.translate(-moveSpeed * (float) zoomLevel, 0.0f);
+        gridDrawer.translate(-moveSpeed * gridDrawer.getMovementScaleX() * (float) zoomLevel, 0.0f);
     }
     if (keyStates[SDL_SCANCODE_LSHIFT]) {
-        float zoomSpeed = 1.f + moveSpeed * 0.005f;
+        float zoomSpeed = 1.f + moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
         zoomLevel /= zoomSpeed;
         treeDrawer.scale(zoomSpeed, zoomSpeed);
         gridDrawer.scale(zoomSpeed, zoomSpeed);
     }
     if (keyStates[SDL_SCANCODE_LCTRL]) {
-        float zoomSpeed = 1.f - moveSpeed * 0.005f;
+        float zoomSpeed = 1.f - moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
         zoomLevel /= zoomSpeed;
         treeDrawer.scale(zoomSpeed, zoomSpeed);
         gridDrawer.scale(zoomSpeed, zoomSpeed);
