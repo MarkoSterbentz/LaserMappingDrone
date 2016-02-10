@@ -106,6 +106,7 @@ void mainLoop() {
     }
 }
 
+// This function runs inside the listeningThread.
 int listeningThreadFunction(void* listeningThreadData) {
     std::cout << "\nListening thread is active.\n";
     ListeningThreadData * data = (ListeningThreadData *)listeningThreadData;
