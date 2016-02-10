@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <SDL.h>
+#include <SDL_thread.h>
 #include <GL/glew.h>
 
 #include "QuadTree.h"
@@ -29,7 +30,7 @@
 #define USE_DEPTHBUFFER
 #define USE_BACKFACE_CULLING
 //#define DEBUG_DRIVERS
-//#define BENCHMARK
+//#define BENCHMARK_QUADTREE
 #define OUTSTREAM std::cout
 
 using namespace LaserMappingDrone;
@@ -54,6 +55,18 @@ void checkGlError(int line = -1);
 void checkSDLError(int line = -1);
 void cleanup();
 
+struct listeningThreadData {
+    bool quit;
+};
+int listeningThreadFunction(void* threadData) {
+    std::cout << "Listening thread is active.\n";
+    listeningThreadData* data = (listeningThreadData*)threadData;
+    while (!data->quit) {
+        std::cout << "Listening thread is working...\n";
+        SDL_Delay(1000);
+    }
+}
+
 int main(int argc, char* argv[]) {
 
     dotZoomLevel = 0.01;
@@ -65,7 +78,7 @@ int main(int argc, char* argv[]) {
     OUTSTREAM << treeDrawer.init(aspectRatio);
     OUTSTREAM << gridDrawer.init(aspectRatio, &grid);
 
-#ifdef BENCHMARK
+#ifdef BENCHMARK_QUADTREE
 	// Benchmark point insertion
 	quadTree.setMaxPointsPerNode(50);
     float invPi = 1.f / 3.14159265358979f;
@@ -75,7 +88,9 @@ int main(int argc, char* argv[]) {
     }
     OUTSTREAM << SDL_GetTicks() - startTime;
 #endif
-	
+
+    listeningThreadData data = { true };
+    SDL_Thread* listeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", (void*) &data);
 
     previousTime = SDL_GetTicks();
     mainLoop();
