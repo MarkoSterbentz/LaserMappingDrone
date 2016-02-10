@@ -30,7 +30,7 @@ QuadTree<DummyPoint> quadTree(1);   // The quad tree
 QuadTreeDrawer treeDrawer;
 
 // The grid and drawer
-Grid<DummyPoint> grid(-10.f, 10.f, -10.f, 10.f, 10, 10);
+Grid<DummyPoint> grid(-10.f, 10.f, -10.f, 10.f, 10, 10, 10);
 GridDrawer<DummyPoint> gridDrawer;
 
 // The graphics backend
