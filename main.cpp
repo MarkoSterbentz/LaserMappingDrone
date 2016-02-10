@@ -5,6 +5,7 @@
 #include <iostream>
 #include <SDL_timer.h>
 #include <SDL_events.h>
+#include <SDL_thread.h>
 
 #include "Graphics.h"
 #include "QuadTree.h"
@@ -39,9 +40,13 @@ Graphics graphics;
 long double zoomLevel;
 unsigned previousTime, currentTime, deltaTime; // Used to regulate controls/physics time step
 
-// Function prototypes
+// prototypes
 void mainLoop();
 int handleControls();
+int listeningThreadFunction(void* listeningThreadData);
+struct ListeningThreadData {
+    bool quit;
+};
 
 int main(int argc, char* argv[]) {
 
@@ -66,7 +71,17 @@ int main(int argc, char* argv[]) {
     std::cout << SDL_GetTicks() - startTime;
     #endif
 
+    // spawn the listening thread, passing it information in "data"
+    ListeningThreadData data = { false };
+    SDL_Thread* listeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", (void*) &data);
+
+    // begin the main loop on this thread
     mainLoop();
+
+    // once the main loop has exited, set the listening thread's "quit" to true and wait for the thread to die.
+    data.quit = true;
+    SDL_WaitThread(listeningThread, NULL);
+
     return 0;
 }
 
@@ -89,6 +104,18 @@ void mainLoop() {
         // update the screen
         graphics.render();
     }
+}
+
+int listeningThreadFunction(void* listeningThreadData) {
+    std::cout << "\nListening thread is active.\n";
+    ListeningThreadData * data = (ListeningThreadData *)listeningThreadData;
+    while (!data->quit) {
+        // do whatever you need to instead of these two lines
+        std::cout << "Listening thread is working...\n";
+        SDL_Delay(3000);    // every 3 seconds
+    }
+    std::cout << "Listening thread is dying.\n";
+    return 0;
 }
 
 int handleControls() {
@@ -114,14 +141,14 @@ int handleControls() {
                 glm::dmat4 invMat = glm::inverse(gridDrawer.getTransformMat());
                 glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                 glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
-                grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y});
+                grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y, 0.f});
             } else if (event.button.button == SDL_BUTTON_RIGHT) {   // add point to quad tree
                 float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
                 float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
                 glm::dmat4 invMat = glm::inverse(treeDrawer.getTransformMat());
                 glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                 glm::dvec4 treeSpaceClick = invMat * scrSpaceClick;
-                quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y});
+                quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y, 0.f});
             }
         } else if (event.type == SDL_MOUSEWHEEL) {
             int xPosInt, yPosInt;
