@@ -29,7 +29,7 @@ QuadTree<DummyPoint> quadTree(1);   // The quad tree
 QuadTreeDrawer treeDrawer;
 
 // The grid and drawer
-Grid<DummyPoint> grid(-10.f, 10.f, -10.f, 10.f, 10, 10);
+Grid<DummyPoint> grid(-10.f, 10.f, -10.f, 10.f, 10, 10, 10);
 GridDrawer<DummyPoint> gridDrawer;
 
 // The graphics backend
@@ -114,14 +114,14 @@ int handleControls() {
                 glm::dmat4 invMat = glm::inverse(gridDrawer.getTransformMat());
                 glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                 glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
-                grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y});
+                grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y, 0.f});
             } else if (event.button.button == SDL_BUTTON_RIGHT) {   // add point to quad tree
                 float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
                 float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
                 glm::dmat4 invMat = glm::inverse(treeDrawer.getTransformMat());
                 glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                 glm::dvec4 treeSpaceClick = invMat * scrSpaceClick;
-                quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y});
+                quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y, 0.f});
             }
         } else if (event.type == SDL_MOUSEWHEEL) {
             int xPosInt, yPosInt;
