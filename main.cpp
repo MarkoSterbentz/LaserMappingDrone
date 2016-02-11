@@ -12,6 +12,7 @@
 #include "QuadTreeDrawer.h"
 #include "Grid.h"
 #include "GridDrawer.h"
+#include "readerwriterqueue.h"
 
 #define SCROLL_ZOOM_SENSITIVITY 0.08f
 #define KEY_ZOOM_EXTRA_SENSITIVITY 0.005f
@@ -30,11 +31,13 @@ QuadTree<DummyPoint> quadTree(1);   // The quad tree
 QuadTreeDrawer treeDrawer;
 
 // The grid and drawer
-Grid<DummyPoint> grid(-10.f, 10.f, -10.f, 10.f, 10, 10, 10);
+Grid<DummyPoint> grid(-10.f, 10.f, -10.f, 10.f, 10, 10, 1000);
 GridDrawer<DummyPoint> gridDrawer;
 
 // The graphics backend
 Graphics graphics;
+
+moodycamel::ReaderWriterQueue<DummyPoint> queue(1000);
 
 // Some things helpful to controls
 long double zoomLevel;

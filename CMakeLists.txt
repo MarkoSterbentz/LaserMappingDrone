@@ -31,7 +31,7 @@ find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
-set(DUA_INCLUDE_DIR QuadTree AssetManagement Grid Utilities PacketReceiver PacketAnalyzer)
+set(DUA_INCLUDE_DIR QuadTree AssetManagement Grid Utilities Utilities/ReaderWriterQueue PacketReceiver PacketAnalyzer)
 include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
