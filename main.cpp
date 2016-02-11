@@ -13,6 +13,8 @@
 #include "Grid.h"
 #include "GridDrawer.h"
 #include "readerwriterqueue.h"
+#include "PacketAnalyzer.h"
+#include "PacketReceiver.h"
 
 #define SCROLL_ZOOM_SENSITIVITY 0.08f
 #define KEY_ZOOM_EXTRA_SENSITIVITY 0.005f
@@ -25,6 +27,10 @@ using namespace LaserMappingDrone;
 struct DummyPoint {
     float x, y, z;
 };
+
+PacketAnalyzer* analyzer;
+PacketReceiver* receiver;
+std::vector<CartesianPoint> dataPoints;
 
 // The quadtree and drawer
 QuadTree<DummyPoint> quadTree(1);   // The quad tree
@@ -51,6 +57,8 @@ struct ListeningThreadData {
     bool quit;
 };
 
+
+
 int main(int argc, char* argv[]) {
 
     zoomLevel = 0.01f;
@@ -74,6 +82,11 @@ int main(int argc, char* argv[]) {
     std::cout << SDL_GetTicks() - startTime;
     #endif
 
+    // packet handler setup
+    receiver = new PacketReceiver();
+    receiver->bindSocket();
+    analyzer = new PacketAnalyzer();
+
     // spawn the listening thread, passing it information in "data"
     ListeningThreadData data = { false };
     SDL_Thread* listeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", (void*) &data);
@@ -85,6 +98,9 @@ int main(int argc, char* argv[]) {
     data.quit = true;
     SDL_WaitThread(listeningThread, NULL);
 
+    delete analyzer;
+    delete receiver;
+
     return 0;
 }
 
@@ -92,6 +108,22 @@ void mainLoop() {
     previousTime = SDL_GetTicks();
     bool loop = true;
     while (loop) {
+
+        /*************************** HANDLE PACKETS *********************************/
+        for (int i = 0; i < 10; ++i) {
+            receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
+            if (receiver->packetQueue.size() > 0) {
+                receiver->writePacketToFile(receiver->packetQueue.front(), "dataPacketOutput.txt");
+                analyzer->loadPacket(receiver->packetQueue.front());
+
+                std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
+                for (int j = 0; j < newPoints.size(); ++j) {
+                    dataPoints.push_back(newPoints[j]);
+                }
+            }
+        }
+
+        std::cout << "analyzed " << 10 << " packet(s)" << std::endl;
 
         /**************************** HANDLE CONTROLS ********************************/
         int timeToQuit = handleControls(); // returns non-zero if quit events happen

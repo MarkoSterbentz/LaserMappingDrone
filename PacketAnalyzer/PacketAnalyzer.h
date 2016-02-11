@@ -13,6 +13,8 @@
 #include <iostream>
 #include <vector>
 
+#define RAD_CONVERSION 0.01745329251
+
 struct CartesianPoint {
     double x;
     double y;
@@ -49,8 +51,10 @@ public:
     PacketAnalyzer();
     ~PacketAnalyzer();
     void loadPacket(unsigned char* newPacket);
+    std::vector<CartesianPoint> getCartesianPoints();
+
     // THESE NEED TO BE MADE PRIVATE AFTER TESTING!
-    CartesianPoint getXYZ(float distance, float elevationAngle, float azimuth);
+    CartesianPoint getSingleXYZ(double distance, double elevationAngle, double azimuth);
     PositionPacketInfo extractPositionPacketInfo();
     DataPacketInfo extractDataPacketInfo();
     DataBlockInfo extractDataBlockInfo(unsigned int dbIndex);

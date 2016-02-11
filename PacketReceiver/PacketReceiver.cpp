@@ -13,10 +13,6 @@ PacketReceiver::~PacketReceiver() {
 
 };
 
-void PacketReceiver::init() {
-
-}
-
 int PacketReceiver::bindSocket() {
     struct addrinfo hints, *servinfo, *p;
     int rv;
@@ -55,25 +51,24 @@ int PacketReceiver::bindSocket() {
     return 0;
 }
 
-void PacketReceiver::listen() {
+/* Pushes the next arriving packet onto the packetQueue */
+void PacketReceiver::listenForDataPacket() {
     ssize_t numbytes;
     struct sockaddr_storage their_addr;
     socklen_t addr_len;
 
-    //printf("listener: waiting to recvfrom...\n");
-
     addr_len = sizeof their_addr;
-    if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0, (struct sockaddr *)&their_addr, &addr_len)) == -1) {
+    if ((numbytes = recvfrom(sockfd, dataBuf, DATABUFLEN-1 , 0, (struct sockaddr *)&their_addr, &addr_len)) == -1) {
         perror("recvfrom");
         exit(1);
     }
+    packetQueue.push(dataBuf);
+}
 
-    //printf("listener: packet is %d bytes long\n", numbytes);
-    //buf[numbytes] = '\0';
-//    for (int i = 0; i < numbytes; ++i) {
-//        std::cout << (int) buf[i] << ", ";
-//    }
-//    std::cout << std::endl;
-
-    //printf("listener: packet contains \"%s\"\n", buf);
+void PacketReceiver::writePacketToFile(unsigned char* packet, std::string fileName)
+{
+    std::ofstream file;
+    file.open(fileName, std::ios::binary | std::ios::app);
+    file.write((char*) &packet[0], DATABUFLEN);
+    file.close();
 }

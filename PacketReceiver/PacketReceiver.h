@@ -16,11 +16,15 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <iostream>
+#include <fstream>
+#include <queue>
+#include <string>
 
 #define DATAPORT "2368"    // the Data Packet is broadcasted to this port
 #define POSITIONPORT "8308" // the Position Packet is broadcasted to this port
 
-#define MAXBUFLEN 1249
+#define DATABUFLEN 1249  //size of the data packet
+#define POSBUFLEN 554   // size of the position packet
 
 
 class PacketReceiver {
@@ -29,13 +33,16 @@ private:
 
 public:
     int sockfd;
-    unsigned char buf[MAXBUFLEN];
+    unsigned char dataBuf[DATABUFLEN];
+    unsigned char posBuf[POSBUFLEN];
+    std::queue <unsigned char*> packetQueue;
 
     PacketReceiver();
     ~PacketReceiver();
     int bindSocket();
-    void listen();
-    void init();
+    void listenForDataPacket();
+    void writePacketToFile(unsigned char* packet, std::string fileName);
+
 };
 
 #endif //PACKETANALYZER_PACKETRECEIVER_H
