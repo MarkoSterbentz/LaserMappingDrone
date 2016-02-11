@@ -8,6 +8,8 @@
 
 #include "QuadTree.h"
 #include "QuadTreeDrawer.h"
+#include "PacketAnalyzer.h"
+#include "PacketReceiver.h"
 
 #define RESOLUTION_X 1200
 #define RESOLUTION_Y 700
@@ -43,12 +45,17 @@ float xRes, yRes, aspectRatio;
 QuadTreeDrawer treeDrawer;
 long double dotZoomLevel;
 unsigned previousTime, currentTime, deltaTime; // Used to regulate physics time step
+PacketAnalyzer* analyzer;
+PacketReceiver* receiver;
+std::vector<CartesianPoint> dataPoints;
 
 void mainLoop();
 bool initGL ();
 void checkGlError(int line = -1);
 void checkSDLError(int line = -1);
 void cleanup();
+
+
 
 int main(int argc, char* argv[]) {
     dotZoomLevel = 0.01;
@@ -69,7 +76,10 @@ int main(int argc, char* argv[]) {
     }
     OUTSTREAM << SDL_GetTicks() - startTime;
 #endif
-	
+    // packet handler setup
+    receiver = new PacketReceiver();
+    receiver->bindSocket();
+    analyzer = new PacketAnalyzer();
 
     previousTime = SDL_GetTicks();
     mainLoop();
@@ -80,6 +90,22 @@ int main(int argc, char* argv[]) {
 void mainLoop() {
     bool loop = true;
     while (loop) {
+        /*************************** HANDLE PACKETS *********************************/
+        for (int i = 0; i < 10; ++i) {
+            receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
+            if (receiver->packetQueue.size() > 0) {
+                receiver->writePacketToFile(receiver->packetQueue.front(), "dataPacketOutput.txt");
+                analyzer->loadPacket(receiver->packetQueue.front());
+
+                std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
+                for (int j = 0; j < newPoints.size(); ++j) {
+                    dataPoints.push_back(newPoints[j]);
+                }
+            }
+        }
+
+        std::cout << "analyzed " << 10 << " packet(s)" << std::endl;
+
         /**************************** HANDLE EVENTS *********************************/
         SDL_Event event;
         while (SDL_PollEvent(&event)) { // process all accumulated events
@@ -337,4 +363,8 @@ void cleanup() {
 
     // Shutdown SDL 2
     SDL_Quit();
+
+    // Delete packet handlers
+    delete receiver;
+    delete analyzer;
 }

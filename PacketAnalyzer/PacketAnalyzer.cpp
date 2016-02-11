@@ -18,12 +18,11 @@ void PacketAnalyzer::loadPacket(unsigned char * newPacket) {
 /*****************************************************************************
  * METHODS FOR EXTRACTING RAW DATA FROM THE PACKET
  *****************************************************************************/
-
 DataPacketInfo PacketAnalyzer::extractDataPacketInfo() {
     DataPacketInfo extractedInfo;
     // first 42 bytes are header
     //unsigned int packetIndex = 42;
-    // there is not UDP header with the new code...
+    // there is no UDP header with the new code...
     unsigned int packetIndex = 0;
     // next 1200 bytes make up the data
     for(int i = 0; i < 12; ++i) {
@@ -147,10 +146,30 @@ unsigned char PacketAnalyzer::calculateReturnMode(unsigned int retIndex){
 /*****************************************************************************
  * METHODS FOR INTERPRETING EXTRACTED DATA
  *****************************************************************************/
+/* Returns the CartesianPoint values for the data in the packet. */
+std::vector<CartesianPoint> PacketAnalyzer::getCartesianPoints() {
+    double laserElevationAngles[] = {-15, 1, -13, 3, -11, 5, -9, 7, -7, 9, -5, 11, -3, 13, -1, 15};
+    DataPacketInfo data = this->extractDataPacketInfo();
+    std::vector<CartesianPoint> cartesianPoints;
+    for(int i = 0; i < 12; ++i) {
+        // first firing sequence
+        for(int j = 0; j < 16; ++j) {
+            cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j], data.blocks[i].azimuth1));
+        }
+        // second firing sequence
+        for(int j = 16; j < 32; ++j) {
+            cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j%16], data.blocks[i].azimuth2));
+        }
+    }
+    return cartesianPoints;
+}
 
 /* VeloDyne Documentation: distance == R | elevationAngle == omega | azimuth == alpha */
-CartesianPoint PacketAnalyzer::getXYZ(float distance, float elevationAngle, float azimuth) {
+CartesianPoint PacketAnalyzer::getSingleXYZ(double distance, double elevationAngle, double azimuth) {
     CartesianPoint p;
+    // convert angles to radians
+    elevationAngle = elevationAngle * RAD_CONVERSION;
+    azimuth = azimuth * RAD_CONVERSION;
     p.x = distance * cos(elevationAngle) * sin(azimuth);
     p.y = distance * cos(elevationAngle) * cos(azimuth);
     p.z = distance * sin(elevationAngle);
