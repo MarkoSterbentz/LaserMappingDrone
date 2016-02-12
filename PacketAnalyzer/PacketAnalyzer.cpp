@@ -154,11 +154,13 @@ std::vector<CartesianPoint> PacketAnalyzer::getCartesianPoints() {
     for(int i = 0; i < 12; ++i) {
         // first firing sequence
         for(int j = 0; j < 16; ++j) {
-            cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j], data.blocks[i].azimuth1));
+            if (data.blocks[i].channels[j].distance > 0) // throw out 0 points
+                cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j], data.blocks[i].azimuth1));
         }
         // second firing sequence
         for(int j = 16; j < 32; ++j) {
-            cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j%16], data.blocks[i].azimuth2));
+            if (data.blocks[i].channels[j].distance > 0) // throw out 0 points
+                cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j%16], data.blocks[i].azimuth2));
         }
     }
     return cartesianPoints;

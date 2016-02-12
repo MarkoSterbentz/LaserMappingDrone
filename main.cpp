@@ -36,14 +36,14 @@ QuadTree<CartesianPoint> quadTree(1);   // The quad tree
 QuadTreeDrawer treeDrawer;
 
 // The grid and drawer
-Grid<CartesianPoint> grid(-10.f, 10.f, -10.f, 10.f, 10, 10, 1000);
+Grid<CartesianPoint> grid(-2000.f, 2000.f, -2000.f, 2000.f, 10, 10, 10000);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
 Graphics graphics;
 
 // This is a thread safe queue designed for one producer and one consumer
-moodycamel::ReaderWriterQueue<CartesianPoint> queue(1000);
+moodycamel::ReaderWriterQueue<CartesianPoint> queue(10000);
 
 // Some things helpful to controls
 long double zoomLevel;
@@ -113,7 +113,10 @@ void mainLoop() {
     previousTime = SDL_GetTicks();
     bool loop = true;
     while (loop) {
-
+        CartesianPoint p;
+        while(queue.try_dequeue(p)) {
+            grid.addPoint(p);
+        }
         /**************************** HANDLE CONTROLS ********************************/
         int timeToQuit = handleControls(); // returns non-zero if quit events happen
         if (timeToQuit) {
@@ -143,7 +146,8 @@ int listeningThreadFunction(void* arg) {
 
                 std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
                 for (unsigned j = 0; j < newPoints.size(); ++j) {
-                    dataPoints.push_back(newPoints[j]);
+                    //dataPoints.push_back(newPoints[j]);
+                    queue.enqueue(newPoints[j]);
                 }
             }
         }
