@@ -39,7 +39,7 @@ namespace LaserMappingDrone {
 
         Delegate<void(P&)> pac;     // (Point Addition Callback)
         bool pacExists;             // and whether or not there is one.
-        
+
         Kernel kernel;
 
         CyclerEntry* cycler;            // used for 'recycling' points for optimization
