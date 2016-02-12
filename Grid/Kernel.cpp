@@ -16,9 +16,9 @@ namespace LaserMappingDrone {
             return 2;
         }
         int cornerIndex = matrixSideLength / 2;
-        for (int y = -cornerIndex; y <= cornerIndex; ++y) {
+        for (int y = cornerIndex; y >= -cornerIndex; --y) {
             for (int x = -cornerIndex; x <= cornerIndex; ++x) {
-                int kermitIndex = (x + cornerIndex) + (y + cornerIndex) * matrixSideLength;
+                int kermitIndex = (x + cornerIndex) + (cornerIndex - y) * matrixSideLength;
                 if (kermits[kermitIndex]) {
                     kernel.contributingCells.push_back({x, y, kermits[kermitIndex]});
                 }

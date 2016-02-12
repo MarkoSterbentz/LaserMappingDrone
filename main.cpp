@@ -60,7 +60,7 @@ int listeningThreadFunction(void* listeningThreadData);
 int main(int argc, char* argv[]) {
 
     int kernelError = grid.specifyStdDevKernel({
-            0, 1, 0,
+            0, 2, 0,
             1, 1, 1,
             0, 1, 0,
     });
