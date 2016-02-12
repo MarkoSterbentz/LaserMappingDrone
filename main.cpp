@@ -28,9 +28,11 @@ struct DummyPoint {
     float x, y, z;
 };
 
+// These regard the handling of incoming data from the LIDAR device
 PacketAnalyzer* analyzer;
 PacketReceiver* receiver;
 std::vector<CartesianPoint> dataPoints;
+bool packetHandlerQuit;
 
 // The quadtree and drawer
 QuadTree<DummyPoint> quadTree(1);   // The quad tree
@@ -43,27 +45,23 @@ GridDrawer<DummyPoint> gridDrawer;
 // The graphics backend
 Graphics graphics;
 
+// This is a thread safe queue designed for one producer and one consumer
 moodycamel::ReaderWriterQueue<DummyPoint> queue(1000);
 
 // Some things helpful to controls
 long double zoomLevel;
-unsigned previousTime, currentTime, deltaTime; // Used to regulate controls/physics time step
+unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time step
 
 // prototypes
 void mainLoop();
 int handleControls();
 int listeningThreadFunction(void* listeningThreadData);
-struct ListeningThreadData {
-    bool quit;
-};
-
-
 
 int main(int argc, char* argv[]) {
 
     zoomLevel = 0.01f;
     std::stringstream log;
-    if (!graphics.initGL(log)) { // if init fails, exit
+    if (!graphics.init(log)) { // if init fails, exit
         std::cout << log.str();
         return 1;
     }
@@ -88,16 +86,17 @@ int main(int argc, char* argv[]) {
     analyzer = new PacketAnalyzer();
 
     // spawn the listening thread, passing it information in "data"
-    ListeningThreadData data = { false };
-    SDL_Thread* listeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", (void*) &data);
+    packetHandlerQuit = false;
+    SDL_Thread* listeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", NULL);
 
     // begin the main loop on this thread
     mainLoop();
 
     // once the main loop has exited, set the listening thread's "quit" to true and wait for the thread to die.
-    data.quit = true;
+    packetHandlerQuit = true;
     SDL_WaitThread(listeningThread, NULL);
 
+    // free packet handler memory
     delete analyzer;
     delete receiver;
 
@@ -108,22 +107,6 @@ void mainLoop() {
     previousTime = SDL_GetTicks();
     bool loop = true;
     while (loop) {
-
-        /*************************** HANDLE PACKETS *********************************/
-        for (int i = 0; i < 10; ++i) {
-            receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
-            if (receiver->packetQueue.size() > 0) {
-                receiver->writePacketToFile(receiver->packetQueue.front(), "dataPacketOutput.txt");
-                analyzer->loadPacket(receiver->packetQueue.front());
-
-                std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
-                for (int j = 0; j < newPoints.size(); ++j) {
-                    dataPoints.push_back(newPoints[j]);
-                }
-            }
-        }
-
-        std::cout << "analyzed " << 10 << " packet(s)" << std::endl;
 
         /**************************** HANDLE CONTROLS ********************************/
         int timeToQuit = handleControls(); // returns non-zero if quit events happen
@@ -142,13 +125,23 @@ void mainLoop() {
 }
 
 // This function runs inside the listeningThread.
-int listeningThreadFunction(void* listeningThreadData) {
-    std::cout << "\nListening thread is active.\n";
-    ListeningThreadData * data = (ListeningThreadData *)listeningThreadData;
-    while (!data->quit) {
-        // do whatever you need to instead of these two lines
-        std::cout << "Listening thread is working...\n";
-        SDL_Delay(3000);    // every 3 seconds
+int listeningThreadFunction(void* arg) {
+    std::cout << "\nPacket handling thread is active.\n";
+    while (!packetHandlerQuit) {
+        /*************************** HANDLE PACKETS *********************************/
+        for (unsigned i = 0; i < 10; ++i) {
+            receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
+            if (receiver->packetQueue.size() > 0) {
+                receiver->writePacketToFile(receiver->packetQueue.front(), "dataPacketOutput.txt");
+                analyzer->loadPacket(receiver->packetQueue.front());
+
+                std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
+                for (unsigned j = 0; j < newPoints.size(); ++j) {
+                    dataPoints.push_back(newPoints[j]);
+                }
+            }
+        }
+        std::cout << "analyzed " << 10 << " packet(s)" << std::endl;
     }
     std::cout << "Listening thread is dying.\n";
     return 0;

@@ -41,7 +41,7 @@ namespace LaserMappingDrone {
         SDL_Quit();
     }
 
-    bool Graphics::initGL(std::stringstream& log) {
+    bool Graphics::init(std::stringstream &log) {
         #ifdef DEBUG_DRIVERS /************ DEBUG DRIVERS ********************************/
         // Identify video drivers (this is for debug)
         OUTSTREAM << "\nSDL found the following video drivers:\n";

@@ -21,7 +21,7 @@ namespace LaserMappingDrone {
     public:
         Graphics();
         ~Graphics();
-        bool initGL(std::stringstream& log);
+        bool init(std::stringstream &log);
         void render();
         inline float getAspectRatio()   { return aspectRatio; };
         inline float getResX()          { return xRes; }
