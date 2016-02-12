@@ -34,6 +34,8 @@ int PacketReceiver::bindSocket() {
             continue;
         }
 
+        fcntl(sockfd, F_SETFL, O_NONBLOCK);
+
         if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
             close(sockfd);
             perror("listener: bind");
@@ -59,10 +61,11 @@ void PacketReceiver::listenForDataPacket() {
 
     addr_len = sizeof their_addr;
     if ((numbytes = recvfrom(sockfd, dataBuf, DATABUFLEN-1 , 0, (struct sockaddr *)&their_addr, &addr_len)) == -1) {
-        perror("recvfrom");
-        exit(1);
+        //perror("recvfrom");
+        //exit(1);
+    } else {
+        packetQueue.push(dataBuf);
     }
-    packetQueue.push(dataBuf);
 }
 
 void PacketReceiver::writePacketToFile(unsigned char* packet, std::string fileName)

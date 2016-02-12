@@ -20,13 +20,10 @@
 #define KEY_ZOOM_EXTRA_SENSITIVITY 0.005f
 #define KEY_MOVE_SENSITIVITY 0.2f
 //#define BENCHMARK_QUADTREE_POINT_INSERTION
+#define DATAFILE "dataOutputFile.dat"
+#define POSFILE "positionOutputFile.dat"
 
 using namespace LaserMappingDrone;
-
-// placeholder struct that represents the eventual data received from the lidar device
-struct DummyPoint {
-    float x, y, z;
-};
 
 // These regard the handling of incoming data from the LIDAR device
 PacketAnalyzer* analyzer;
@@ -35,18 +32,18 @@ std::vector<CartesianPoint> dataPoints;
 bool packetHandlerQuit;
 
 // The quadtree and drawer
-QuadTree<DummyPoint> quadTree(1);   // The quad tree
+QuadTree<CartesianPoint> quadTree(1);   // The quad tree
 QuadTreeDrawer treeDrawer;
 
 // The grid and drawer
-Grid<DummyPoint> grid(-10.f, 10.f, -10.f, 10.f, 10, 10, 1000);
-GridDrawer<DummyPoint> gridDrawer;
+Grid<CartesianPoint> grid(-10.f, 10.f, -10.f, 10.f, 10, 10, 1000);
+GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
 Graphics graphics;
 
 // This is a thread safe queue designed for one producer and one consumer
-moodycamel::ReaderWriterQueue<DummyPoint> queue(1000);
+moodycamel::ReaderWriterQueue<CartesianPoint> queue(1000);
 
 // Some things helpful to controls
 long double zoomLevel;
@@ -141,7 +138,7 @@ int listeningThreadFunction(void* arg) {
         for (unsigned i = 0; i < 10; ++i) {
             receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
             if (receiver->packetQueue.size() > 0) {
-                receiver->writePacketToFile(receiver->packetQueue.front(), "dataPacketOutput.txt");
+                receiver->writePacketToFile(receiver->packetQueue.front(), DATAFILE);
                 analyzer->loadPacket(receiver->packetQueue.front());
 
                 std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
@@ -150,7 +147,6 @@ int listeningThreadFunction(void* arg) {
                 }
             }
         }
-        std::cout << "analyzed " << 10 << " packet(s)" << std::endl;
     }
     std::cout << "Listening thread is dying.\n";
     return 0;

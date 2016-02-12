@@ -116,11 +116,11 @@ void PacketAnalyzer::interpolateSecondAzimuth(DataPacketInfo& packet) {
         packet.blocks[11].azimuth2 -= 360;
 }
 
-double PacketAnalyzer::calculateDistance(unsigned int distIndex){
+float PacketAnalyzer::calculateDistance(unsigned int distIndex){
     unsigned int byteCombo = currentPacket[distIndex+1];
     byteCombo = byteCombo << 8;
     byteCombo = byteCombo | currentPacket[distIndex];
-    return byteCombo;
+    return (float) byteCombo;
 }
 
 unsigned char PacketAnalyzer::calculateReflectivity(unsigned int refIndex){
@@ -128,7 +128,7 @@ unsigned char PacketAnalyzer::calculateReflectivity(unsigned int refIndex){
 }
 
 // timestamp is given in microseconds, then converted to seconds
-double PacketAnalyzer::calculateTimestamp(unsigned int tsIndex){            // NEED TO CALCULATE OFFSETS AND ADD TO THE TIME
+float PacketAnalyzer::calculateTimestamp(unsigned int tsIndex){            // NEED TO CALCULATE OFFSETS AND ADD TO THE TIME
     unsigned int byteCombo = currentPacket[tsIndex];
     for(int i = 1; i < 4; ++i) {
         byteCombo = byteCombo << 8;
@@ -148,7 +148,7 @@ unsigned char PacketAnalyzer::calculateReturnMode(unsigned int retIndex){
  *****************************************************************************/
 /* Returns the CartesianPoint values for the data in the packet. */
 std::vector<CartesianPoint> PacketAnalyzer::getCartesianPoints() {
-    double laserElevationAngles[] = {-15, 1, -13, 3, -11, 5, -9, 7, -7, 9, -5, 11, -3, 13, -1, 15};
+    float laserElevationAngles[] = {-15, 1, -13, 3, -11, 5, -9, 7, -7, 9, -5, 11, -3, 13, -1, 15};
     DataPacketInfo data = this->extractDataPacketInfo();
     std::vector<CartesianPoint> cartesianPoints;
     for(int i = 0; i < 12; ++i) {
@@ -165,13 +165,13 @@ std::vector<CartesianPoint> PacketAnalyzer::getCartesianPoints() {
 }
 
 /* VeloDyne Documentation: distance == R | elevationAngle == omega | azimuth == alpha */
-CartesianPoint PacketAnalyzer::getSingleXYZ(double distance, double elevationAngle, double azimuth) {
+CartesianPoint PacketAnalyzer::getSingleXYZ(float distance, float elevationAngle, float azimuth) {
     CartesianPoint p;
     // convert angles to radians
-    elevationAngle = elevationAngle * RAD_CONVERSION;
-    azimuth = azimuth * RAD_CONVERSION;
-    p.x = distance * cos(elevationAngle) * sin(azimuth);
-    p.y = distance * cos(elevationAngle) * cos(azimuth);
-    p.z = distance * sin(elevationAngle);
+    elevationAngle = (float) (elevationAngle * RAD_CONVERSION);
+    azimuth = (float) (azimuth * RAD_CONVERSION);
+    p.x = (float) (distance * cos(elevationAngle) * sin(azimuth));
+    p.y = (float) (distance * cos(elevationAngle) * cos(azimuth));
+    p.z = (float) (distance * sin(elevationAngle));
     return p;
 }

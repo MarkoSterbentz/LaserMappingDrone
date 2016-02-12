@@ -16,14 +16,12 @@
 #define RAD_CONVERSION 0.01745329251
 
 struct CartesianPoint {
-    double x;
-    double y;
-    double z;
+    float x, y, z;
 };
 
 struct ChannelInfo {
-    double distance;
-    double reflectivity;
+    float distance;
+    float reflectivity;
 };
 
 struct DataBlockInfo {
@@ -34,7 +32,7 @@ struct DataBlockInfo {
 
 struct DataPacketInfo {
     DataBlockInfo blocks[12];
-    double timestamp;
+    float timestamp;
     unsigned returnMode;
 };
 
@@ -46,25 +44,22 @@ struct PositionPacketInfo {
 class PacketAnalyzer {
 private:
     unsigned char* currentPacket;
-
-public:
-    PacketAnalyzer();
-    ~PacketAnalyzer();
-    void loadPacket(unsigned char* newPacket);
-    std::vector<CartesianPoint> getCartesianPoints();
-
-    // THESE NEED TO BE MADE PRIVATE AFTER TESTING!
-    CartesianPoint getSingleXYZ(double distance, double elevationAngle, double azimuth);
+    CartesianPoint getSingleXYZ(float distance, float elevationAngle, float azimuth);
     PositionPacketInfo extractPositionPacketInfo();
     DataPacketInfo extractDataPacketInfo();
     DataBlockInfo extractDataBlockInfo(unsigned int dbIndex);
     ChannelInfo extractChannelInfo(unsigned int chIndex);
     void interpolateSecondAzimuth(DataPacketInfo& packetInfo);
     float calculateFirstAzimuth(unsigned int azIndex);
-    double calculateTimestamp(unsigned int tsIndex);
-    double calculateDistance(unsigned int distIndex);
+    float calculateTimestamp(unsigned int tsIndex);
+    float calculateDistance(unsigned int distIndex);
     unsigned char calculateReflectivity(unsigned int refIndex);
     unsigned char calculateReturnMode(unsigned int retIndex);
+public:
+    PacketAnalyzer();
+    ~PacketAnalyzer();
+    void loadPacket(unsigned char* newPacket);
+    std::vector<CartesianPoint> getCartesianPoints();
 };
 
 #endif //LASERMAPPINGDRONE_PACKETANALYZER_H
