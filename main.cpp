@@ -59,6 +59,15 @@ int listeningThreadFunction(void* listeningThreadData);
 
 int main(int argc, char* argv[]) {
 
+    int kernelError = grid.specifyStdDevKernel({
+            0, 1, 0,
+            1, 1, 1,
+            0, 1, 0,
+    });
+    if (kernelError) {
+        std::cout << "KERNEL FAILURE!\n";
+    }
+
     zoomLevel = 0.01f;
     std::stringstream log;
     if (!graphics.init(log)) { // if init fails, exit

@@ -8,6 +8,7 @@
 #include <vector>
 #include <deque>
 #include "Delegate.h"
+#include "Kernel.h"
 
 namespace LaserMappingDrone {
 
@@ -38,6 +39,8 @@ namespace LaserMappingDrone {
 
         Delegate<void(P&)> pac;     // (Point Addition Callback)
         bool pacExists;             // and whether or not there is one.
+        
+        Kernel kernel;
 
         CyclerEntry* cycler;            // used for 'recycling' points for optimization
         unsigned long cycles;           // how may points available to cycle (0 means infinite and is default)
@@ -50,6 +53,7 @@ namespace LaserMappingDrone {
         Grid(float xMin, float xMax, float yMin, float yMax, unsigned xRes, unsigned yRes, unsigned long cycle = 0);
         ~Grid();
         void addPoint(P point);
+        int specifyStdDevKernel(std::vector<int> kermit);
     };
 
     /*******************    GRID CLASS IMPLEMENTATION    *************************/
@@ -129,6 +133,11 @@ namespace LaserMappingDrone {
             pac = delegate;
             pacExists = true;
         }
+    }
+
+    template<class P>
+    int Grid<P>::specifyStdDevKernel(std::vector<int> kermit) {
+        return initKernel(kernel, KernelType::STDDEV, kermit);
     }
 }   // namespace LaserMappingDrone
 
