@@ -10,7 +10,7 @@
 #define RESOLUTION_Y 700
 #define GLVERSION_MAJOR 3
 #define GLVERSION_MINOR 0
-//#define FULLSCREEN
+#define FULLSCREEN
 /*******************************/
 #ifdef FULLSCREEN
 #define SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -81,7 +81,7 @@ namespace LaserMappingDrone {
             xRes = current.w;
             yRes = current.h;
         } else {
-            OUTSTREAM << "<!>    Could not get display information!\n";
+            log << "<!>    Could not get display information!\n";
             aspectRatio = 1.f;
         }
         #else /************************** GET ASPECT RATIO ******************************/

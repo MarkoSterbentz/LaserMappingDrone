@@ -45,6 +45,15 @@ int handleControls();
 
 int main(int argc, char* argv[]) {
 
+    int kernelError = grid.specifyStdDevKernel({
+            0, 1, 0,
+            1, 1, 1,
+            0, 1, 0,
+    });
+    if (kernelError) {
+        std::cout << "KERNEL FAILURE!\n";
+    }
+
     zoomLevel = 0.01f;
     std::stringstream log;
     if (!graphics.initGL(log)) { // if init fails, exit
@@ -114,14 +123,14 @@ int handleControls() {
                 glm::dmat4 invMat = glm::inverse(gridDrawer.getTransformMat());
                 glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                 glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
-                grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y});
+                grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y, 0.f});
             } else if (event.button.button == SDL_BUTTON_RIGHT) {   // add point to quad tree
                 float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
                 float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
                 glm::dmat4 invMat = glm::inverse(treeDrawer.getTransformMat());
                 glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                 glm::dvec4 treeSpaceClick = invMat * scrSpaceClick;
-                quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y});
+                quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y, 0.f});
             }
         } else if (event.type == SDL_MOUSEWHEEL) {
             int xPosInt, yPosInt;

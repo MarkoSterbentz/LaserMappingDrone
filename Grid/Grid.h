@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "Delegate.h"
+#include "Kernel.h"
 
 namespace LaserMappingDrone {
 
@@ -31,6 +32,8 @@ namespace LaserMappingDrone {
         float xIndexFactor, yIndexFactor;
         unsigned xRes, yRes;
 
+        Kernel kernel;
+
         Delegate<void(P&)> pointAdditionCallback;
         bool pointAdditionCallbackExists;
 
@@ -39,6 +42,7 @@ namespace LaserMappingDrone {
         Grid(float xMin, float xMax, float yMin, float yMax, unsigned xRes, unsigned yRes);
         ~Grid();
         void addPoint(P point);
+        int specifyStdDevKernel(std::vector<int> kermit);
     };
 
     /*******************    GRID CLASS IMPLEMENTATION    *************************/
@@ -88,6 +92,10 @@ namespace LaserMappingDrone {
         }
     }
 
+    template<class P>
+    int Grid<P>::specifyStdDevKernel(std::vector<int> kermit) {
+        return initKernel(kernel, KernelType::STDDEV, kermit);
+    }
 }   // namespace LaserMappingDrone
 
 #endif //LASERMAPPINGDRONE_GRID_H
