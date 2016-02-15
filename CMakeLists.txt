@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.3)
 project(LaserMappingDrone)
 
 # Make sure the project compiles with the c++11 and thread safety flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -g -O0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -g -O3")
 
 # Tell cMake where to look for the modules that search for SDL2 (the others come with cMake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmakeModules/")
@@ -31,8 +31,8 @@ find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
-set(DUA_INCLUDE_DIR QuadTree AssetManagement Grid Utilities PacketReceiver PacketAnalyzer)
-include_directories(${DUA_INCLUDE_DIR})
+set(LASERMAPPINGDRONE_INCLUDE_DIRS QuadTree AssetManagement Grid Utilities PacketReceiver PacketAnalyzer)
+include_directories(${LASERMAPPINGDRONE_INCLUDE_DIRS})
 
 # Find all the source files
 set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree/QuadTreeDrawer.cpp
