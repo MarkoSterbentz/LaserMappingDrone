@@ -28,7 +28,6 @@ using namespace LaserMappingDrone;
 // These regard the handling of incoming data from the LIDAR device
 PacketAnalyzer* analyzer;
 PacketReceiver* receiver;
-std::vector<CartesianPoint> dataPoints;
 bool packetHandlerQuit;
 
 // The quadtree and drawer
@@ -146,7 +145,6 @@ int listeningThreadFunction(void* arg) {
 
                 std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
                 for (unsigned j = 0; j < newPoints.size(); ++j) {
-                    //dataPoints.push_back(newPoints[j]);
                     queue.enqueue(newPoints[j]);
                 }
             }
