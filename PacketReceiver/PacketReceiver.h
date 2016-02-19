@@ -30,19 +30,20 @@
 
 class PacketReceiver {
 private:
-
+    std::ofstream file;
+    int sockfd;
 
 public:
-    int sockfd;
     unsigned char dataBuf[DATABUFLEN];
     unsigned char posBuf[POSBUFLEN];
     std::queue <unsigned char*> packetQueue;
+    std::string filename;
 
-    PacketReceiver();
+    PacketReceiver(std::string outputFileName);
     ~PacketReceiver();
     int bindSocket();
     void listenForDataPacket();
-    void writePacketToFile(unsigned char* packet, std::string fileName);
+    void writePacketToFile(unsigned char* packet);
 
 };
 
