@@ -35,7 +35,7 @@ QuadTree<CartesianPoint> quadTree(1);   // The quad tree
 QuadTreeDrawer treeDrawer;
 
 // The grid and drawer
-Grid<CartesianPoint> grid(-2000.f, 2000.f, -2000.f, 2000.f, 10, 10, 10000);
+Grid<CartesianPoint> grid(-2000.f, 2000.f, -2000.f, 2000.f, 10, 10, 100000);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
@@ -116,6 +116,7 @@ void mainLoop() {
         while(queue.try_dequeue(p)) {
             grid.addPoint(p);
         }
+
         /**************************** HANDLE CONTROLS ********************************/
         int timeToQuit = handleControls(); // returns non-zero if quit events happen
         if (timeToQuit) {
@@ -140,7 +141,7 @@ int listeningThreadFunction(void* arg) {
         for (unsigned i = 0; i < 10; ++i) {
             receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
             if (receiver->packetQueue.size() > 0) {
-                receiver->writePacketToFile(receiver->packetQueue.front(), DATAFILE);
+//                receiver->writePacketToFile(receiver->packetQueue.front(), DATAFILE);
                 analyzer->loadPacket(receiver->packetQueue.front());
 
                 std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
@@ -150,7 +151,7 @@ int listeningThreadFunction(void* arg) {
             }
         }
     }
-    std::cout << "Listening thread is dying.\n";
+    std::cout << "Packet handling thread is dying.\n";
     return 0;
 }
 
