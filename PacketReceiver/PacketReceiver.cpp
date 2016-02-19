@@ -5,12 +5,13 @@
 #include "PacketReceiver.h"
 
 
-PacketReceiver::PacketReceiver() {
-
+PacketReceiver::PacketReceiver(std::string outputFileName) {
+    filename = outputFileName;
+    file.open(filename, std::ios::binary | std::ios::app);
 };
 
 PacketReceiver::~PacketReceiver() {
-
+    file.close();
 };
 
 int PacketReceiver::bindSocket() {
@@ -68,10 +69,7 @@ void PacketReceiver::listenForDataPacket() {
     }
 }
 
-void PacketReceiver::writePacketToFile(unsigned char* packet, std::string fileName)
+void PacketReceiver::writePacketToFile(unsigned char* packet)
 {
-    std::ofstream file;
-    file.open(fileName, std::ios::binary | std::ios::app);
     file.write((char*) &packet[0], DATABUFLEN);
-    file.close();
 }

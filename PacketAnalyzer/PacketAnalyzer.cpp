@@ -120,7 +120,7 @@ float PacketAnalyzer::calculateDistance(unsigned int distIndex){
     unsigned int byteCombo = currentPacket[distIndex+1];
     byteCombo = byteCombo << 8;
     byteCombo = byteCombo | currentPacket[distIndex];
-    return (float) byteCombo;
+    return (float) (byteCombo * 2);
 }
 
 unsigned char PacketAnalyzer::calculateReflectivity(unsigned int refIndex){
