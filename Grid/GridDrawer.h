@@ -9,9 +9,11 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <deque>
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include <PacketAnalyzer.h>
 #include "Grid.h"
 #include "LoadShaders.h"
 
@@ -31,8 +33,6 @@ namespace LaserMappingDrone {
         inline float getMovementScaleY() { return pointSizeY; }
 
     private:
-        Grid<P>* grid;
-
         GLuint shader;
         GLuint vao;
         GLint shader_modelMat;
@@ -40,10 +40,12 @@ namespace LaserMappingDrone {
         float currentColor[3];
         std::vector<glm::dmat4> matrixStack;
         glm::dmat4 localModelMat;
-        unsigned long numGridVerts;
+        int gridVertStart;
+        long int pointsVertStart, pointsByteStart;
+        unsigned long gridVertCount, pointsVertCount, pointsByteCount, pointsByteVboHead;
         float pointSizeX, pointSizeY, centerX, centerY, scaleX, scaleY;
 
-        void addPoint(P& point);
+        std::deque<float> pointBuffer;
 
         void pushMat(glm::dmat4&& mat);
         void popMat();
@@ -55,9 +57,6 @@ namespace LaserMappingDrone {
 
     template <class P>
     std::string GridDrawer<P>::init(float aspectRatio, Grid<P> *grid) {
-        this->grid = grid;
-        //grid->specifyPointAdditionCallback(DELEGATE(&GridDrawer<P>::addPoint, this));
-
         std::stringstream log;
 
         // Create and bind a VAO
@@ -75,44 +74,85 @@ namespace LaserMappingDrone {
         glGenBuffers(1, &vertices);
 
         // this is the data that will be buffered up as vertices
-        std::vector<float> verts = {
-                0.0f, -0.01f, 0.5f, 1.0f,
-                0.0f, 0.01f, 0.5f, 1.0f,        // these four verts make up the cross that draws the points
-                -0.01f, 0.0f, 0.5f, 1.0f,
-                0.01f, 0.0f, 0.5f, 1.0f
-        };
+        std::vector<float> verts;
+
+        // Here the vertices for the grid are generated
         float xStep = 2.f / grid->xRes;
         for (unsigned x = 0; x <= grid->xRes; ++x) {
             verts.emplace_back(x * xStep - 1.f);
             verts.emplace_back(-1.f);
             verts.emplace_back(0.5f);
-            verts.emplace_back(1.f);
 
             verts.emplace_back(x * xStep - 1.f);
             verts.emplace_back(1.f);
             verts.emplace_back(0.5f);
-            verts.emplace_back(1.f);
         }
         float yStep = 2.f / grid->yRes;
         for (unsigned y = 0; y <= grid->yRes; ++y) {
             verts.emplace_back(-1.f);
             verts.emplace_back(y * yStep - 1.f);
             verts.emplace_back(0.5f);
-            verts.emplace_back(1.f);
 
             verts.emplace_back(1.f);
             verts.emplace_back(y * yStep - 1.f);
             verts.emplace_back(0.5f);
-            verts.emplace_back(1.f);
         }
 
-        numGridVerts = verts.size() - 4;
+        gridVertStart = 0;
+        gridVertCount = verts.size() / 3;
 
-        // Fill the vertex buff in GPU memory with the data from corners
+        pointsVertStart = gridVertCount;
+        pointsByteStart = pointsVertStart * 3 * sizeof(float);
+        pointsVertCount = grid->cycles;
+        pointsByteCount = pointsVertCount * 3 * sizeof(float);
+        pointsByteVboHead = 0;
+
+        unsigned long bufferSizeInBytes = (verts.size() + grid->cycles * 3) * sizeof(float);
+
+        // Generate the empty VBO on the GPU, to be filled with glBufferSubArray
         glBindBuffer(GL_ARRAY_BUFFER, vertices);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * verts.size(), &verts[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, bufferSizeInBytes, NULL, GL_STREAM_DRAW);
         glEnableVertexAttribArray((GLuint) shader_vertex);
-        glVertexAttribPointer((GLuint) shader_vertex, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer((GLuint) shader_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+        // Put the grid's vertices into the VBO
+        glBufferSubData(GL_ARRAY_BUFFER, gridVertStart, verts.size() * sizeof(float), &verts[0]);
+
+        // Set up the grid to automagically do the following every time a point is added to it.
+        // This will put each point's data on the VBO as it comes in.
+        grid->specifyPointAdditionCallback( [&] (P& p) {
+            if (pointsByteVboHead >= pointsByteCount) {
+                pointsByteVboHead = 0;
+            }
+            float vertex[3] = {p.x, p.y, p.z};
+//                glBindBuffer(GL_ARRAY_BUFFER, vertices);
+            glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
+                            3 * sizeof(float), &vertex[0]);
+            pointsByteVboHead += 3 * sizeof(float);
+
+
+//            pointBuffer.push_back(p.x);
+//            pointBuffer.push_back(p.y);
+//            pointBuffer.push_back(p.z);
+//            if (pointBuffer.size() * sizeof(float) >= 18000) {
+//                unsigned long bytesTillEnd = pointsByteCount - pointsByteVboHead;
+//                if (bytesTillEnd < 18000) {
+//                    unsigned long bytesFromBeginning = 18000 - bytesTillEnd;
+//                    glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
+//                                    bytesTillEnd, &pointBuffer[0]);
+//                    glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart,
+//                                    bytesFromBeginning, &pointBuffer[0]);
+//                    pointBuffer.clear();
+//                    pointsByteVboHead = bytesFromBeginning;
+//                } else {
+//                    glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
+//                                    pointBuffer.size() * sizeof(float), &pointBuffer[0]);
+//                    pointBuffer.clear();
+//                    pointsByteVboHead += pointBuffer.size() * sizeof(float);
+//                }
+//            }
+
+        });
 
         currentColor[0] = 0.f;
         currentColor[1] = 1.f;
@@ -188,11 +228,6 @@ namespace LaserMappingDrone {
     }
 
     template <class P>
-    void GridDrawer<P>::addPoint(P &point) {
-        // NOT IMPLEMENTED - GOING TO BE USED FOR OPTIMIZATION
-    }
-
-    template <class P>
     void GridDrawer<P>::pushMat(glm::dmat4 &&mat) {
         matrixStack.push_back(mat);
     }
@@ -211,8 +246,9 @@ namespace LaserMappingDrone {
 
     template <class P>
     void GridDrawer<P>::drawBorders() {
+        setColor(0.f, 1.f, 1.f);
         preDrawCommon();
-        glDrawArrays(GL_LINES, 4, (GLsizei)numGridVerts);
+        glDrawArrays(GL_LINES, gridVertStart, (GLsizei) gridVertCount);
     }
 
     template <class P>
@@ -226,19 +262,10 @@ namespace LaserMappingDrone {
     template <class P>
     void GridDrawer<P>::drawPoints() {
         setColor(1.f, 1.f, 0.f);
-        for (unsigned i = 0; i < grid->cells.size(); ++i) {
-            for (unsigned j = 0; j < grid->cells[i].points.size(); ++j) {
-                pushMat(localModelMat *
-                        glm::dmat4{{pointSizeX,                  0.f,                          0.f,    0.f},
-                                   {0.f,                         pointSizeY,                   0.f,    0.f},
-                                   {0.f,                         0.f,                          1.f,    0.f},
-                                   {grid->cells[i].points[j].x,  grid->cells[i].points[j].y,   0.f,    1.f} });
-                preDrawCommon();
-                glDrawArrays(GL_LINES, 0, 4);
-                popMat();
-            }
-        }
-        setColor(0.f, 1.f, 1.f);
+        pushMat(glm::dmat4(localModelMat));
+        preDrawCommon();
+        glDrawArrays(GL_POINTS, (GLint)pointsVertStart, (GLsizei)pointsVertCount);
+        popMat();
     }
 }
 

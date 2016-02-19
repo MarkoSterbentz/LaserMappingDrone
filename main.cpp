@@ -35,7 +35,7 @@ QuadTree<CartesianPoint> quadTree(1);   // The quad tree
 QuadTreeDrawer treeDrawer;
 
 // The grid and drawer
-Grid<CartesianPoint> grid(-2000.f, 2000.f, -2000.f, 2000.f, 10, 10, 100000);
+Grid<CartesianPoint> grid(-2000.f, 2000.f, -2000.f, 2000.f, 10, 10, 1000000);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     std::cout << log.str();
-    std::cout << treeDrawer.init(graphics.getAspectRatio());
+//    std::cout << treeDrawer.init(graphics.getAspectRatio());
     std::cout << gridDrawer.init(graphics.getAspectRatio(), &grid);
 
     #ifdef BENCHMARK_QUADTREE_POINT_INSERTION
@@ -125,7 +125,7 @@ void mainLoop() {
 
         /**************************** DO THE DRAWING *********************************/
         // draw the tree
-        treeDrawer.drawQuadTree(quadTree, (float) zoomLevel);
+//        treeDrawer.drawQuadTree(quadTree, (float) zoomLevel);
         // draw the grid
         gridDrawer.drawGrid();
         // update the screen

@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <deque>
+#include <functional>
 #include "Delegate.h"
 #include "Kernel.h"
 
@@ -37,7 +38,8 @@ namespace LaserMappingDrone {
         float xIndexFactor, yIndexFactor;
         unsigned xRes, yRes;
 
-        Delegate<void(P&)> pac;     // (Point Addition Callback)
+//        Delegate<void(P&)> pac;     // (Point Addition Callback)
+        std::function<void(P&)> pac;
         bool pacExists;             // and whether or not there is one.
 
         Kernel kernel;
@@ -48,7 +50,7 @@ namespace LaserMappingDrone {
         bool cyclerHasReachedCapacity;  // whether or not the cycler needs to actually start recycling
 
         void removeOldestInCell(unsigned long cellIndex);
-        void specifyPointAdditionCallback(Delegate<void(P &)> delegate);
+        void specifyPointAdditionCallback(std::function<void(P&)> pac);
     public:
         Grid(float xMin, float xMax, float yMin, float yMax, unsigned xRes, unsigned yRes, unsigned long cycle = 0);
         ~Grid();
@@ -126,13 +128,15 @@ namespace LaserMappingDrone {
      * safe thing to do, I realize.
      */
     template<class P>
-    void Grid<P>::specifyPointAdditionCallback(Delegate<void(P &)> delegate) {
+    void Grid<P>::specifyPointAdditionCallback(std::function<void(P&)> pac) {
         // No recursion of addPoint please - this is a basic check for that, but a clever coder could defeat it.
         // Also, a not-necessarily-clever coder could accidentally produce indirect recursion.  Be careful.
-        if (delegate != DELEGATE(&Grid<P>::addPoint, this)) {
-            pac = delegate;
-            pacExists = true;
-        }
+//        if (pac != [] (P& x) { this->addPoint(x); } ) {
+//            this->pac = pac;
+//            pacExists = true;
+//        }
+        this->pac = pac;
+        pacExists = true;
     }
 
     template<class P>
