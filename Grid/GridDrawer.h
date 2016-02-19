@@ -45,8 +45,6 @@ namespace LaserMappingDrone {
         unsigned long gridVertCount, pointsVertCount, pointsByteCount, pointsByteVboHead;
         float pointSizeX, pointSizeY, centerX, centerY, scaleX, scaleY;
 
-        std::deque<float> pointBuffer;
-
         void pushMat(glm::dmat4&& mat);
         void popMat();
         void setColor(float r, float g, float b);
@@ -129,28 +127,6 @@ namespace LaserMappingDrone {
             glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
                             3 * sizeof(float), &vertex[0]);
             pointsByteVboHead += 3 * sizeof(float);
-
-
-//            pointBuffer.push_back(p.x);
-//            pointBuffer.push_back(p.y);
-//            pointBuffer.push_back(p.z);
-//            if (pointBuffer.size() * sizeof(float) >= 18000) {
-//                unsigned long bytesTillEnd = pointsByteCount - pointsByteVboHead;
-//                if (bytesTillEnd < 18000) {
-//                    unsigned long bytesFromBeginning = 18000 - bytesTillEnd;
-//                    glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
-//                                    bytesTillEnd, &pointBuffer[0]);
-//                    glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart,
-//                                    bytesFromBeginning, &pointBuffer[0]);
-//                    pointBuffer.clear();
-//                    pointsByteVboHead = bytesFromBeginning;
-//                } else {
-//                    glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
-//                                    pointBuffer.size() * sizeof(float), &pointBuffer[0]);
-//                    pointBuffer.clear();
-//                    pointsByteVboHead += pointBuffer.size() * sizeof(float);
-//                }
-//            }
 
         });
 

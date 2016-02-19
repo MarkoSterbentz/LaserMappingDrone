@@ -8,8 +8,6 @@
 #include <SDL_thread.h>
 
 #include "Graphics.h"
-#include "QuadTree.h"
-#include "QuadTreeDrawer.h"
 #include "Grid.h"
 #include "GridDrawer.h"
 #include "readerwriterqueue.h"
@@ -19,7 +17,6 @@
 #define SCROLL_ZOOM_SENSITIVITY 0.08f
 #define KEY_ZOOM_EXTRA_SENSITIVITY 0.005f
 #define KEY_MOVE_SENSITIVITY 0.2f
-//#define BENCHMARK_QUADTREE_POINT_INSERTION
 #define DATAFILE "dataOutputFile.dat"
 #define POSFILE "positionOutputFile.dat"
 
@@ -29,10 +26,6 @@ using namespace LaserMappingDrone;
 PacketAnalyzer* analyzer;
 PacketReceiver* receiver;
 bool packetHandlerQuit;
-
-// The quadtree and drawer
-QuadTree<CartesianPoint> quadTree(1);   // The quad tree
-QuadTreeDrawer treeDrawer;
 
 // The grid and drawer
 Grid<CartesianPoint> grid(-2000.f, 2000.f, -2000.f, 2000.f, 10, 10, 1000000);
@@ -71,7 +64,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     std::cout << log.str();
-//    std::cout << treeDrawer.init(graphics.getAspectRatio());
     std::cout << gridDrawer.init(graphics.getAspectRatio(), &grid);
 
     #ifdef BENCHMARK_QUADTREE_POINT_INSERTION
@@ -165,9 +157,6 @@ int handleControls() {
             switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE:
                     return 1;
-                case SDLK_SPACE:	// turn on or off the small-node culling optimization for the quad tree
-                    treeDrawer.toggleOptimization();
-                    break;
                 default:
                     break;
             }
@@ -179,13 +168,6 @@ int handleControls() {
                 glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                 glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
                 grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y, 0.f});
-            } else if (event.button.button == SDL_BUTTON_RIGHT) {   // add point to quad tree
-                float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
-                float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
-                glm::dmat4 invMat = glm::inverse(treeDrawer.getTransformMat());
-                glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
-                glm::dvec4 treeSpaceClick = invMat * scrSpaceClick;
-                quadTree.addPoint({(float)treeSpaceClick.x, (float)treeSpaceClick.y, 0.f});
             }
         } else if (event.type == SDL_MOUSEWHEEL) {
             int xPosInt, yPosInt;
@@ -196,7 +178,6 @@ int handleControls() {
             float zoomSpeed = 1.f + event.wheel.y * SCROLL_ZOOM_SENSITIVITY;
             zoomLevel /= zoomSpeed;
             gridDrawer.zoomAtPoint((float)scrSpacePos.x, (float)scrSpacePos.y, zoomSpeed);
-            treeDrawer.zoomAtPoint((float)scrSpacePos.x, (float)scrSpacePos.y, zoomSpeed);
         }
     }
     /**************************** HANDLE KEY STATE *********************************/
@@ -209,31 +190,25 @@ int handleControls() {
     float moveSpeed = KEY_MOVE_SENSITIVITY * deltaTime;
     // apply movement according to which keys are down
     if (keyStates[SDL_SCANCODE_UP]) {
-        treeDrawer.translate(0.0f, -moveSpeed * (float) zoomLevel);
         gridDrawer.translate(0.0f, -moveSpeed * gridDrawer.getMovementScaleY() * (float) zoomLevel);
     }
     if (keyStates[SDL_SCANCODE_DOWN]) {
-        treeDrawer.translate(0.0f, moveSpeed * (float) zoomLevel);
         gridDrawer.translate(0.0f, moveSpeed * gridDrawer.getMovementScaleY() * (float) zoomLevel);
     }
     if (keyStates[SDL_SCANCODE_LEFT]) {
-        treeDrawer.translate(moveSpeed * (float) zoomLevel, 0.0f);
         gridDrawer.translate(moveSpeed * gridDrawer.getMovementScaleX() * (float) zoomLevel, 0.0f);
     }
     if (keyStates[SDL_SCANCODE_RIGHT]) {
-        treeDrawer.translate(-moveSpeed * (float) zoomLevel, 0.0f);
         gridDrawer.translate(-moveSpeed * gridDrawer.getMovementScaleX() * (float) zoomLevel, 0.0f);
     }
     if (keyStates[SDL_SCANCODE_LSHIFT]) {
         float zoomSpeed = 1.f + moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
         zoomLevel /= zoomSpeed;
-        treeDrawer.scale(zoomSpeed, zoomSpeed);
         gridDrawer.scale(zoomSpeed, zoomSpeed);
     }
     if (keyStates[SDL_SCANCODE_LCTRL]) {
         float zoomSpeed = 1.f - moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
         zoomLevel /= zoomSpeed;
-        treeDrawer.scale(zoomSpeed, zoomSpeed);
         gridDrawer.scale(zoomSpeed, zoomSpeed);
     }
     return 0;
