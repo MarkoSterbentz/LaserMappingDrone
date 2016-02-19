@@ -62,10 +62,12 @@ namespace LaserMappingDrone {
 
     template<class P>
     Grid<P>::Grid(float xMin, float xMax, float yMin, float yMax, unsigned xRes, unsigned yRes, unsigned long cycle /*= 0*/):
-            xMin(xMin), xMax(xMax), yMin(yMin), yMax(yMax), xRes(xRes), yRes(yRes), pacExists(false), cycles(cycle) {
-        xIndexFactor = xRes / (xMax - xMin);
-        yIndexFactor = yRes / (yMax - yMin);
-        unsigned long numCells = xRes * yRes;
+            xMin(xMin * 1000.f), xMax(xMax * 1000.f), yMin(yMin * 1000.f), yMax(yMax * 1000.f),
+            xRes(xRes), yRes(yRes), pacExists(false), cycles(cycle) {
+        // The factors of 1000 are to get from LIDAR units to meters on the bounds.
+        xIndexFactor = this->xRes / (this->xMax - this->xMin);
+        yIndexFactor = this->yRes / (this->yMax - this->yMin);
+        unsigned long numCells = this->xRes * this->yRes;
         for (unsigned long i = 0; i < numCells; ++i) {
             cells.push_back(Cell<P>());
         }
@@ -90,11 +92,7 @@ namespace LaserMappingDrone {
     void Grid<P>::addPoint(P point) {
         if (point.x < xMax && point.x > xMin && point.y < yMax && point.y > yMin) {
             unsigned cellIndex = (int)((point.x - xMin) * xIndexFactor) + (int)((point.y - yMin) * yIndexFactor) * xRes;
-//            if (cellIndex >= 0 && cellIndex < cells.size()) {
                 cells[cellIndex].points.push_back(point);
-//            }
-//            printf("[%f, %f] (%f, %f) : cell %d : has %lu\n", point.x, point.y, (point.x - xMin) * xIndexFactor,
-//                   (point.y - yMin) * yIndexFactor, cellIndex, cells[cellIndex].points.size());
             if (cycles) {
                 if (cyclerHasReachedCapacity) {
                     removeOldestInCell(cycler[currentCycle].cellIndex);

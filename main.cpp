@@ -28,7 +28,8 @@ PacketReceiver* receiver;
 bool packetHandlerQuit;
 
 // The grid and drawer
-Grid<CartesianPoint> grid(-2000.f, 2000.f, -2000.f, 2000.f, 10, 10, 1000000);
+// constructor min/max arguments are in meters (the LIDAR device is at the origin)
+Grid<CartesianPoint> grid(-1.f, 1.f, -1.f, 1.f, 10, 10, 1000000);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
