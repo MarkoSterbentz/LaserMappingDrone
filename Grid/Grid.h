@@ -16,8 +16,9 @@ namespace LaserMappingDrone {
     /*******************    CELL CLASS HEADER    *************************/
 
     template<class P>
-    struct Cell {
+    struct GridCell {
         std::deque<P> points;
+        float kernelOutput;
     };
 
     /*******************    GRID CLASS HEADER    *************************/
@@ -33,7 +34,7 @@ namespace LaserMappingDrone {
     class Grid {
         friend class GridDrawer<P>;
     private:
-        std::vector<Cell<P>> cells;
+
         float xMin, xMax, yMin, yMax;
         float xIndexFactor, yIndexFactor;
         unsigned xRes, yRes;
@@ -42,7 +43,7 @@ namespace LaserMappingDrone {
         std::function<void(P&)> pac;
         bool pacExists;             // and whether or not there is one.
 
-        Kernel kernel;
+
 
         CyclerEntry* cycler;            // used for 'recycling' points for optimization
         unsigned long cycles;           // how may points available to cycle (0 means infinite and is default)
@@ -54,8 +55,13 @@ namespace LaserMappingDrone {
     public:
         Grid(float xMin, float xMax, float yMin, float yMax, unsigned xRes, unsigned yRes, unsigned long cycle = 0);
         ~Grid();
+        Kernel<P> kernel;
+        std::vector<GridCell<P>> cells;
         void addPoint(P point);
-        int specifyStdDevKernel(std::vector<int> kermit);
+        int specifyKernel(std::vector<int> kermit, std::function<void(Grid*, int, int)> execute);
+        void runKernel();
+        int getXRes();
+        int getYRes();
     };
 
     /*******************    GRID CLASS IMPLEMENTATION    *************************/
@@ -69,7 +75,7 @@ namespace LaserMappingDrone {
         yIndexFactor = this->yRes / (this->yMax - this->yMin);
         unsigned long numCells = this->xRes * this->yRes;
         for (unsigned long i = 0; i < numCells; ++i) {
-            cells.push_back(Cell<P>());
+            cells.push_back(GridCell<P>());
         }
         if (cycle) {
             cycler = new CyclerEntry[cycle];
@@ -111,6 +117,8 @@ namespace LaserMappingDrone {
             if (pacExists) {
                 pac(point);
             }
+            runKernel();
+            std::cout << cells[cellIndex].kernelOutput << std::endl;
         }
     }
 
@@ -138,8 +146,25 @@ namespace LaserMappingDrone {
     }
 
     template<class P>
-    int Grid<P>::specifyStdDevKernel(std::vector<int> kermit) {
-        return initKernel(kernel, KernelType::STDDEV, kermit);
+    int Grid<P>::specifyKernel(std::vector<int> kermit, std::function<void(Grid*, int, int)> execute) {
+        return initKernel(kernel, execute, kermit);
+    }
+
+    template <class P>
+    void Grid<P>::runKernel() {
+        for (int i = 0; i < xRes; ++i) {
+            kernel.execute(this, i, 0);
+        }
+    }
+
+    template <class P>
+    int Grid<P>::getXRes() {
+        return xRes;
+    }
+
+    template <class P>
+    int Grid<P>::getYRes() {
+        return yRes;
     }
 }   // namespace LaserMappingDrone
 

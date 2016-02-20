@@ -49,14 +49,40 @@ int listeningThreadFunction(void* listeningThreadData);
 
 int main(int argc, char* argv[]) {
 
-    int kernelError = grid.specifyStdDevKernel({
-            0, 1, 0,
-            1, 1, 1,
-            0, 1, 0,
-    });
+    auto stdDevKernel = [] (Grid<CartesianPoint>* pGrid, int x, int y){
+        int totalPointsCounted = 0;
+        float average = 0;
+        int gridIndex = y * pGrid->getXRes() + x;
+        for (int i = 0; i < pGrid->kernel.contributingCells.size(); ++i) {
+            int gridIndexOffset = pGrid->kernel.contributingCells[i].yOffset * pGrid->getXRes();
+            gridIndexOffset += pGrid->kernel.contributingCells[i].xOffset;
+            for (int j = 0; j < pGrid->cells[gridIndex + gridIndexOffset].points.size(); ++j) {
+                if (gridIndex + gridIndexOffset > 0 && gridIndex + gridIndexOffset < pGrid->cells.size()) {         // NOTE: This causes it to wrap around left and right
+                    average += pGrid->cells[gridIndex + gridIndexOffset].points[j].y;
+                }
+            }
+            totalPointsCounted += pGrid->cells[gridIndex + gridIndexOffset].points.size();
+        }
+        if (totalPointsCounted > 0) {
+            average /= totalPointsCounted;
+        }
+        pGrid->cells[gridIndex].kernelOutput = average;
+
+    };
+
+    stdDevKernel(&grid, 0, 0);
+
+    int kernelError = grid.specifyKernel(
+            {
+                 0, 1, 0,
+                 1, 1, 1,
+                 0, 1, 0,
+            }, stdDevKernel);
     if (kernelError) {
         std::cout << "KERNEL FAILURE!\n";
     }
+
+    grid.runKernel();
 
     zoomLevel = 0.01f;
     std::stringstream log;

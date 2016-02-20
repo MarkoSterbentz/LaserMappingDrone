@@ -42,7 +42,7 @@ include_directories(${LASERMAPPINGDRONE_INCLUDE_DIRS})
 set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree/QuadTreeDrawer.cpp
         AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp Grid/Grid.h Grid/GridDrawer.h
         Utilities/Delegate.h PacketAnalyzer/PacketAnalyzer.cpp PacketAnalyzer/PacketAnalyzer.h
-        PacketReceiver/PacketReceiver.cpp PacketReceiver/PacketReceiver.h Utilities/Graphics.cpp Utilities/Graphics.h Grid/Kernel.cpp Grid/Kernel.h)
+        PacketReceiver/PacketReceiver.cpp PacketReceiver/PacketReceiver.h Utilities/Graphics.cpp Utilities/Graphics.h Grid/Kernel.h)
         #PacketReceiver/UdpConnection.cpp PacketReceiver/UdpConnection.h)
 
 # Make an executable called LaserMappingDrone out of all the above source files
