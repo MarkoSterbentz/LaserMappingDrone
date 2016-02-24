@@ -153,7 +153,9 @@ namespace LaserMappingDrone {
     template <class P>
     void Grid<P>::runKernel() {
         for (int i = 0; i < xRes; ++i) {
-            kernel.execute(this, i, 0);
+            for (int j = 0; j < yRes; ++j) {
+                    kernel.execute(this, i, j);
+            }
         }
     }
 
