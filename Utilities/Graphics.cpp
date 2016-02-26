@@ -150,7 +150,7 @@ namespace LaserMappingDrone {
 
         // set openGL clear color
         glClearColor(CLEARCOLOR);
-
+        glPointSize(3.0);
         #ifdef USE_DEPTHBUFFER
         // enable the occlusion of objects hidden behind other objects (using the depth buffer)
         glEnable(GL_DEPTH_TEST);
