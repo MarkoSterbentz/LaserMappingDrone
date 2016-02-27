@@ -34,7 +34,6 @@ namespace LaserMappingDrone {
     class Grid {
         friend class GridDrawer<P>;
     private:
-
         float xMin, xMax, yMin, yMax;
         float xIndexFactor, yIndexFactor;
         unsigned xRes, yRes;
@@ -43,8 +42,6 @@ namespace LaserMappingDrone {
         std::function<void(P&)> pac;
         bool pacExists;             // and whether or not there is one.
 
-
-
         CyclerEntry* cycler;            // used for 'recycling' points for optimization
         unsigned long cycles;           // how may points available to cycle (0 means infinite and is default)
         unsigned long currentCycle;     // which point is to be recycled next
@@ -52,6 +49,9 @@ namespace LaserMappingDrone {
 
         void removeOldestInCell(unsigned long cellIndex);
         void specifyPointAdditionCallback(std::function<void(P&)> pac);
+        void runKernelOnCell(int cellX, int cellY);
+        void runKernelImplicit(int cellX, int cellY);   // runs kernel on cell and updates cells it contributes to
+        unsigned parseCellIndex(float x, float y);
     public:
         Grid(float xMin, float xMax, float yMin, float yMax, unsigned xRes, unsigned yRes, unsigned long cycle = 0);
         ~Grid();
@@ -59,9 +59,10 @@ namespace LaserMappingDrone {
         std::vector<GridCell<P>> cells;
         void addPoint(P point);
         int specifyKernel(std::vector<int> kermit, std::function<void(Grid*, int, int)> execute);
-        void runKernel();
+        void runKernel();   // runs kernel for all the cell
         int getXRes();
         int getYRes();
+        float getKernelOutput(float x, float y);
     };
 
     /*******************    GRID CLASS IMPLEMENTATION    *************************/
@@ -97,8 +98,8 @@ namespace LaserMappingDrone {
     template<class P>
     void Grid<P>::addPoint(P point) {
         if (point.x < xMax && point.x > xMin && point.y < yMax && point.y > yMin) {
-            unsigned cellIndex = (int)((point.x - xMin) * xIndexFactor) + (int)((point.y - yMin) * yIndexFactor) * xRes;
-                cells[cellIndex].points.push_back(point);
+            unsigned cellIndex = parseCellIndex(point.x, point.y);
+            cells[cellIndex].points.push_back(point);
             if (cycles) {
                 if (cyclerHasReachedCapacity) {
                     removeOldestInCell(cycler[currentCycle].cellIndex);
@@ -117,8 +118,11 @@ namespace LaserMappingDrone {
             if (pacExists) {
                 pac(point);
             }
-            runKernel();
-            std::cout << cells[cellIndex].kernelOutput << std::endl;
+            /* Running the kernel for the cell that contains the new point: */
+            int testCellX = (int)((point.x - xMin) * xIndexFactor);
+            int testCellY = (int)((point.y - yMin) * yIndexFactor);
+
+            runKernelImplicit(testCellX, testCellY);
         }
     }
 
@@ -151,10 +155,22 @@ namespace LaserMappingDrone {
     }
 
     template <class P>
+    void Grid<P>::runKernelOnCell(int cellX, int cellY) {
+        kernel.execute(this, cellX, cellY);
+    }
+
+    template <class P>
+    void Grid<P>::runKernelImplicit(int cellX, int cellY) {
+        for(int i = 0; i < kernel.contributingCells.size(); ++i) {
+            runKernelOnCell(cellX - kernel.contributingCells[i].xOffset, cellY - kernel.contributingCells[i].yOffset);
+        }
+    }
+
+    template <class P>
     void Grid<P>::runKernel() {
         for (int i = 0; i < xRes; ++i) {
             for (int j = 0; j < yRes; ++j) {
-                    kernel.execute(this, i, j);
+                    runKernelOnCell(i, j);
             }
         }
     }
@@ -167,6 +183,17 @@ namespace LaserMappingDrone {
     template <class P>
     int Grid<P>::getYRes() {
         return yRes;
+    }
+
+    template <class P>
+    float Grid<P>::getKernelOutput(float x, float y) {
+        unsigned cellIndex = parseCellIndex(x, y);
+        return cells[cellIndex].kernelOutput;
+    }
+
+    template <class P>
+    unsigned Grid<P>::parseCellIndex(float x, float y) {
+        return (int)((x - xMin) * xIndexFactor) + (int)((y - yMin) * yIndexFactor) * xRes;
     }
 }   // namespace LaserMappingDrone
 

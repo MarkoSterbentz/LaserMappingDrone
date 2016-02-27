@@ -48,41 +48,41 @@ int handleControls();
 int listeningThreadFunction(void* listeningThreadData);
 
 int main(int argc, char* argv[]) {
-
-    auto stdDevKernel = [] (Grid<CartesianPoint>* pGrid, int x, int y){
+    /* KERNEL IMPLEMENTATIONS: */
+    auto avgKernel = [] (Grid<CartesianPoint>* pGrid, int x, int y){ // x and y determine which grid cell is being operated on
         int totalPointsCounted = 0;
         float average = 0;
-        int gridIndex = y * pGrid->getXRes() + x;
-        for (int i = 0; i < pGrid->kernel.contributingCells.size(); ++i) {
-            int gridIndexOffset = pGrid->kernel.contributingCells[i].yOffset * pGrid->getXRes();
-            gridIndexOffset += pGrid->kernel.contributingCells[i].xOffset;
-            for (int j = 0; j < pGrid->cells[gridIndex + gridIndexOffset].points.size(); ++j) {
-                if (gridIndex + gridIndexOffset > 0 && gridIndex + gridIndexOffset < pGrid->cells.size()) {         // NOTE: This causes it to wrap around left and right
-                    average += pGrid->cells[gridIndex + gridIndexOffset].points[j].y;
+        int gridIndex = y * pGrid->getXRes() + x; // index into the vector of GridCells
+        for (unsigned i = 0; i < pGrid->kernel.contributingCells.size(); ++i) {
+            if (x + pGrid->kernel.contributingCells[i].xOffset >= 0 && x + pGrid->kernel.contributingCells[i].xOffset < pGrid->getXRes()) {
+                int gridIndexOffset = pGrid->kernel.contributingCells[i].yOffset * pGrid->getXRes(); // offset from the gridIndex to the current contributing cell
+                gridIndexOffset += pGrid->kernel.contributingCells[i].xOffset;
+                int ccIndex = gridIndex + gridIndexOffset; // contributingCellIndex
+                if (ccIndex >= 0 && ccIndex < pGrid->cells.size()) {
+                    for (unsigned j = 0; j < pGrid->cells[ccIndex].points.size(); ++j) {
+                        average += pGrid->cells[ccIndex].points[j].y;
+                    }
+                    totalPointsCounted += pGrid->cells[ccIndex].points.size();
                 }
             }
-            totalPointsCounted += pGrid->cells[gridIndex + gridIndexOffset].points.size();
         }
         if (totalPointsCounted > 0) {
             average /= totalPointsCounted;
         }
         pGrid->cells[gridIndex].kernelOutput = average;
-
     };
 
-    stdDevKernel(&grid, 0, 0);
+    avgKernel(&grid, 0, 0);
 
     int kernelError = grid.specifyKernel(
             {
                  0, 1, 0,
                  1, 1, 1,
                  0, 1, 0,
-            }, stdDevKernel);
+            }, avgKernel);
     if (kernelError) {
         std::cout << "KERNEL FAILURE!\n";
     }
-
-    grid.runKernel();
 
     zoomLevel = 0.01f;
     std::stringstream log;
@@ -195,6 +195,14 @@ int handleControls() {
                 glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
                 glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
                 grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y, 0.f});
+            }
+            else if (event.button.button == SDL_BUTTON_RIGHT) {   // add point to grid
+                float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
+                float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
+                glm::dmat4 invMat = glm::inverse(gridDrawer.getTransformMat());
+                glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
+                glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
+                std::cout << grid.getKernelOutput((float)gridSpaceClick.x, (float)gridSpaceClick.y) << std::endl;
             }
         } else if (event.type == SDL_MOUSEWHEEL) {
             int xPosInt, yPosInt;
