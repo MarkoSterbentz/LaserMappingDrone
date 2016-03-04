@@ -26,6 +26,7 @@ using namespace LaserMappingDrone;
 PacketAnalyzer* analyzer;
 PacketReceiver* receiver;
 bool packetHandlerQuit;
+SDL_Thread* packetListeningThread;
 
 // The grid and drawer
 // constructor min/max arguments are in meters (the LIDAR device is at the origin)
@@ -45,85 +46,68 @@ unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time
 
 // prototypes
 void mainLoop();
+void initPacketHandling();
+void stopPacketHandling();
+void initKernel();
+int initGraphics(bool graphicsOn);
 int handleControls();
 int listeningThreadFunction(void* listeningThreadData);
 
 int main(int argc, char* argv[]) {
-    /* KERNEL IMPLEMENTATIONS: */
-    auto avgKernel = [] (Grid<CartesianPoint>* pGrid, int x, int y){ // x and y determine which grid cell is being operated on
-        int totalPointsCounted = 0;
-        float average = 0;
-        int gridIndex = y * pGrid->getXRes() + x; // index into the vector of GridCells
-        for (unsigned i = 0; i < pGrid->kernel.contributingCells.size(); ++i) {
-            if (x + pGrid->kernel.contributingCells[i].xOffset >= 0 && x + pGrid->kernel.contributingCells[i].xOffset < pGrid->getXRes()) {
-                int gridIndexOffset = pGrid->kernel.contributingCells[i].yOffset * pGrid->getXRes(); // offset from the gridIndex to the current contributing cell
-                gridIndexOffset += pGrid->kernel.contributingCells[i].xOffset;
-                int ccIndex = gridIndex + gridIndexOffset; // contributingCellIndex
-                if (ccIndex >= 0 && ccIndex < pGrid->cells.size()) {
-                    for (unsigned j = 0; j < pGrid->cells[ccIndex].points.size(); ++j) {
-                        average += pGrid->cells[ccIndex].points[j].y;
-                    }
-                    totalPointsCounted += pGrid->cells[ccIndex].points.size();
-                }
+    /* Deal with the command line flags: */
+    if (argc == 1) {
+        /* User gave no flags, so prompt the user for the flags they would like to use: */
+        std::string inputDataFileName;
+        char input = '0';
+        /* Check for graphics flag: */
+        while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
+            std::cout << "Enable graphical display? (y/n) ";
+            std::cin.get(input);
+            std::cin.ignore(256, '\n');
+            if (input == 'y' || input == 'Y') {
+                std::cout << "Graphical display ENABLED." << std::endl;
+            } else if (input == 'n' || input == 'N') {
+                std::cout << "Graphical display DISABLED" << std::endl;
+            } else {
+                std::cout << "Please enter either 'y' or 'n'." << std::endl;
             }
         }
-        if (totalPointsCounted > 0) {
-            average /= totalPointsCounted;
+        input = '0';
+        while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
+            std::cout << "Enable data collection? (y/n) ";
+            std::cin.get(input);
+            std::cin.ignore(256, '\n');
+            if (input == 'y' || input == 'Y') {
+                std::cout << "Data collection ENABLED." << std::endl;
+                std::cout << "What would you like to name the data file? ";
+                std::getline(std::cin, inputDataFileName);
+                inputDataFileName.append(".dat");
+                std::cout << "Data will be written to: " << inputDataFileName << std::endl;
+            } else if (input == 'n' || input == 'N') {
+                std::cout << "Data collection DISABLED." << std::endl;
+            } else {
+                std::cout << "Please enter either 'y' or 'n'." << std::endl;
+            }
         }
-        pGrid->cells[gridIndex].kernelOutput = average;
-    };
+    } else {
+        /* Handle the user specified flags: */
+        for (int fc = 0; fc < argc; ++fc) {
 
-    avgKernel(&grid, 0, 0);
-
-    int kernelError = grid.specifyKernel(
-            {
-                 0, 1, 0,
-                 1, 1, 1,
-                 0, 1, 0,
-            }, avgKernel);
-    if (kernelError) {
-        std::cout << "KERNEL FAILURE!\n";
+        }
     }
 
-    zoomLevel = 0.01f;
-    std::stringstream log;
-    if (!graphics.init(log)) { // if init fails, exit
-        std::cout << log.str();
+    /* Initialize components based on the flags: */
+    initKernel();
+
+    if(initGraphics(true) == 1) {                                              // NEED bools to represent the flags!!{
         return 1;
     }
-    std::cout << log.str();
-    std::cout << gridDrawer.init(graphics.getAspectRatio(), &grid);
 
-    #ifdef BENCHMARK_QUADTREE_POINT_INSERTION
-	// Benchmark point insertion
-	quadTree.setMaxPointsPerNode(50);
-    float invPi = 1.f / 3.14159265358979f;
-    float startTime = SDL_GetTicks();
-    for (unsigned i = 0; i < 1000000; ++i) {
-        quadTree.addPoint({(float)i * (float)sin(i * invPi) * 0.1f, (float)i * (float)cos(i * invPi) * 0.1f});
-    }
-    std::cout << SDL_GetTicks() - startTime;
-    #endif
+    initPacketHandling();
 
-    // packet handler setup
-    receiver = new PacketReceiver(DATAFILE);
-    receiver->bindSocket();
-    analyzer = new PacketAnalyzer();
-
-    // spawn the listening thread, passing it information in "data"
-    packetHandlerQuit = false;
-    SDL_Thread* listeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", NULL);
-
-    // begin the main loop on this thread
+    /* Begin the main loop on this thread: */
     mainLoop();
-
-    // once the main loop has exited, set the listening thread's "quit" to true and wait for the thread to die.
-    packetHandlerQuit = true;
-    SDL_WaitThread(listeningThread, NULL);
-
-    // free packet handler memory
-    delete analyzer;
-    delete receiver;
+    stopPacketHandling();
 
     return 0;
 }
@@ -247,5 +231,87 @@ int handleControls() {
         zoomLevel /= zoomSpeed;
         gridDrawer.scale(zoomSpeed, zoomSpeed);
     }
+    return 0;
+}
+
+void initPacketHandling() {
+    // packet handler setup
+    receiver = new PacketReceiver(DATAFILE);
+    receiver->bindSocket();
+    analyzer = new PacketAnalyzer();
+
+    // spawn the listening thread, passing it information in "data"
+    packetHandlerQuit = false;
+    packetListeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", NULL);
+}
+
+void stopPacketHandling() {
+    // once the main loop has exited, set the listening thread's "quit" to true and wait for the thread to die.
+    packetHandlerQuit = true;
+    SDL_WaitThread(packetListeningThread, NULL);
+
+    // free packet handler memory
+    delete analyzer;
+    delete receiver;
+}
+
+void initKernel() {
+    /* KERNEL IMPLEMENTATIONS: */
+    auto avgKernel = [] (Grid<CartesianPoint>* pGrid, int x, int y){ // x and y determine which grid cell is being operated on
+        int totalPointsCounted = 0;
+        float average = 0;
+        int gridIndex = y * pGrid->getXRes() + x; // index into the vector of GridCells
+        for (unsigned i = 0; i < pGrid->kernel.contributingCells.size(); ++i) {
+            if (x + pGrid->kernel.contributingCells[i].xOffset >= 0 && x + pGrid->kernel.contributingCells[i].xOffset < pGrid->getXRes()) {
+                int gridIndexOffset = pGrid->kernel.contributingCells[i].yOffset * pGrid->getXRes(); // offset from the gridIndex to the current contributing cell
+                gridIndexOffset += pGrid->kernel.contributingCells[i].xOffset;
+                int ccIndex = gridIndex + gridIndexOffset; // contributingCellIndex
+                if (ccIndex >= 0 && ccIndex < pGrid->cells.size()) {
+                    for (unsigned j = 0; j < pGrid->cells[ccIndex].points.size(); ++j) {
+                        average += pGrid->cells[ccIndex].points[j].y;
+                    }
+                    totalPointsCounted += pGrid->cells[ccIndex].points.size();
+                }
+            }
+        }
+        if (totalPointsCounted > 0) {
+            average /= totalPointsCounted;
+        }
+        pGrid->cells[gridIndex].kernelOutput = average;
+    };
+
+    avgKernel(&grid, 0, 0);
+
+    int kernelError = grid.specifyKernel(
+            {
+                    0, 1, 0,
+                    1, 1, 1,
+                    0, 1, 0,
+            }, avgKernel);
+    if (kernelError) {
+        std::cout << "KERNEL FAILURE!\n";
+    }
+}
+
+int initGraphics(bool graphicsOn) {
+    zoomLevel = 0.01f;
+    std::stringstream log;
+    if (!graphics.init(log)) { // if init fails, exit
+        std::cout << log.str();
+        return 1;
+    }
+    std::cout << log.str();
+    std::cout << gridDrawer.init(graphics.getAspectRatio(), &grid);
+
+    #ifdef BENCHMARK_QUADTREE_POINT_INSERTION
+        // Benchmark point insertion
+        quadTree.setMaxPointsPerNode(50);
+        float invPi = 1.f / 3.14159265358979f;
+        float startTime = SDL_GetTicks();
+        for (unsigned i = 0; i < 1000000; ++i) {
+            quadTree.addPoint({(float)i * (float)sin(i * invPi) * 0.1f, (float)i * (float)cos(i * invPi) * 0.1f});
+        }
+        std::cout << SDL_GetTicks() - startTime;
+    #endif
     return 0;
 }
