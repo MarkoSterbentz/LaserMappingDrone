@@ -44,12 +44,18 @@ moodycamel::ReaderWriterQueue<CartesianPoint> queue(10000);
 long double zoomLevel;
 unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time step
 
+/* Flag Booleans: */
+bool graphicsEnabled;
+bool dataCollectionEnabled;
+std::string dataFileName;                                                                           // TODO: THIS NEEDS TO BE USED SOMEWHERE!
+
+
 // prototypes
 void mainLoop();
-void initPacketHandling();
+void initPacketHandling(std::string filename);
 void stopPacketHandling();
 void initKernel();
-int initGraphics(bool graphicsOn);
+int initGraphics();
 int handleControls();
 int listeningThreadFunction(void* listeningThreadData);
 
@@ -57,7 +63,6 @@ int main(int argc, char* argv[]) {
     /* Deal with the command line flags: */
     if (argc == 1) {
         /* User gave no flags, so prompt the user for the flags they would like to use: */
-        std::string inputDataFileName;
         char input = '0';
         /* Check for graphics flag: */
         while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
@@ -66,8 +71,10 @@ int main(int argc, char* argv[]) {
             std::cin.ignore(256, '\n');
             if (input == 'y' || input == 'Y') {
                 std::cout << "Graphical display ENABLED." << std::endl;
+                graphicsEnabled = true;
             } else if (input == 'n' || input == 'N') {
                 std::cout << "Graphical display DISABLED" << std::endl;
+                graphicsEnabled = false;
             } else {
                 std::cout << "Please enter either 'y' or 'n'." << std::endl;
             }
@@ -79,35 +86,62 @@ int main(int argc, char* argv[]) {
             std::cin.ignore(256, '\n');
             if (input == 'y' || input == 'Y') {
                 std::cout << "Data collection ENABLED." << std::endl;
-                std::cout << "What would you like to name the data file? ";
-                std::getline(std::cin, inputDataFileName);
-                inputDataFileName.append(".dat");
-                std::cout << "Data will be written to: " << inputDataFileName << std::endl;
+                dataCollectionEnabled = true;
+
             } else if (input == 'n' || input == 'N') {
                 std::cout << "Data collection DISABLED." << std::endl;
+                dataCollectionEnabled = false;
             } else {
                 std::cout << "Please enter either 'y' or 'n'." << std::endl;
             }
         }
     } else {
         /* Handle the user specified flags: */
-        for (int fc = 0; fc < argc; ++fc) {
-
+        /* Default flag values are set to false: */
+        graphicsEnabled = false;
+        dataCollectionEnabled = false;
+        for (int fc = 1; fc < argc; ++fc) {
+            if (std::string(argv[fc]) == "-g") {
+                std::cout << "Graphics ENABLED." << std::endl;
+                graphicsEnabled = true;
+            } else if (std::string(argv[fc]) == "-d") {
+                std::cout << "Data collection ENABLED" << std::endl;
+                dataCollectionEnabled = true;
+            } else if (std::string(argv[fc]) == "-h") {
+                std::cout << "HELP" << std::endl;
+            } else {
+                std::cout << argv[fc] << " is an invalid flag." << std::endl;
+            }
         }
+    }
+
+    /* Obtain the dataFileName if necessary: */
+    if (dataCollectionEnabled) {
+        std::cout << "What would you like to name the data file? ";
+        std::getline(std::cin, dataFileName);
+        dataFileName.append(".dat");
+        std::cout << "Data will be written to: " << dataFileName << std::endl;
     }
 
     /* Initialize components based on the flags: */
     initKernel();
 
-    if(initGraphics(true) == 1) {                                              // NEED bools to represent the flags!!{
-        return 1;
+    if (graphicsEnabled) {
+        if (initGraphics() == 1) {
+            return 1;
+        }
     }
 
-    initPacketHandling();
+    if (dataCollectionEnabled) {
+        initPacketHandling(dataFileName);
+    }
 
     /* Begin the main loop on this thread: */
     mainLoop();
-    stopPacketHandling();
+
+    if (dataCollectionEnabled) {
+        stopPacketHandling();
+    }
 
     return 0;
 }
@@ -117,23 +151,25 @@ void mainLoop() {
     bool loop = true;
     while (loop) {
         CartesianPoint p;
-        while(queue.try_dequeue(p)) {
+        while (queue.try_dequeue(p)) {
             grid.addPoint(p);
         }
 
-        /**************************** HANDLE CONTROLS ********************************/
-        int timeToQuit = handleControls(); // returns non-zero if quit events happen
-        if (timeToQuit) {
-            loop = false;
-        }
+        if (graphicsEnabled) {
+            /**************************** HANDLE CONTROLS ********************************/
+            int timeToQuit = handleControls(); // returns non-zero if quit events happen
+            if (timeToQuit) {
+                loop = false;
+            }
 
-        /**************************** DO THE DRAWING *********************************/
-        // draw the tree
+            /**************************** DO THE DRAWING *********************************/
+            // draw the tree
 //        treeDrawer.drawQuadTree(quadTree, (float) zoomLevel);
-        // draw the grid
-        gridDrawer.drawGrid();
-        // update the screen
-        graphics.render();
+            // draw the grid
+            gridDrawer.drawGrid();
+            // update the screen
+            graphics.render();
+        }
     }
 }
 
@@ -234,9 +270,9 @@ int handleControls() {
     return 0;
 }
 
-void initPacketHandling() {
+void initPacketHandling(std::string filename) {
     // packet handler setup
-    receiver = new PacketReceiver(DATAFILE);
+    receiver = new PacketReceiver(filename);
     receiver->bindSocket();
     analyzer = new PacketAnalyzer();
 
@@ -293,7 +329,7 @@ void initKernel() {
     }
 }
 
-int initGraphics(bool graphicsOn) {
+int initGraphics() {
     zoomLevel = 0.01f;
     std::stringstream log;
     if (!graphics.init(log)) { // if init fails, exit
