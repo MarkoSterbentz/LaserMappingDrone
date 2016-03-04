@@ -181,7 +181,7 @@ int listeningThreadFunction(void* arg) {
         for (unsigned i = 0; i < 10; ++i) {
             receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
             if (receiver->packetQueue.size() > 0) {
-//                receiver->writePacketToFile(receiver->packetQueue.front());
+                receiver->writePacketToFile(receiver->packetQueue.front());
                 analyzer->loadPacket(receiver->packetQueue.front());
 
                 std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
