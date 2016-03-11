@@ -44,7 +44,6 @@ public:
     int bindSocket();
     void listenForDataPacket();
     void writePacketToFile(unsigned char* packet);
-
 };
 
 #endif //PACKETANALYZER_PACKETRECEIVER_H

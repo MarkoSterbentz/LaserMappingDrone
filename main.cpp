@@ -47,7 +47,7 @@ unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time
 /* Flag Booleans: */
 bool graphicsEnabled;
 bool dataCollectionEnabled;
-std::string dataFileName;                                                                           // TODO: THIS NEEDS TO BE USED SOMEWHERE!
+std::string dataFileName;
 
 
 // prototypes
