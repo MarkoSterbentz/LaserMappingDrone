@@ -17,8 +17,6 @@
 #define SCROLL_ZOOM_SENSITIVITY 0.08f
 #define KEY_ZOOM_EXTRA_SENSITIVITY 0.005f
 #define KEY_MOVE_SENSITIVITY 0.2f
-#define DATAFILE "dataOutputFile.dat"
-#define POSFILE "positionOutputFile.dat"
 
 using namespace LaserMappingDrone;
 
@@ -115,6 +113,22 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    receiver = new PacketReceiver();
+    analyzer = new PacketAnalyzer();
+
+//    /* TESTING READING PACKETS FROM DATA FILE: */
+//    receiver->openInputFile("testData.dat");
+//    receiver->readSingleDataPacketFromFile();
+//    if (receiver->getPacketQueueSize() > 0) {
+//        analyzer->loadPacket(receiver->getNextQueuedPacket());
+//
+//        std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
+//        for (unsigned j = 0; j < newPoints.size(); ++j) {
+//            queue.enqueue(newPoints[j]);
+//        }
+//    }
+//    /* END TESTING */
+
     /* Obtain the dataFileName if necessary: */
     if (dataCollectionEnabled) {
         std::cout << "What would you like to name the data file? ";
@@ -142,6 +156,10 @@ int main(int argc, char* argv[]) {
     if (dataCollectionEnabled) {
         stopPacketHandling();
     }
+
+    /* Memory Cleanup: */
+    delete analyzer;
+    delete receiver;
 
     return 0;
 }
@@ -180,9 +198,9 @@ int listeningThreadFunction(void* arg) {
         /*************************** HANDLE PACKETS *********************************/
         for (unsigned i = 0; i < 10; ++i) {
             receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
-            if (receiver->packetQueue.size() > 0) {
-                receiver->writePacketToFile(receiver->packetQueue.front());
-                analyzer->loadPacket(receiver->packetQueue.front());
+            if (receiver->getPacketQueueSize() > 0) {
+                receiver->writePacketToFile(receiver->packetQueue.front());//receiver->getNextQueuedPacket());
+                analyzer->loadPacket(receiver->packetQueue.front()); //receiver->getNextQueuedPacket());
 
                 std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
                 for (unsigned j = 0; j < newPoints.size(); ++j) {
@@ -272,9 +290,8 @@ int handleControls() {
 
 void initPacketHandling(std::string filename) {
     // packet handler setup
-    receiver = new PacketReceiver(filename);
+    receiver->openOutputFile(filename);
     receiver->bindSocket();
-    analyzer = new PacketAnalyzer();
 
     // spawn the listening thread, passing it information in "data"
     packetHandlerQuit = false;
@@ -285,10 +302,6 @@ void stopPacketHandling() {
     // once the main loop has exited, set the listening thread's "quit" to true and wait for the thread to die.
     packetHandlerQuit = true;
     SDL_WaitThread(packetListeningThread, NULL);
-
-    // free packet handler memory
-    delete analyzer;
-    delete receiver;
 }
 
 void initKernel() {

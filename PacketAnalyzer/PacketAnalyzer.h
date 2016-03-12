@@ -1,9 +1,7 @@
-
 #ifndef LASERMAPPINGDRONE_PACKETANALYZER_H
 #define LASERMAPPINGDRONE_PACKETANALYZER_H
 
-/*********************************************************************
- * PACKET ANALYZER | Marko Sterbentz
+/* PACKET ANALYZER | Marko Sterbentz
  * This class is designed to take in a packet or series of packets output
  * from the VeloDyne VLP-16 and convert it to a variety of useful three
  * dimensional data points.
