@@ -30,7 +30,7 @@ bool packetHandlerQuit;
 // The grid and drawer
 // constructor min/max arguments are in meters (the LIDAR device is at the origin)
 //Grid<CartesianPoint> grid(-1.f, 1.f, -1.f, 1.f, 10, 10, 1000000);
-Grid<CartesianPoint> grid(-3.f, 3.f, -3.f, 3.f, 10, 10, 500000);
+Grid<CartesianPoint> grid(-3.f, 3.f, -3.f, 3.f, 10, 10, 25);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
@@ -91,8 +91,12 @@ int main(int argc, char* argv[]) {
         std::cout << log.str();
         return 1;
     }
+//    if (gridDrawer.init(graphics.getAspectRatio(), &grid, 5, log)) {
+//        std::cout << log.str();
+//        return 1;
+//    }
+    gridDrawer.init(graphics.getAspectRatio(), &grid, 5, log);
     std::cout << log.str();
-    std::cout << gridDrawer.init(graphics.getAspectRatio(), &grid);
 
     #ifdef BENCHMARK_QUADTREE_POINT_INSERTION
 	// Benchmark point insertion
