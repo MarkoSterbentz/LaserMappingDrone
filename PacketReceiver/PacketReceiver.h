@@ -32,16 +32,16 @@
 class PacketReceiver {
 private:
     std::ofstream outputFile;
-    std::ifstream inputFile;
+
     std::string outputFileName;
     std::string inputFileName;
     int sockfd;
     unsigned char dataBuf[DATABUFLEN];
     unsigned char posBuf[POSBUFLEN];
-
-public:
-
     std::queue <unsigned char*> packetQueue;
+public:
+    std::ifstream inputFile;
+
     PacketReceiver();
     ~PacketReceiver();
     void openOutputFile(std::string newOutputFileName);
@@ -55,6 +55,7 @@ public:
 
     unsigned long getPacketQueueSize();
     unsigned char* getNextQueuedPacket();
+    void popQueuedPacket();
 };
 
 #endif //PACKETANALYZER_PACKETRECEIVER_H

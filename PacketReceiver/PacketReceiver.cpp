@@ -18,7 +18,7 @@ PacketReceiver::~PacketReceiver() {
     }
 };
 
-/* Opens the output file stream in order to save colelcted packet data. */
+/* Opens the output file stream in order to save collected packet data. */
 void PacketReceiver::openOutputFile(std::string newOutputFileName) {
     if (outputFile.is_open()) {
         outputFile.close();
@@ -119,7 +119,11 @@ unsigned long PacketReceiver::getPacketQueueSize() {
 
 /* Getter for the next packet in packetQueue. */
 unsigned char* PacketReceiver::getNextQueuedPacket() {
-    packetQueue.front();
+    return packetQueue.front();
 }
 
-
+void PacketReceiver::popQueuedPacket() {
+    if (packetQueue.size() > 0) {
+        packetQueue.pop();
+    }
+}
