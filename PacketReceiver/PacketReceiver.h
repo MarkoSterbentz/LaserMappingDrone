@@ -33,12 +33,15 @@ class PacketReceiver {
 private:
     std::ofstream outputFile;
 
+
     std::string outputFileName;
     std::string inputFileName;
     int sockfd;
     unsigned char dataBuf[DATABUFLEN];
     unsigned char posBuf[POSBUFLEN];
     std::queue <unsigned char*> packetQueue;
+    void readSingleDataPacketFromFile();
+
 public:
     std::ifstream inputFile;
 
@@ -50,7 +53,7 @@ public:
     void listenForDataPacket();
     void writePacketToFile(unsigned char* packet);
 
-    void readSingleDataPacketFromFile();
+    void readDataPacketsFromFile(int numPackets);
     void readAllDataPacketsFromFile();
 
     unsigned long getPacketQueueSize();

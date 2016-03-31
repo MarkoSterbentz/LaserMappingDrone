@@ -102,13 +102,25 @@ void PacketReceiver::readAllDataPacketsFromFile() {
 
 }
 
+/* Reads a given number of packets from the inputFile. */
+void PacketReceiver::readDataPacketsFromFile(int numPackets) {
+    if (inputFile.is_open()) {
+        for (int i = 0; i < numPackets; ++i) {
+            readSingleDataPacketFromFile();
+//            if (inputFile.eof()) {
+//                break;
+//            }
+        }
+    }
+}
+
 /* Read a single packet from the input file into packetQueue. */
 void PacketReceiver::readSingleDataPacketFromFile() {
-    if (inputFile.is_open()) {
-        inputFile.read((char*)dataBuf, DATABUFLEN);
+    if (inputFile.is_open() && inputFile.read((char*)dataBuf, DATABUFLEN)) {
         packetQueue.push(dataBuf);
+        inputFile.seekg(DATABUFLEN, std::ios::cur);   // move the current position in the ifstream to the next packet
     } else {
-        std::cout << "Could not read packet from file. No file was open." << std::endl;
+        std::cout << "No longer reading packets file." << std::endl;
     }
 }
 

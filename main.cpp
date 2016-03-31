@@ -120,16 +120,15 @@ int main(int argc, char* argv[]) {
     receiver->openInputFile("oneMinuteCapture.dat");
     // load k number of packets from the data file
     for (int k = 0; k < 10000; ++k) {
-        //std::cout << DATABUFLEN*k << std::endl;
-        receiver->inputFile.seekg(DATABUFLEN, std::ios::cur);   // move the current position in the ifstream to the next packet
-        receiver->readSingleDataPacketFromFile();
+        //receiver->inputFile.seekg(DATABUFLEN, std::ios::cur);   // move the current position in the ifstream to the next packet
+        //receiver->readSingleDataPacketFromFile();
+        receiver->readDataPacketsFromFile(1);
         if (receiver->getPacketQueueSize() > 0) {
             analyzer->loadPacket(receiver->getNextQueuedPacket());
             receiver->popQueuedPacket(); // this packet will be analyzed, get it out of the queue
             std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
             std::cout << "Number of points: " << newPoints.size() << std::endl;
             for (unsigned j = 0; j < newPoints.size(); ++j) {
-                //std::cout << newPoints[j].x << ", " << newPoints[j].y << ", " << newPoints[j].z << std::endl;
                 queue.enqueue(newPoints[j]);
             }
         }
@@ -204,10 +203,9 @@ int listeningThreadFunction(void* arg) {
     std::cout << "\nPacket handling thread is active.\n";
     while (!packetHandlerQuit) {
         /*************************** HANDLE PACKETS *********************************/
-        //for (unsigned i = 0; i < 10; ++i) {
             receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
             if (receiver->getPacketQueueSize() > 0) {
-                receiver->writePacketToFile(receiver->getNextQueuedPacket());
+                //receiver->writePacketToFile(receiver->getNextQueuedPacket());
                 analyzer->loadPacket(receiver->getNextQueuedPacket());
                 receiver->popQueuedPacket();    // packet has been read, get rid of it
                 std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
@@ -215,7 +213,6 @@ int listeningThreadFunction(void* arg) {
                     queue.enqueue(newPoints[j]);
                 }
             }
-        //}
     }
     std::cout << "Packet handling thread is dying.\n";
     return 0;
