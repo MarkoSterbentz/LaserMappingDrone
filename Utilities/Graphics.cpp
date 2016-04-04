@@ -100,7 +100,7 @@ namespace LaserMappingDrone {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
         // Create the SDL window
-        pWindow = SDL_CreateWindow("QuadTree Viewer",	// name of window
+        pWindow = SDL_CreateWindow("Laser Mapping Drone",	    // name of window
                                    SDL_WINDOWPOS_CENTERED,		// x position of window
                                    SDL_WINDOWPOS_CENTERED,		// y position of window
                                    (int)xRes, (int)yRes,	    // x and y width of window

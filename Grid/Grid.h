@@ -38,12 +38,11 @@ namespace LaserMappingDrone {
         float xIndexFactor, yIndexFactor;
         unsigned xRes, yRes;
 
-//        Delegate<void(P&)> pac;     // (Point Addition Callback)
         std::function<void(P&)> pac;
         bool pacExists;             // and whether or not there is one.
 
         CyclerEntry* cycler;            // used for 'recycling' points for optimization
-        unsigned long cycles;           // how may points available to cycle (0 means infinite and is default)
+        unsigned long capacity;         // how may points available to cycle (0 means infinite and is default)
         unsigned long currentCycle;     // which point is to be recycled next
         bool cyclerHasReachedCapacity;  // whether or not the cycler needs to actually start recycling
 
@@ -70,7 +69,7 @@ namespace LaserMappingDrone {
     template<class P>
     Grid<P>::Grid(float xMin, float xMax, float yMin, float yMax, unsigned xRes, unsigned yRes, unsigned long cycle /*= 0*/):
             xMin(xMin * 1000.f), xMax(xMax * 1000.f), yMin(yMin * 1000.f), yMax(yMax * 1000.f),
-            xRes(xRes), yRes(yRes), pacExists(false), cycles(cycle) {
+            xRes(xRes), yRes(yRes), pacExists(false), capacity(cycle) {
         // The factors of 1000 are to get from LIDAR units to meters on the bounds.
         xIndexFactor = this->xRes / (this->xMax - this->xMin);
         yIndexFactor = this->yRes / (this->yMax - this->yMin);
@@ -89,7 +88,7 @@ namespace LaserMappingDrone {
 
     template<class P>
     Grid<P>::~Grid() {
-        if (cycles) {
+        if (capacity) {
             delete[] cycler;
             cycler = NULL;
         }
@@ -100,16 +99,16 @@ namespace LaserMappingDrone {
         if (point.x < xMax && point.x > xMin && point.y < yMax && point.y > yMin) {
             unsigned cellIndex = parseCellIndex(point.x, point.y);
             cells[cellIndex].points.push_back(point);
-            if (cycles) {
+            if (capacity) {
                 if (cyclerHasReachedCapacity) {
                     removeOldestInCell(cycler[currentCycle].cellIndex);
                     cycler[currentCycle].cellIndex = cellIndex;
-                    if (++currentCycle >= cycles) {
+                    if (++currentCycle >= capacity) {
                         currentCycle = 0;
                     }
                 } else {
                     cycler[currentCycle].cellIndex = cellIndex;
-                    if (++currentCycle >= cycles) {
+                    if (++currentCycle >= capacity) {
                         currentCycle = 0;
                         cyclerHasReachedCapacity = true;
                     }
@@ -170,7 +169,7 @@ namespace LaserMappingDrone {
     void Grid<P>::runKernel() {
         for (int i = 0; i < xRes; ++i) {
             for (int j = 0; j < yRes; ++j) {
-                    runKernelOnCell(i, j);
+                runKernelOnCell(i, j);
             }
         }
     }

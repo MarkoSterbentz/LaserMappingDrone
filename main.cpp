@@ -30,8 +30,8 @@ SDL_Thread* packetListeningThread;
 
 // The grid and drawer
 // constructor min/max arguments are in meters (the LIDAR device is at the origin)
-//Grid<CartesianPoint> grid(-1.f, 1.f, -1.f, 1.f, 10, 10, 1000000);
-Grid<CartesianPoint> grid(-3.f, 3.f, -3.f, 3.f, 10, 10, 500000);
+// Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
+Grid<CartesianPoint> grid(-3.f, 3.f, -3.f, 3.f, 10, 10, 100000);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
@@ -337,7 +337,8 @@ int initGraphics() {
         return 1;
     }
     std::cout << log.str();
-    std::cout << gridDrawer.init(graphics.getAspectRatio(), &grid);
+    gridDrawer.init(graphics.getAspectRatio(), &grid, 0, log);
+    std::cout << log.str();
 
     #ifdef BENCHMARK_QUADTREE_POINT_INSERTION
         // Benchmark point insertion

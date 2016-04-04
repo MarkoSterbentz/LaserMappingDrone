@@ -22,7 +22,7 @@ namespace LaserMappingDrone {
     template<class P>
     struct GridDrawer {
 
-        std::string init(float aspectRatio, Grid<P>* grid);
+        int init(float aspectRatio, Grid <P> *grid, unsigned additionBufferSize, std::stringstream& log);
         void drawGrid();
         void translate(float x, float y);
         void scale (float x, float y);
@@ -35,15 +35,20 @@ namespace LaserMappingDrone {
     private:
         GLuint shader;
         GLuint vao;
+        GLuint vertices;
         GLint shader_modelMat;
         GLint shader_color;
         float currentColor[3];
         std::vector<glm::dmat4> matrixStack;
         glm::dmat4 localModelMat;
+        unsigned vertexNumElements;
         int gridVertStart;
         long int pointsVertStart, pointsByteStart;
         unsigned long gridVertCount, pointsVertCount, pointsByteCount, pointsByteVboHead;
         float pointSizeX, pointSizeY, centerX, centerY, scaleX, scaleY;
+
+        std::vector<float> buffer;
+        unsigned long addBufferSize, addBufferSizeElem;
 
         void pushMat(glm::dmat4&& mat);
         void popMat();
@@ -54,21 +59,20 @@ namespace LaserMappingDrone {
     };
 
     template <class P>
-    std::string GridDrawer<P>::init(float aspectRatio, Grid<P> *grid) {
-        std::stringstream log;
+    int GridDrawer<P>::init(float aspectRatio, Grid <P> *grid, unsigned additionBufferSize, std::stringstream& log) {
+        addBufferSize = additionBufferSize;
 
         // Create and bind a VAO
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
 
-        // set up a simple shader that shades any triangle a single solid color.
+        // set up a simple shader that shades any primitive a single solid color.
         shader = loadShaders("Shaders/color.vert", "Shaders/color.frag", log);
         GLint shader_vertex = glGetAttribLocation(shader, "vertex");
         shader_modelMat = glGetUniformLocation(shader, "modelMat");
         shader_color = glGetUniformLocation(shader, "color");
 
         // Create the vertex buffer in GPU memory (nothing in it yet)
-        GLuint vertices;
         glGenBuffers(1, &vertices);
 
         // this is the data that will be buffered up as vertices
@@ -96,39 +100,66 @@ namespace LaserMappingDrone {
             verts.emplace_back(0.5f);
         }
 
+        vertexNumElements = 3;
+
         gridVertStart = 0;
-        gridVertCount = verts.size() / 3;
+        gridVertCount = verts.size() / vertexNumElements;
 
         pointsVertStart = gridVertCount;
-        pointsByteStart = pointsVertStart * 3 * sizeof(float);
-        pointsVertCount = grid->cycles;
-        pointsByteCount = pointsVertCount * 3 * sizeof(float);
+        pointsByteStart = pointsVertStart * vertexNumElements * sizeof(float);
+        pointsVertCount = grid->capacity;
+        pointsByteCount = pointsVertCount * vertexNumElements * sizeof(float);
         pointsByteVboHead = 0;
 
-        unsigned long bufferSizeInBytes = (verts.size() + grid->cycles * 3) * sizeof(float);
+        unsigned long bufferSizeInBytes = (verts.size() + grid->capacity * vertexNumElements) * sizeof(float);
 
         // Generate the empty VBO on the GPU, to be filled with glBufferSubArray
         glBindBuffer(GL_ARRAY_BUFFER, vertices);
         glBufferData(GL_ARRAY_BUFFER, bufferSizeInBytes, NULL, GL_STREAM_DRAW);
         glEnableVertexAttribArray((GLuint) shader_vertex);
-        glVertexAttribPointer((GLuint) shader_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer((GLuint) shader_vertex, vertexNumElements, GL_FLOAT, GL_FALSE, 0, 0);
 
         // Put the grid's vertices into the VBO
         glBufferSubData(GL_ARRAY_BUFFER, gridVertStart, verts.size() * sizeof(float), &verts[0]);
 
         // Set up the grid to automagically do the following every time a point is added to it.
         // This will put each point's data on the VBO as it comes in.
-        grid->specifyPointAdditionCallback( [&] (P& p) {
-            if (pointsByteVboHead >= pointsByteCount) {
-                pointsByteVboHead = 0;
-            }
-            float vertex[3] = {p.x, p.y, p.z};
-//                glBindBuffer(GL_ARRAY_BUFFER, vertices);
-            glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
-                            3 * sizeof(float), &vertex[0]);
-            pointsByteVboHead += 3 * sizeof(float);
-
-        });
+        if (addBufferSize <= 1) {
+            log << "No GPU addition buffering will be used.\n";
+            grid->specifyPointAdditionCallback([&](P &p) {
+                if (pointsByteVboHead >= pointsByteCount) {
+                    pointsByteVboHead = 0;
+                }
+                float vertex[vertexNumElements] = {p.x, p.y, p.z};
+                glBindBuffer(GL_ARRAY_BUFFER, vertices);
+                glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
+                                vertexNumElements * sizeof(float), &vertex[0]);
+                pointsByteVboHead += vertexNumElements * sizeof(float);
+            });
+        } else if (grid->capacity % addBufferSize == 0) {
+            log << addBufferSize << " points will be buffered before each transfer to GPU.\n";
+            addBufferSizeElem = addBufferSize * vertexNumElements;
+            buffer.reserve(addBufferSizeElem);
+            grid->specifyPointAdditionCallback([&](P &p) {
+                buffer.push_back(p.x);
+                buffer.push_back(p.y);
+                buffer.push_back(p.z);
+                if (buffer.size() >= addBufferSizeElem) {
+                    if (pointsByteVboHead >= pointsByteCount) {
+                        pointsByteVboHead = 0;
+                    }
+                    glBindBuffer(GL_ARRAY_BUFFER, vertices);
+                    glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
+                                    addBufferSizeElem * sizeof(float), &buffer[0]);
+                    buffer.clear();
+                    pointsByteVboHead += addBufferSizeElem * sizeof(float);
+                }
+            });
+        } else {
+            log << "FAIL: (GPU addition buffer) Grid Drawer buffer size MUST be a factor of Grid capacity. ";
+            log << "This error is due to a bad GridDrawer constructor argument.\n";
+            return 1;
+        }
 
         currentColor[0] = 0.f;
         currentColor[1] = 1.f;
@@ -152,7 +183,7 @@ namespace LaserMappingDrone {
         pointSizeX = scaleX;
         pointSizeY = scaleY;
 
-        return log.str();
+        return 0;
     }
 
     template <class P>
