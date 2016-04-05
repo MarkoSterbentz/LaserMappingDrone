@@ -138,11 +138,10 @@ namespace LaserMappingDrone {
 
         checkGlError(log, __LINE__);
 
-
         #ifdef USE_VSYNC /************ USE VSYNC ********************************/
         if (SDL_GL_SetSwapInterval(1) < 0) {
-        log << "<!>    Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
-        // Do not return. This is not an essential functionality.
+            log << "<!>    Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
+            // Do not return. This is not an essential functionality.
         } else {
             log << "VSync enabled.\n";
         }

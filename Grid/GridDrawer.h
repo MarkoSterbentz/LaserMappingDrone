@@ -15,6 +15,7 @@
 #include <glm/gtx/transform.hpp>
 #include <PacketAnalyzer.h>
 #include "Grid.h"
+#include "Camera.h"
 #include "LoadShaders.h"
 
 namespace LaserMappingDrone {
@@ -22,7 +23,7 @@ namespace LaserMappingDrone {
     template<class P>
     struct GridDrawer {
 
-        int init(float aspectRatio, Grid <P> *grid, unsigned additionBufferSize, std::stringstream& log);
+        int init(float aspectRatio, Grid <P> *grid, Camera* camera, unsigned additionBufferSize, std::stringstream& log);
         void drawGrid();
         void translate(float x, float y);
         void scale (float x, float y);
@@ -46,6 +47,8 @@ namespace LaserMappingDrone {
         long int pointsVertStart, pointsByteStart;
         unsigned long gridVertCount, pointsVertCount, pointsByteCount, pointsByteVboHead;
         float pointSizeX, pointSizeY, centerX, centerY, scaleX, scaleY;
+        Camera* camera;
+        uint32_t lastTime;
 
         std::vector<float> buffer;
         unsigned long addBufferSize, addBufferSizeElem;
@@ -59,8 +62,10 @@ namespace LaserMappingDrone {
     };
 
     template <class P>
-    int GridDrawer<P>::init(float aspectRatio, Grid <P> *grid, unsigned additionBufferSize, std::stringstream& log) {
+    int GridDrawer<P>::init(float aspectRatio, Grid <P> *grid, Camera* camera, unsigned additionBufferSize, std::stringstream& log) {
         addBufferSize = additionBufferSize;
+        this->camera = camera;
+        lastTime = SDL_GetTicks();
 
         // Create and bind a VAO
         glGenVertexArrays(1, &vao);
@@ -78,26 +83,35 @@ namespace LaserMappingDrone {
         // this is the data that will be buffered up as vertices
         std::vector<float> verts;
 
+        std::cout << "Stiff: " << grid->xMin << std::endl;
+
         // Here the vertices for the grid are generated
+        float sclX = (grid->xMax - grid->xMin) * .5f;
+        float sclY = (grid->yMax - grid->yMin) * .5f;
+        float ctrX = grid->xMin + sclX;
+        float ctrY = grid->yMin + sclY;
         float xStep = 2.f / grid->xRes;
         for (unsigned x = 0; x <= grid->xRes; ++x) {
-            verts.emplace_back(x * xStep - 1.f);
-            verts.emplace_back(-1.f);
-            verts.emplace_back(0.5f);
+            verts.emplace_back(ctrX + (x * xStep * sclX - sclX));
+            verts.emplace_back(ctrY + -sclY);
+            verts.emplace_back(0.0f);
 
-            verts.emplace_back(x * xStep - 1.f);
-            verts.emplace_back(1.f);
-            verts.emplace_back(0.5f);
+            std::cout << ctrX + (x * xStep * sclX - sclX) << std::endl;
+            std::cout << ctrY + -sclY << std::endl;
+
+            verts.emplace_back(ctrX + (x * xStep * sclX - sclX));
+            verts.emplace_back(ctrY + sclY);
+            verts.emplace_back(0.0f);
         }
         float yStep = 2.f / grid->yRes;
         for (unsigned y = 0; y <= grid->yRes; ++y) {
-            verts.emplace_back(-1.f);
-            verts.emplace_back(y * yStep - 1.f);
-            verts.emplace_back(0.5f);
+            verts.emplace_back(ctrX + -sclX);
+            verts.emplace_back(ctrY + (y * yStep * sclY - sclY));
+            verts.emplace_back(0.0f);
 
-            verts.emplace_back(1.f);
-            verts.emplace_back(y * yStep - 1.f);
-            verts.emplace_back(0.5f);
+            verts.emplace_back(ctrX + sclX);
+            verts.emplace_back(ctrY + (y * yStep * sclY - sclY));
+            verts.emplace_back(0.0f);
         }
 
         vertexNumElements = 3;
@@ -188,12 +202,16 @@ namespace LaserMappingDrone {
 
     template <class P>
     void GridDrawer<P>::drawGrid() {
+        uint32_t currentTime = SDL_GetTicks();
+        camera->tickShmooze(currentTime - lastTime);
+        lastTime = currentTime;
         matrixStack.clear();
-        glm::dmat4 sizingMat = {{scaleX,  0.f,     0.f, 0.f},
-                                {0.f,     scaleY,  0.f, 0.f},
-                                {0.f,     0.f,     1.f, 0.f},
-                                {centerX, centerY, 0.f, 1.f}};
-        matrixStack.push_back(localModelMat * sizingMat);
+//        glm::dmat4 sizingMat = {{scaleX,  0.f,     0.f, 0.f},
+//                                {0.f,     scaleY,  0.f, 0.f},
+//                                {0.f,     0.f,     1.f, 0.f},
+//                                {centerX, centerY, 0.f, 1.f}};
+//        matrixStack.push_back(localModelMat * sizingMat);
+        matrixStack.push_back(camera->getVp());
 
         // Bind the VAO
         glBindVertexArray(vao);
@@ -269,11 +287,12 @@ namespace LaserMappingDrone {
     template <class P>
     void GridDrawer<P>::drawPoints() {
         setColor(1.f, 1.f, 0.f);
-        pushMat(glm::dmat4(localModelMat));
+//        pushMat(glm::dmat4(localModelMat));
         preDrawCommon();
         glDrawArrays(GL_POINTS, (GLint)pointsVertStart, (GLsizei)pointsVertCount);
-        popMat();
+//        popMat();
     }
+
 }
 
 #endif //LASERMAPPINGDRONE_GRIDDRAWER_H

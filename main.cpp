@@ -10,6 +10,7 @@
 #include "Graphics.h"
 #include "Grid.h"
 #include "GridDrawer.h"
+#include "Camera.h"
 #include "readerwriterqueue.h"
 #include "PacketAnalyzer.h"
 #include "PacketReceiver.h"
@@ -34,6 +35,9 @@ SDL_Thread* packetListeningThread;
 Grid<CartesianPoint> grid(-3.f, 3.f, -3.f, 3.f, 10, 10, 100000);
 GridDrawer<CartesianPoint> gridDrawer;
 
+// The ... camera.
+Camera camera(1.0, 10.0f, 100000.0, 800, 600, 0.0, 1.2, 2000.0);
+
 // The graphics backend
 Graphics graphics;
 
@@ -48,7 +52,6 @@ unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time
 bool graphicsEnabled;
 bool dataCollectionEnabled;
 std::string dataFileName;
-
 
 // prototypes
 void mainLoop();
@@ -257,15 +260,29 @@ int handleControls() {
     if (keyStates[SDL_SCANCODE_RIGHT]) {
         gridDrawer.translate(-moveSpeed * gridDrawer.getMovementScaleX() * (float) zoomLevel, 0.0f);
     }
+    if (keyStates[SDL_SCANCODE_W]) {
+        camera.rotatePhi(0.01f);
+    }
+    if (keyStates[SDL_SCANCODE_S]) {
+        camera.rotatePhi(-0.01f);
+    }
+    if (keyStates[SDL_SCANCODE_A]) {
+        camera.rotateTheta(-0.01f);
+    }
+    if (keyStates[SDL_SCANCODE_D]) {
+        camera.rotateTheta(0.01f);
+    }
     if (keyStates[SDL_SCANCODE_LSHIFT]) {
-        float zoomSpeed = 1.f + moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
-        zoomLevel /= zoomSpeed;
-        gridDrawer.scale(zoomSpeed, zoomSpeed);
+//        float zoomSpeed = 1.f + moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
+//        zoomLevel /= zoomSpeed;
+//        gridDrawer.scale(zoomSpeed, zoomSpeed);
+        camera.zoom(-10.f);
     }
     if (keyStates[SDL_SCANCODE_LCTRL]) {
-        float zoomSpeed = 1.f - moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
-        zoomLevel /= zoomSpeed;
-        gridDrawer.scale(zoomSpeed, zoomSpeed);
+//        float zoomSpeed = 1.f - moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
+//        zoomLevel /= zoomSpeed;
+//        gridDrawer.scale(zoomSpeed, zoomSpeed);
+        camera.zoom(10.f);
     }
     return 0;
 }
@@ -336,9 +353,12 @@ int initGraphics() {
         std::cout << log.str();
         return 1;
     }
+    camera.setResX(graphics.getResX());
+    camera.setResY(graphics.getResY());
+    gridDrawer.init(graphics.getAspectRatio(), &grid, &camera, 0, log);
     std::cout << log.str();
-    gridDrawer.init(graphics.getAspectRatio(), &grid, 0, log);
-    std::cout << log.str();
+
+    grid.addPoint({1500.f, 1500.f});
 
     #ifdef BENCHMARK_QUADTREE_POINT_INSERTION
         // Benchmark point insertion

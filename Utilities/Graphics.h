@@ -13,7 +13,8 @@ namespace LaserMappingDrone {
     class Graphics {
         SDL_Window* pWindow;                // The SDL window
         SDL_GLContext context;              // The openGL context
-        float xRes, yRes, aspectRatio;
+        float aspectRatio;
+        int xRes, yRes;
 
         void checkGlError(std::stringstream& log, int line = -1);
         void checkSDLError(std::stringstream& log, int line = -1);
@@ -24,8 +25,8 @@ namespace LaserMappingDrone {
         bool init(std::stringstream &log);
         void render();
         inline float getAspectRatio()   { return aspectRatio; };
-        inline float getResX()          { return xRes; }
-        inline float getResY()          { return yRes; }
+        inline int getResX()          { return xRes; }
+        inline int getResY()          { return yRes; }
     };
 }
 
