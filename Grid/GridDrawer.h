@@ -34,7 +34,6 @@ namespace LaserMappingDrone {
         GLint shader_color;
         float currentColor[3];
         std::vector<glm::dmat4> matrixStack;
-        unsigned vertexNumElements;
         int gridVertStart;
         long int pointsVertStart, pointsByteStart;
         unsigned long gridVertCount, pointsVertCount, pointsByteCount, pointsByteVboHead;
@@ -103,24 +102,22 @@ namespace LaserMappingDrone {
             verts.emplace_back(0.0f);
         }
 
-        vertexNumElements = 3;
-
         gridVertStart = 0;
-        gridVertCount = verts.size() / vertexNumElements;
+        gridVertCount = verts.size() / 3;
 
         pointsVertStart = gridVertCount;
-        pointsByteStart = pointsVertStart * vertexNumElements * sizeof(float);
+        pointsByteStart = pointsVertStart * 3 * sizeof(float);
         pointsVertCount = grid->capacity;
-        pointsByteCount = pointsVertCount * vertexNumElements * sizeof(float);
+        pointsByteCount = pointsVertCount * 3 * sizeof(float);
         pointsByteVboHead = 0;
 
-        unsigned long bufferSizeInBytes = (verts.size() + grid->capacity * vertexNumElements) * sizeof(float);
+        unsigned long bufferSizeInBytes = (verts.size() + grid->capacity * 3) * sizeof(float);
 
         // Generate the empty VBO on the GPU, to be filled with glBufferSubArray
         glBindBuffer(GL_ARRAY_BUFFER, vertices);
         glBufferData(GL_ARRAY_BUFFER, bufferSizeInBytes, NULL, GL_STREAM_DRAW);
         glEnableVertexAttribArray((GLuint) shader_vertex);
-        glVertexAttribPointer((GLuint) shader_vertex, vertexNumElements, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer((GLuint) shader_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
         // Put the grid's vertices into the VBO
         glBufferSubData(GL_ARRAY_BUFFER, gridVertStart, verts.size() * sizeof(float), &verts[0]);
@@ -133,15 +130,15 @@ namespace LaserMappingDrone {
                 if (pointsByteVboHead >= pointsByteCount) {
                     pointsByteVboHead = 0;
                 }
-                float vertex[vertexNumElements] = {p.x, p.y, p.z};
+                float vertex[3] = {p.x, p.y, p.z};
                 glBindBuffer(GL_ARRAY_BUFFER, vertices);
                 glBufferSubData(GL_ARRAY_BUFFER, pointsByteStart + pointsByteVboHead,
-                                vertexNumElements * sizeof(float), &vertex[0]);
-                pointsByteVboHead += vertexNumElements * sizeof(float);
+                                3 * sizeof(float), &vertex[0]);
+                pointsByteVboHead += 3 * sizeof(float);
             });
         } else if (grid->capacity % addBufferSize == 0) {
             log << addBufferSize << " points will be buffered before each transfer to GPU.\n";
-            addBufferSizeElem = addBufferSize * vertexNumElements;
+            addBufferSizeElem = addBufferSize * 3;
             buffer.reserve(addBufferSizeElem);
             grid->specifyPointAdditionCallback([&](P &p) {
                 buffer.push_back(p.x);

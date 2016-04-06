@@ -34,11 +34,11 @@ SDL_Thread* packetListeningThread;
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
 // Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
-Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 3000.f, 10, 10, 100000);
+Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 50000.f, 10, 40, 100000);
 GridDrawer<CartesianPoint> gridDrawer;
 
-// The ... camera.
-Camera camera(1.0, 10.0f, 100000.0, 800, 0.0, 1.2, 2000.0, 100.f, 10000.f);
+// Arguments: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
+Camera camera(1.0, 10.0f, 100000.0, 1, 0.0, 1.2, 2000.0, 100.f, 10000.f);
 
 // The graphics backend
 Graphics graphics;
