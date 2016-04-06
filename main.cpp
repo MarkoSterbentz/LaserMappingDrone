@@ -43,9 +43,10 @@ long double zoomLevel;
 unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time step
 
 /* Flag Booleans: */
-bool graphicsEnabled;
-bool dataCollectionEnabled;
+bool graphicsModeEnabled, streamModeEnabled, writeModeEnabled;
+StreamingMedium streamMedium;
 std::string dataFileName;
+
 
 
 // prototypes
@@ -56,6 +57,13 @@ void initKernel();
 int initGraphics();
 int handleControls();
 int listeningThreadFunction(void* listeningThreadData);
+void enableGraphicsMode();
+void disableGraphicsMode();
+void enableStreamMode();
+void disableStreamMode();
+void getStreamDevice();
+void enableWriteMode();
+void disableWriteMode();
 
 int main(int argc, char* argv[]) {
     /* Deal with the command line flags: */
@@ -68,43 +76,54 @@ int main(int argc, char* argv[]) {
             std::cin.get(input);
             std::cin.ignore(256, '\n');
             if (input == 'y' || input == 'Y') {
-                std::cout << "Graphical display ENABLED." << std::endl;
-                graphicsEnabled = true;
+                enableGraphicsMode();
             } else if (input == 'n' || input == 'N') {
-                std::cout << "Graphical display DISABLED" << std::endl;
-                graphicsEnabled = false;
+                disableGraphicsMode();
             } else {
                 std::cout << "Please enter either 'y' or 'n'." << std::endl;
             }
         }
         input = '0';
         while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
-            std::cout << "Enable data collection? (y/n) ";
+            std::cout << "Enable data streaming? (y/n) ";
             std::cin.get(input);
             std::cin.ignore(256, '\n');
             if (input == 'y' || input == 'Y') {
-                std::cout << "Data collection ENABLED." << std::endl;
-                dataCollectionEnabled = true;
-
+                enableStreamMode();
             } else if (input == 'n' || input == 'N') {
-                std::cout << "Data collection DISABLED." << std::endl;
-                dataCollectionEnabled = false;
+                disableStreamMode();
             } else {
                 std::cout << "Please enter either 'y' or 'n'." << std::endl;
+            }
+        }
+        if (streamModeEnabled) {
+            while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
+                std::cout << "Enable writing data to a file? (y/n) ";
+                std::cin.get(input);
+                std::cin.ignore(256, '\n');
+                if (input == 'y' || input == 'Y') {
+                    enableWriteMode();
+                } else if (input == 'n' || input == 'N') {
+                    disableWriteMode();
+                } else {
+                    std::cout << "Please enter either 'y' or 'n'." << std::endl;
+                }
             }
         }
     } else {
         /* Handle the user specified flags: */
         /* Default flag values are set to false: */
-        graphicsEnabled = false;
-        dataCollectionEnabled = false;
+        graphicsModeEnabled = false;
+        streamModeEnabled = false;
+        writeModeEnabled = false;
         for (int fc = 1; fc < argc; ++fc) {
             if (std::string(argv[fc]) == "-g") {
-                std::cout << "Graphics ENABLED." << std::endl;
-                graphicsEnabled = true;
-            } else if (std::string(argv[fc]) == "-d") {
-                std::cout << "Data collection ENABLED" << std::endl;
-                dataCollectionEnabled = true;
+                enableGraphicsMode();
+            } else if (std::string(argv[fc]) == "-s") {
+                enableStreamMode();
+            } else if (std::string(argv[fc]) == "-sw"){
+                enableStreamMode();
+                enableWriteMode();
             } else if (std::string(argv[fc]) == "-h") {
                 std::cout << "HELP" << std::endl;
             } else {
@@ -117,50 +136,42 @@ int main(int argc, char* argv[]) {
     analyzer = new PacketAnalyzer();
 
     /* TESTING READING PACKETS FROM DATA FILE: */
-    receiver->openInputFile("oneMinuteCapture.dat");
-    // load k number of packets from the data file
-    for (int k = 0; k < 10000; ++k) {
-        //receiver->inputFile.seekg(DATABUFLEN, std::ios::cur);   // move the current position in the ifstream to the next packet
-        //receiver->readSingleDataPacketFromFile();
-        receiver->readDataPacketsFromFile(1);
-        if (receiver->getPacketQueueSize() > 0) {
-            analyzer->loadPacket(receiver->getNextQueuedPacket());
-            receiver->popQueuedPacket(); // this packet will be analyzed, get it out of the queue
-            std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
-            std::cout << "Number of points: " << newPoints.size() << std::endl;
-            for (unsigned j = 0; j < newPoints.size(); ++j) {
-                queue.enqueue(newPoints[j]);
-            }
-        }
-     }
+//    receiver->openInputFile("oneMinuteCapture.dat");
+//    // load k number of packets from the data file
+//    for (int k = 0; k < 10000; ++k) {
+//        //receiver->inputFile.seekg(DATABUFLEN, std::ios::cur);   // move the current position in the ifstream to the next packet
+//        //receiver->readSingleDataPacketFromFile();
+//        receiver->readDataPacketsFromFile(1);
+//        if (receiver->getPacketQueueSize() > 0) {
+//            analyzer->loadPacket(receiver->getNextQueuedPacket());
+//            receiver->popQueuedPacket(); // this packet will be analyzed, get it out of the queue
+//            std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
+//            std::cout << "Number of points: " << newPoints.size() << std::endl;
+//            for (unsigned j = 0; j < newPoints.size(); ++j) {
+//                queue.enqueue(newPoints[j]);
+//            }
+//        }
+//     }
 
     /* END TESTING */
-
-    /* Obtain the dataFileName if necessary: */
-    if (dataCollectionEnabled) {
-        std::cout << "What would you like to name the data file? ";
-        std::getline(std::cin, dataFileName);
-        dataFileName.append(".dat");
-        std::cout << "Data will be written to: " << dataFileName << std::endl;
-    }
 
     /* Initialize components based on the flags: */
     initKernel();
 
-    if (graphicsEnabled) {
+    if (graphicsModeEnabled) {
         if (initGraphics() == 1) {
             return 1;
         }
     }
 
-    if (dataCollectionEnabled) {
+    if (streamModeEnabled) {
         initPacketHandling(dataFileName);
     }
 
     /* Begin the main loop on this thread: */
     mainLoop();
 
-    if (dataCollectionEnabled) {
+    if (streamModeEnabled) {
         stopPacketHandling();
     }
 
@@ -180,7 +191,7 @@ void mainLoop() {
             grid.addPoint(p);
         }
 
-        if (graphicsEnabled) {
+        if (graphicsModeEnabled) {
             /**************************** HANDLE CONTROLS ********************************/
             int timeToQuit = handleControls(); // returns non-zero if quit events happen
             if (timeToQuit) {
@@ -203,9 +214,12 @@ int listeningThreadFunction(void* arg) {
     std::cout << "\nPacket handling thread is active.\n";
     while (!packetHandlerQuit) {
         /*************************** HANDLE PACKETS *********************************/
+        if (streamMedium == Velodyne) {
             receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
             if (receiver->getPacketQueueSize() > 0) {
-                //receiver->writePacketToFile(receiver->getNextQueuedPacket());
+                if (writeModeEnabled) {
+                    receiver->writePacketToFile(receiver->getNextQueuedPacket());
+                }
                 analyzer->loadPacket(receiver->getNextQueuedPacket());
                 receiver->popQueuedPacket();    // packet has been read, get rid of it
                 std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
@@ -213,6 +227,24 @@ int listeningThreadFunction(void* arg) {
                     queue.enqueue(newPoints[j]);
                 }
             }
+        } else if (streamMedium == file) {
+//            receiver->openInputFile("oneMinuteCapture.dat");
+//            // load k number of packets from the data file
+//            for (int k = 0; k < 10000; ++k) {
+//                //receiver->inputFile.seekg(DATABUFLEN, std::ios::cur);   // move the current position in the ifstream to the next packet
+//                //receiver->readSingleDataPacketFromFile();
+//                receiver->readDataPacketsFromFile(1);
+//                if (receiver->getPacketQueueSize() > 0) {
+//                    analyzer->loadPacket(receiver->getNextQueuedPacket());
+//                    receiver->popQueuedPacket(); // this packet will be analyzed, get it out of the queue
+//                    std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
+//                    std::cout << "Number of points: " << newPoints.size() << std::endl;
+//                    for (unsigned j = 0; j < newPoints.size(); ++j) {
+//                        queue.enqueue(newPoints[j]);
+//                    }
+//                }
+//             }
+        }
     }
     std::cout << "Packet handling thread is dying.\n";
     return 0;
@@ -368,4 +400,65 @@ int initGraphics() {
         std::cout << SDL_GetTicks() - startTime;
     #endif
     return 0;
+}
+
+void enableGraphicsMode() {
+    graphicsModeEnabled = true;
+    std::cout << "Graphical display ENABLED." << std::endl;
+}
+
+void disableGraphicsMode() {
+    graphicsModeEnabled = false;
+    std::cout << "Graphical display DISABLED" << std::endl;
+}
+
+void enableStreamMode() {
+    streamModeEnabled = true;
+    std::cout << "Data streaming ENABLED." << std::endl;
+    getStreamDevice();
+}
+
+void disableStreamMode() {
+    streamModeEnabled = false;
+    std::cout << "Data streaming DISABLED." << std::endl;
+}
+
+void getStreamDevice() {
+    std::cout << "Select the device you are streaming data from (enter the associated number):" << std::endl;
+    std::cout << "1. Velodyne" << std::endl;
+    std::cout << "2. File" << std::endl;
+    std::string input;
+    std::getline(std::cin, input);
+    int inputInt = -1;
+    while (inputInt == -1) {
+        inputInt = std::stoi(input);
+        switch (inputInt) {
+            case (1):
+                streamMedium = Velodyne;
+                std::cout << "Selected streaming medium: VELODYNE." << std::endl;
+                break;
+            case (2):
+                streamMedium = file;
+                std::cout << "Selected streaming medium: FILE." << std::endl;
+                break;
+            default:
+                std::cout << "Invalid input. Please select a valid number." << std::endl;
+                inputInt = -1;
+                break;
+        }
+    }
+}
+
+void enableWriteMode() {
+    writeModeEnabled = true;
+    std::cout << "Data writing ENABLED." << std::endl;
+    std::cout << "What would you like to name the output data file? ";
+    std::getline(std::cin, dataFileName);
+    dataFileName.append(".dat");
+    std::cout << "Data will be written to: " << dataFileName << std::endl;
+}
+
+void disableWriteMode() {
+    writeModeEnabled = false;
+    std::cout << "Data writing DISABLED." << std::endl;
 }

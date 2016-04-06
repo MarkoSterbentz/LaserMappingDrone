@@ -28,6 +28,7 @@
 #define DATABUFLEN 1249  //size of the data packet
 #define POSBUFLEN 554   // size of the position packet
 
+enum StreamingMedium {Velodyne, file};
 
 class PacketReceiver {
 private:
