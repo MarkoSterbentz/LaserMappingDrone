@@ -32,7 +32,7 @@ enum StreamingMedium {Velodyne, file};
 
 class PacketReceiver {
 private:
-    std::ofstream outputFile;
+    std::ofstream outputFileStream;
 
 
     std::string outputFileName;

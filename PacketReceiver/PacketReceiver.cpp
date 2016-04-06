@@ -10,8 +10,8 @@ PacketReceiver::PacketReceiver() {
 };
 
 PacketReceiver::~PacketReceiver() {
-    if (outputFile.is_open()) {
-        outputFile.close();
+    if (outputFileStream.is_open()) {
+        outputFileStream.close();
     }
     if (inputFile.is_open()) {
         inputFile.close();
@@ -20,11 +20,11 @@ PacketReceiver::~PacketReceiver() {
 
 /* Opens the output file stream in order to save collected packet data. */
 void PacketReceiver::openOutputFile(std::string newOutputFileName) {
-    if (outputFile.is_open()) {
-        outputFile.close();
+    if (outputFileStream.is_open()) {
+        outputFileStream.close();
     }
     outputFileName = newOutputFileName;
-    outputFile.open(outputFileName, std::ios::binary | std::ios::app);
+    outputFileStream.open(outputFileName, std::ios::binary | std::ios::app);
 }
 
 /* Opens the input file stream in order to read stored packet data. */
@@ -94,7 +94,7 @@ void PacketReceiver::listenForDataPacket() {
 
 /* Writes the given packet data to the current output file. */
 void PacketReceiver::writePacketToFile(unsigned char* packet) {
-    outputFile.write((char*) &packet[0], DATABUFLEN);
+    outputFileStream.write((char*) &packet[0], DATABUFLEN);
 }
 
 /* Read all data packets from the input file into packetQueue. */

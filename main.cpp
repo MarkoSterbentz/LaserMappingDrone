@@ -161,6 +161,10 @@ int main(int argc, char* argv[]) {
 
     /* END TESTING */
 
+    /* Separate testing: */
+    receiver->openInputFile("oneMinuteCapture.dat");
+    /* End separate testing */
+
     /* Initialize components based on the flags: */
     initKernel();
 
@@ -219,35 +223,21 @@ int listeningThreadFunction(void* arg) {
     while (!packetHandlerQuit) {
         /*************************** HANDLE PACKETS *********************************/
         if (streamMedium == Velodyne) {
-            receiver->listenForDataPacket(); // make sure to take the lack of UDP header into account
-            if (receiver->getPacketQueueSize() > 0) {
-                if (writeModeEnabled) {
-                    receiver->writePacketToFile(receiver->getNextQueuedPacket());
-                }
-                analyzer->loadPacket(receiver->getNextQueuedPacket());
-                receiver->popQueuedPacket();    // packet has been read, get rid of it
-                std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
-                for (unsigned j = 0; j < newPoints.size(); ++j) {
-                    queue.enqueue(newPoints[j]);
-                }
+            receiver->listenForDataPacket();
+        } else if (streamMedium == file && !receiver->inputFile.eof()) {
+            receiver->readDataPacketsFromFile(1);
+        }
+        // handle any incoming packet
+        if (receiver->getPacketQueueSize() > 0) {
+            if (writeModeEnabled) {
+                receiver->writePacketToFile(receiver->getNextQueuedPacket());
             }
-        } else if (streamMedium == file) {
-//            receiver->openInputFile("oneMinuteCapture.dat");
-//            // load k number of packets from the data file
-//            for (int k = 0; k < 10000; ++k) {
-//                //receiver->inputFile.seekg(DATABUFLEN, std::ios::cur);   // move the current position in the ifstream to the next packet
-//                //receiver->readSingleDataPacketFromFile();
-//                receiver->readDataPacketsFromFile(1);
-//                if (receiver->getPacketQueueSize() > 0) {
-//                    analyzer->loadPacket(receiver->getNextQueuedPacket());
-//                    receiver->popQueuedPacket(); // this packet will be analyzed, get it out of the queue
-//                    std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
-//                    std::cout << "Number of points: " << newPoints.size() << std::endl;
-//                    for (unsigned j = 0; j < newPoints.size(); ++j) {
-//                        queue.enqueue(newPoints[j]);
-//                    }
-//                }
-//             }
+            analyzer->loadPacket(receiver->getNextQueuedPacket());
+            receiver->popQueuedPacket();    // packet has been read, get rid of it
+            std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
+            for (unsigned j = 0; j < newPoints.size(); ++j) {
+                queue.enqueue(newPoints[j]);
+            }
         }
     }
     std::cout << "Packet handling thread is dying.\n";
