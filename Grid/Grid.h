@@ -121,7 +121,7 @@ namespace LaserMappingDrone {
             int testCellX = (int)((point.x - xMin) * xIndexFactor);
             int testCellY = (int)((point.y - yMin) * yIndexFactor);
 
-            runKernelImplicit(testCellX, testCellY);
+            //runKernelImplicit(testCellX, testCellY);                                                          // PROBLEMS WHEN TRYING TO DO THIS!!
         }
     }
 
@@ -191,6 +191,7 @@ namespace LaserMappingDrone {
     unsigned Grid<P>::parseCellIndex(float x, float y) {
         return (int)((x - xMin) * xIndexFactor) + (int)((y - yMin) * yIndexFactor) * xRes;
     }
+
 }   // namespace LaserMappingDrone
 
 #endif //LASERMAPPINGDRONE_GRID_H

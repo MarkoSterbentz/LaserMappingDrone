@@ -1,9 +1,10 @@
-//
-// Created by marko sterbentz on 2/5/16.
-//
-
 #ifndef PACKETANALYZER_PACKETRECEIVER_H
 #define PACKETANALYZER_PACKETRECEIVER_H
+
+/* Packet Receiver | Marko Sterbentz 2/5/2016
+ * This class will receieve/read data from outside the application.
+ * Potential sources include: VeloDyne VLP-16, binary data file
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,23 +28,38 @@
 #define DATABUFLEN 1249  //size of the data packet
 #define POSBUFLEN 554   // size of the position packet
 
+enum StreamingMedium {Velodyne, file};
 
 class PacketReceiver {
 private:
-    std::ofstream file;
-    int sockfd;
+    std::ofstream outputFile;
 
-public:
+
+    std::string outputFileName;
+    std::string inputFileName;
+    int sockfd;
     unsigned char dataBuf[DATABUFLEN];
     unsigned char posBuf[POSBUFLEN];
     std::queue <unsigned char*> packetQueue;
-    std::string filename;
+    void readSingleDataPacketFromFile();
 
-    PacketReceiver(std::string outputFileName);
+public:
+    std::ifstream inputFile;
+
+    PacketReceiver();
     ~PacketReceiver();
+    void openOutputFile(std::string newOutputFileName);
+    void openInputFile(std::string newInputFileName);
     int bindSocket();
     void listenForDataPacket();
     void writePacketToFile(unsigned char* packet);
+
+    void readDataPacketsFromFile(int numPackets);
+    void readAllDataPacketsFromFile();
+
+    unsigned long getPacketQueueSize();
+    unsigned char* getNextQueuedPacket();
+    void popQueuedPacket();
 };
 
 #endif //PACKETANALYZER_PACKETRECEIVER_H

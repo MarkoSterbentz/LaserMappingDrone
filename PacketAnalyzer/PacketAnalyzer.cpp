@@ -152,27 +152,27 @@ std::vector<CartesianPoint> PacketAnalyzer::getCartesianPoints() {
     DataPacketInfo data = this->extractDataPacketInfo();
     std::vector<CartesianPoint> cartesianPoints;
     /* Actual Code: */
-//    for(int i = 0; i < 12; ++i) {
-//        // first firing sequence
-//        for(int j = 0; j < 16; ++j) {
-//            if (data.blocks[i].channels[j].distance > 0) // throw out 0 points
-//                cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j], data.blocks[i].azimuth1));
-//        }
-//        // second firing sequence
-//        for(int j = 16; j < 32; ++j) {
-//            if (data.blocks[i].channels[j].distance > 0) // throw out 0 points
-//                cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j%16], data.blocks[i].azimuth2));
-//        }
-//    }
-    /* Demo Code: */
-    // grabbing a single data point from each firing sequence for speed/testing purposes
-    for(int i = 0; i < 1; ++i) {
+    for(int i = 0; i < 12; ++i) {
         // first firing sequence
-        for(int j = 1; j < 2; ++j) {
+        for(int j = 0; j < 16; ++j) {
             if (data.blocks[i].channels[j].distance > 0) // throw out 0 points
                 cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j], data.blocks[i].azimuth1));
         }
+        // second firing sequence
+        for(int j = 16; j < 32; ++j) {
+            if (data.blocks[i].channels[j].distance > 0) // throw out 0 points
+                cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j%16], data.blocks[i].azimuth2));
+        }
     }
+    /* Demo Code: */
+    // grabbing a single data point from each firing sequence for speed/testing purposes
+//    for(int i = 0; i < 1; ++i) {
+//        // first firing sequence
+//        for(int j = 1; j < 2; ++j) {
+//            if (data.blocks[i].channels[j].distance > 0) // throw out 0 points
+//                cartesianPoints.push_back(getSingleXYZ(data.blocks[i].channels[j].distance, laserElevationAngles[j], data.blocks[i].azimuth1));
+//        }
+//    }
 
     return cartesianPoints;
 }
