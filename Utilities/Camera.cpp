@@ -6,13 +6,14 @@
 #include "Camera.h"
 
 namespace LaserMappingDrone {
-    Camera::Camera(float fovY, float near, float far, int resX, int resY, float theta, float phi, float dist) :
-                    fovY(fovY), near(near), far(far), resX(resX), resY(resY), theta(theta), phi(phi), dist(dist) {
+    Camera::Camera(float fovY, float near, float far, float aspect,
+                   float theta, float phi, float dist, float distMin, float distMax) :
+                    fovY(fovY), near(near), far(far), aspect(aspect),
+                    theta(theta), phi(phi), dist(dist), distMin(distMin), distMax(distMax) {
         calculateInitialValues();
     }
 
     void Camera::calculateInitialValues() {
-        aspect = (float)resX / (float)resY;
         thetaTarget = theta;
         thetaSpeed = 0.004f;
         phiTarget = phi;
@@ -20,12 +21,9 @@ namespace LaserMappingDrone {
         phiMin = -1.5f;
         phiMax = 1.5f;
         distTarget = dist;
-        distSpeed = 0.004f;
-        distMin = 100.f;
-        distMax = 3000.f;
+        distSpeed = (distMax - distMin) * 0.0000002f;
         physicsLastDt = 1.f;
-        zoomFocusSpeed = 4.f;
-        zoomFocusTravelDist = 1.f;
+        zoomFocusSpeed = 0.004f;
 
         oldVp = true;
         oldVpInv = true;
@@ -33,10 +31,8 @@ namespace LaserMappingDrone {
         oldProjInv = true;
         oldView = true;
         oldViewInv = true;
-        zoomFocusIsMoving = false;
 
         up = glm::vec3(0, 0, 1);
-        zoomFocusTravel = glm::vec3(0, 0, 0);
     }
 
     void Camera::calcCamVectors() {
@@ -46,33 +42,6 @@ namespace LaserMappingDrone {
         float xDist = horizDist * cosf(theta);
         float yDist = horizDist * sinf(theta);
         eye = glm::vec3(xDist + focus[0], yDist + focus[1], z + focus[2]);
-    }
-
-    bool Camera::calcZoomFocus(float dt) {
-        if(zoomFocusIsMoving) {
-            float currentShmoozeLength = (float)glm::length(zoomFocusTravel);
-            if (currentShmoozeLength < 0.001f) {
-                zoomFocusCurrent = zoomFocusTarget;
-                zoomFocusIsMoving = false;
-            } else {
-                float interp = powf((1.f - (currentShmoozeLength / zoomFocusTravelDist)
-                                           * 2.f), 2) * -1 + 1.001f;
-                zoomFocusCurrent += interp * zoomFocusSpeed * dt * zoomFocusTravel;
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    void Camera::changeZoomFocus(const glm::vec3& focus) {
-        zoomFocusTarget = focus;
-        zoomFocusOld = zoomFocusCurrent;
-        zoomFocusTravel = zoomFocusTarget - zoomFocusOld;
-        zoomFocusTravelDist = (float)glm::length(zoomFocusTravel);
-        if (zoomFocusTravelDist > 0) {
-            zoomFocusIsMoving = true;
-        }
     }
 
     void Camera::updateVpMat() {
@@ -164,7 +133,9 @@ namespace LaserMappingDrone {
             phi += phiSpeed * dt * (phiTarget - phi);
             oldView = true;
         }
-        if (calcZoomFocus(dt)) {
+        glm::vec3 zoomFocusTravel = zoomFocusTarget - zoomFocusCurrent;
+        if ((float)glm::length(zoomFocusTravel) > zoomFocusSpeed * physicsLastDt * 0.1) {
+            zoomFocusCurrent += zoomFocusSpeed * dt * zoomFocusTravel;
             oldView = true;
         }
         physicsLastDt = dt;
@@ -194,26 +165,84 @@ namespace LaserMappingDrone {
 
     void Camera::setFovY(float fovY) {
         this->fovY = fovY;
+        oldProj = true;
     }
 
     void Camera::setNear(float near) {
         this->near = near;
+        oldProj = true;
     }
 
     void Camera::setFar(float far) {
         this->far = far;
+        oldProj = true;
     }
 
-    void Camera::setResX(int resX) {
-        this->resX = resX;
-        aspect = this->resX / resY;
+    int Camera::getHorizIntersectionFromScreenSpace(const glm::vec2& ndcClick, glm::vec2& result) {
+        // this first part finds the intersection of your ray with the horizontal z = 0 plane, whether in front of you
+        // or behind you.
+        glm::vec4 rayClip = getProjInv() * glm::vec4(ndcClick.x, ndcClick.y, -1.f, 1.f);
+        glm::vec4 rayWorld = getViewInv() * glm::vec4(rayClip.x, rayClip.y, -1.f, 0.f);
+        if (rayWorld.z) {
+            glm::vec4 ray = glm::normalize(rayWorld);
+            if (ray.x) {
+                float slopeX = ray.z / ray.x;
+                result.x = eye.x + (-eye.z / slopeX);
+            } else {
+                result.x = eye.x;
+            }
+            if (ray.y) {
+                float slopeY = ray.z / ray.y;
+                result.y = eye.y + (-eye.z / slopeY);
+            } else {
+                result.y = eye.y;
+            }
+        }
+        // the rest is to make sure the ray actually hits the horizontal plane (not the horizon) and that
+        // it hits somewhere in the camera's field of view (that it hits in front of you)
+        int clickedSkyOrGround = (rayWorld.z > 0) - (rayWorld.z < 0); // results 1 for sky, -1 for ground, 0 for horizon
+        int cameraAboveOrBelow = (eye.z > 0) - (eye.z < 0); // results 1 for above horizon, -1 for below, 0 for horizon
+        if (cameraAboveOrBelow) {
+            if (cameraAboveOrBelow == -clickedSkyOrGround) {
+                return clickedSkyOrGround;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+        // so finally, it returns 1 if you hit the horizontal plane from below (meaning the z = 0 plane was your sky)
+        // or -1 if you hit the same z = 0 plane from above (you hit the ground)
+        // or 0 if you never hit the z = 0 plane (like if you are above it and also shoot above it,
+        // or you shoot the horizon line or something.
     }
 
-    void Camera::setResY(int resY) {
-        this->resY = resY;
-        aspect = resX / this->resY;
+    void Camera::dragHorizPlaneFromScreenSpace(const glm::vec2 &ndcStart, const glm::vec2 &ndcEnd) {
+        glm::vec2 worldStart, worldEnd;
+        int startIntersection = getHorizIntersectionFromScreenSpace(ndcStart, worldStart);
+        int endIntersection = getHorizIntersectionFromScreenSpace(ndcEnd, worldEnd);
+        if (startIntersection && endIntersection && startIntersection == endIntersection) {
+            zoomFocusTarget += glm::vec3(worldEnd - worldStart, 0.f);
+            std::cout << worldStart.x << " " << worldStart.y << " -> " << worldEnd.x << " " << worldEnd.y << std::endl;
+        }
     }
 
+    void Camera::forward(float distance) {
+        glm::vec2 horizVector;
+        horizVector.x = cosf(theta);
+        horizVector.y = sinf(theta);
+        horizVector *= -distance;
+        changeZoomFocus(focus + glm::vec3(horizVector, 0.0f));
+    }
+
+    void Camera::setAspect(float aspect) {
+        this->aspect = aspect;
+        oldProj = true;
+    }
+
+    void Camera::changeZoomFocus(const glm::vec3 &focus) {
+        zoomFocusTarget = focus;
+    }
 
 }
 

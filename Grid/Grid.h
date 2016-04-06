@@ -61,14 +61,14 @@ namespace LaserMappingDrone {
         void runKernel();   // runs kernel for all the cell
         int getXRes();
         int getYRes();
-        float getKernelOutput(float x, float y);
+        int getKernelOutput(float x, float y, float& result);
     };
 
     /*******************    GRID CLASS IMPLEMENTATION    *************************/
 
     template<class P>
     Grid<P>::Grid(float xMin, float xMax, float yMin, float yMax, unsigned xRes, unsigned yRes, unsigned long cycle /*= 0*/):
-            xMin(xMin * 1000.f), xMax(xMax * 1000.f), yMin(yMin * 1000.f), yMax(yMax * 1000.f),
+            xMin(xMin), xMax(xMax), yMin(yMin), yMax(yMax),
             xRes(xRes), yRes(yRes), pacExists(false), capacity(cycle) {
         // The factors of 1000 are to get from LIDAR units to meters on the bounds.
         xIndexFactor = this->xRes / (this->xMax - this->xMin);
@@ -133,17 +133,10 @@ namespace LaserMappingDrone {
     }
 
     /**
-     * The callback delegate is allowed to help optimize rendering of this structure should the need arise.  It's not a
-     * safe thing to do, I realize.
+     * The callback delegate is allowed to help optimize rendering of this structure should the need arise.
      */
     template<class P>
     void Grid<P>::specifyPointAdditionCallback(std::function<void(P&)> pac) {
-        // No recursion of addPoint please - this is a basic check for that, but a clever coder could defeat it.
-        // Also, a not-necessarily-clever coder could accidentally produce indirect recursion.  Be careful.
-//        if (pac != [] (P& x) { this->addPoint(x); } ) {
-//            this->pac = pac;
-//            pacExists = true;
-//        }
         this->pac = pac;
         pacExists = true;
     }
@@ -185,9 +178,13 @@ namespace LaserMappingDrone {
     }
 
     template <class P>
-    float Grid<P>::getKernelOutput(float x, float y) {
+    int Grid<P>::getKernelOutput(float x, float y, float& result) {
         unsigned cellIndex = parseCellIndex(x, y);
-        return cells[cellIndex].kernelOutput;
+        if (cellIndex > 0 && cellIndex < cells.size()) {
+            result = cells[cellIndex].kernelOutput;
+            return 0;
+        }
+        return 1;
     }
 
     template <class P>

@@ -23,15 +23,8 @@ namespace LaserMappingDrone {
     template<class P>
     struct GridDrawer {
 
-        int init(float aspectRatio, Grid <P> *grid, Camera* camera, unsigned additionBufferSize, std::stringstream& log);
+        int init(Grid <P> *grid, Camera* camera, unsigned additionBufferSize, std::stringstream& log);
         void drawGrid();
-        void translate(float x, float y);
-        void scale (float x, float y);
-        void transform(glm::dmat4& transform);
-        void zoomAtPoint(float x, float y, float amount);
-        glm::dmat4 getTransformMat();
-        inline float getMovementScaleX() { return pointSizeX; }
-        inline float getMovementScaleY() { return pointSizeY; }
 
     private:
         GLuint shader;
@@ -41,20 +34,16 @@ namespace LaserMappingDrone {
         GLint shader_color;
         float currentColor[3];
         std::vector<glm::dmat4> matrixStack;
-        glm::dmat4 localModelMat;
         unsigned vertexNumElements;
         int gridVertStart;
         long int pointsVertStart, pointsByteStart;
         unsigned long gridVertCount, pointsVertCount, pointsByteCount, pointsByteVboHead;
-        float pointSizeX, pointSizeY, centerX, centerY, scaleX, scaleY;
         Camera* camera;
         uint32_t lastTime;
 
         std::vector<float> buffer;
         unsigned long addBufferSize, addBufferSizeElem;
 
-        void pushMat(glm::dmat4&& mat);
-        void popMat();
         void setColor(float r, float g, float b);
         void preDrawCommon();
         void drawBorders();
@@ -62,7 +51,7 @@ namespace LaserMappingDrone {
     };
 
     template <class P>
-    int GridDrawer<P>::init(float aspectRatio, Grid <P> *grid, Camera* camera, unsigned additionBufferSize, std::stringstream& log) {
+    int GridDrawer<P>::init(Grid <P> *grid, Camera* camera, unsigned additionBufferSize, std::stringstream& log) {
         addBufferSize = additionBufferSize;
         this->camera = camera;
         lastTime = SDL_GetTicks();
@@ -179,24 +168,6 @@ namespace LaserMappingDrone {
         currentColor[1] = 1.f;
         currentColor[2] = 1.f;
 
-        scaleX = (grid->xMax - grid->xMin) * 0.5f;
-        scaleY = (grid->yMax - grid->yMin) * 0.5f;
-        centerX = grid->xMin + (scaleX);
-        centerY = grid->yMin + (scaleY);
-
-        localModelMat = glm::dmat4();
-        localModelMat = glm::scale(localModelMat, {aspectRatio * (1.9f / (grid->yMax - grid->yMin)),
-                                                   (1.9f / (grid->yMax - grid->yMin)),
-                                                   1.f});
-
-        localModelMat = glm::translate(localModelMat, {-centerX, -centerY, 0.f});
-
-        centerX = grid->xMin + ((grid->xMax - grid->xMin) * 0.5f);
-        centerY = grid->yMin + ((grid->yMax - grid->yMin) * 0.5f);
-
-        pointSizeX = scaleX;
-        pointSizeY = scaleY;
-
         return 0;
     }
 
@@ -206,11 +177,6 @@ namespace LaserMappingDrone {
         camera->tickShmooze(currentTime - lastTime);
         lastTime = currentTime;
         matrixStack.clear();
-//        glm::dmat4 sizingMat = {{scaleX,  0.f,     0.f, 0.f},
-//                                {0.f,     scaleY,  0.f, 0.f},
-//                                {0.f,     0.f,     1.f, 0.f},
-//                                {centerX, centerY, 0.f, 1.f}};
-//        matrixStack.push_back(localModelMat * sizingMat);
         matrixStack.push_back(camera->getVp());
 
         // Bind the VAO
@@ -220,46 +186,6 @@ namespace LaserMappingDrone {
 
         drawBorders();
         drawPoints();
-    }
-
-    template <class P>
-    void GridDrawer<P>::translate(float x, float y) {
-        localModelMat *= glm::dmat4{{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {x, y, 0.f, 1.f}};
-    }
-
-    template <class P>
-    void GridDrawer<P>::scale(float x, float y) {
-        localModelMat = glm::dmat4{{x, 0.f, 0.f, 0.f}, {0.f, y, 0.f, 0.f}, {0.f, 0.f, 1.f, 0.f}, {0.f, 0.f, 0.f, 1.f}} *
-                        localModelMat;
-    }
-
-    template <class P>
-    void GridDrawer<P>::transform(glm::dmat4 &transform) {
-        localModelMat = localModelMat * transform;
-    }
-
-    template <class P>
-    void GridDrawer<P>::zoomAtPoint(float x, float y, float amount) {
-        glm::dmat4 transToCenter = glm::translate(glm::dmat4(), {-x, -y, 0.0});
-        glm::dmat4 transBackOut  = glm::translate(glm::dmat4(), {x, y, 0.0});
-        glm::dmat4 scale = glm::scale(glm::dmat4(), {amount, amount, 1.0});
-
-        localModelMat = transBackOut * scale * transToCenter * localModelMat;
-    }
-
-    template <class P>
-    glm::dmat4 GridDrawer<P>::getTransformMat() {
-        return localModelMat;
-    }
-
-    template <class P>
-    void GridDrawer<P>::pushMat(glm::dmat4 &&mat) {
-        matrixStack.push_back(mat);
-    }
-
-    template <class P>
-    void GridDrawer<P>::popMat() {
-        matrixStack.pop_back();
     }
 
     template <class P>
@@ -287,10 +213,8 @@ namespace LaserMappingDrone {
     template <class P>
     void GridDrawer<P>::drawPoints() {
         setColor(1.f, 1.f, 0.f);
-//        pushMat(glm::dmat4(localModelMat));
         preDrawCommon();
         glDrawArrays(GL_POINTS, (GLint)pointsVertStart, (GLsizei)pointsVertCount);
-//        popMat();
     }
 
 }

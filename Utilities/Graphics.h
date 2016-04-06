@@ -25,8 +25,8 @@ namespace LaserMappingDrone {
         bool init(std::stringstream &log);
         void render();
         inline float getAspectRatio()   { return aspectRatio; };
-        inline int getResX()          { return xRes; }
-        inline int getResY()          { return yRes; }
+        inline int getResX()            { return xRes; }
+        inline int getResY()            { return yRes; }
     };
 }
 

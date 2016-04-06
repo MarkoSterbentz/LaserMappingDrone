@@ -85,7 +85,7 @@ namespace LaserMappingDrone {
             aspectRatio = 1.f;
         }
         #else /************************** GET ASPECT RATIO ******************************/
-        aspectRatio = (float)RESOLUTION_Y / (float)RESOLUTION_X;
+        aspectRatio = (float)xRes / (float)yRes;
         #endif /************************** GET ASPECT RATIO *****************************/
 
         // SDL_GL_CONTEXT_CORE gives us only the newer version, deprecated functions are disabled

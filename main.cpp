@@ -15,9 +15,11 @@
 #include "PacketAnalyzer.h"
 #include "PacketReceiver.h"
 
-#define SCROLL_ZOOM_SENSITIVITY 0.08f
-#define KEY_ZOOM_EXTRA_SENSITIVITY 0.005f
-#define KEY_MOVE_SENSITIVITY 0.2f
+#define KEY_MOVE_SENSITIVITY 100.f
+#define KEY_ROTATE_SENSITIVITY 0.01f
+#define MOUSE_SENSITIVITY_X -0.006f
+#define MOUSE_SENSITIVITY_Y 0.006f
+#define MOUSE_SENSITIVITY_WHEEL -800.f
 #define DATAFILE "dataOutputFile.dat"
 #define POSFILE "positionOutputFile.dat"
 
@@ -30,13 +32,13 @@ bool packetHandlerQuit;
 SDL_Thread* packetListeningThread;
 
 // The grid and drawer
-// constructor min/max arguments are in meters (the LIDAR device is at the origin)
+// constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
 // Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
-Grid<CartesianPoint> grid(-3.f, 3.f, -3.f, 3.f, 10, 10, 100000);
+Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 3000.f, 10, 10, 100000);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The ... camera.
-Camera camera(1.0, 10.0f, 100000.0, 800, 600, 0.0, 1.2, 2000.0);
+Camera camera(1.0, 10.0f, 100000.0, 800, 0.0, 1.2, 2000.0, 100.f, 10000.f);
 
 // The graphics backend
 Graphics graphics;
@@ -166,8 +168,6 @@ void mainLoop() {
             }
 
             /**************************** DO THE DRAWING *********************************/
-            // draw the tree
-//        treeDrawer.drawQuadTree(quadTree, (float) zoomLevel);
             // draw the grid
             gridDrawer.drawGrid();
             // update the screen
@@ -202,41 +202,58 @@ int handleControls() {
     /**************************** HANDLE EVENTS *********************************/
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // process all accumulated events
-        if (event.type == SDL_QUIT) { // quit events (like if you press the x)
-            return 1;
-        } else if (event.type == SDL_KEYDOWN) { // keydown events (generated only once per key press)
-            switch (event.key.keysym.sym) {
-                case SDLK_ESCAPE:
-                    return 1;
-                default:
-                    break;
-            }
-        } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-            if (event.button.button == SDL_BUTTON_LEFT) {   // add point to grid
-                float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
-                float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
-                glm::dmat4 invMat = glm::inverse(gridDrawer.getTransformMat());
-                glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
-                glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
-                grid.addPoint({(float) gridSpaceClick.x, (float) gridSpaceClick.y, 0.f});
-            }
-            else if (event.button.button == SDL_BUTTON_RIGHT) {   // add point to grid
-                float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
-                float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
-                glm::dmat4 invMat = glm::inverse(gridDrawer.getTransformMat());
-                glm::dvec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
-                glm::dvec4 gridSpaceClick = invMat * scrSpaceClick;
-                std::cout << grid.getKernelOutput((float)gridSpaceClick.x, (float)gridSpaceClick.y) << std::endl;
-            }
-        } else if (event.type == SDL_MOUSEWHEEL) {
-            int xPosInt, yPosInt;
-            SDL_GetMouseState(&xPosInt, &yPosInt);
-            float xPos = (float)xPosInt / (graphics.getResX() * 0.5f) - 1.0f;
-            float yPos = -(float)yPosInt / (graphics.getResY() * 0.5f) + 1.0f;
-            glm::dvec4 scrSpacePos(xPos, yPos, 0.0, 1.0);
-            float zoomSpeed = 1.f + event.wheel.y * SCROLL_ZOOM_SENSITIVITY;
-            zoomLevel /= zoomSpeed;
-            gridDrawer.zoomAtPoint((float)scrSpacePos.x, (float)scrSpacePos.y, zoomSpeed);
+        switch(event.type) {
+            case SDL_MOUSEMOTION:
+                if (event.button.button & SDL_BUTTON_RMASK) {
+                    if (event.button.button & SDL_BUTTON_LMASK) {
+                        camera.dragHorizPlaneFromScreenSpace(
+                                {event.motion.x - event.motion.xrel, event.motion.y - event.motion.yrel},
+                                {event.motion.x, event.motion.y});
+                    } else {
+                        camera.rotatePhi(event.motion.yrel * MOUSE_SENSITIVITY_Y);
+                        camera.rotateTheta(event.motion.xrel * MOUSE_SENSITIVITY_X);
+                    }
+                }
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (event.button.button == SDL_BUTTON_LEFT && !(event.button.button & SDL_BUTTON_RMASK)) {   // add point to grid
+                    float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
+                    float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
+                    glm::vec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
+                    glm::vec2 horizCoord{0.f, 0.f};
+                    if (camera.getHorizIntersectionFromScreenSpace({scrSpaceClick.x, scrSpaceClick.y}, horizCoord)) {
+                        grid.addPoint({horizCoord.x, horizCoord.y, 0.f});
+                    }
+                }
+//                else if (event.button.button == SDL_BUTTON_RIGHT ) {   // add point to grid
+//                    float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
+//                    float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
+//                    glm::vec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
+//                    glm::vec2 horizCoord{0.f, 0.f};
+//                    if (camera.getHorizIntersectionFromScreenSpace({scrSpaceClick.x, scrSpaceClick.y}, horizCoord)) {
+//                        float result = 0;
+//                        if (!grid.getKernelOutput(horizCoord.x, horizCoord.y, result)) {
+//                            std::cout << result << std::endl;
+//                        }
+//                    }
+//                }
+                break;
+            case SDL_MOUSEWHEEL:
+                camera.zoom(event.wheel.y * MOUSE_SENSITIVITY_WHEEL);
+                break;
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym) {
+                    case SDLK_ESCAPE:
+                        return 1;
+                    default:
+                        break;
+                }
+                break;
+            case SDL_QUIT:
+                std::cout << "Received Quit Event.\n";
+                return 1;
+            default:
+                break;
         }
     }
     /**************************** HANDLE KEY STATE *********************************/
@@ -246,43 +263,18 @@ int handleControls() {
     previousTime = currentTime;
     // Get current keyboard state ( this is used for smooth controls rather than key press event controls above )
     const Uint8* keyStates = SDL_GetKeyboardState(NULL);
-    float moveSpeed = KEY_MOVE_SENSITIVITY * deltaTime;
-    // apply movement according to which keys are down
-    if (keyStates[SDL_SCANCODE_UP]) {
-        gridDrawer.translate(0.0f, -moveSpeed * gridDrawer.getMovementScaleY() * (float) zoomLevel);
-    }
-    if (keyStates[SDL_SCANCODE_DOWN]) {
-        gridDrawer.translate(0.0f, moveSpeed * gridDrawer.getMovementScaleY() * (float) zoomLevel);
-    }
-    if (keyStates[SDL_SCANCODE_LEFT]) {
-        gridDrawer.translate(moveSpeed * gridDrawer.getMovementScaleX() * (float) zoomLevel, 0.0f);
-    }
-    if (keyStates[SDL_SCANCODE_RIGHT]) {
-        gridDrawer.translate(-moveSpeed * gridDrawer.getMovementScaleX() * (float) zoomLevel, 0.0f);
-    }
+    float keyRotate = KEY_ROTATE_SENSITIVITY * deltaTime;
     if (keyStates[SDL_SCANCODE_W]) {
-        camera.rotatePhi(0.01f);
+        camera.rotatePhi(keyRotate);
     }
     if (keyStates[SDL_SCANCODE_S]) {
-        camera.rotatePhi(-0.01f);
+        camera.rotatePhi(-keyRotate);
     }
     if (keyStates[SDL_SCANCODE_A]) {
-        camera.rotateTheta(-0.01f);
+        camera.rotateTheta(-keyRotate);
     }
     if (keyStates[SDL_SCANCODE_D]) {
-        camera.rotateTheta(0.01f);
-    }
-    if (keyStates[SDL_SCANCODE_LSHIFT]) {
-//        float zoomSpeed = 1.f + moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
-//        zoomLevel /= zoomSpeed;
-//        gridDrawer.scale(zoomSpeed, zoomSpeed);
-        camera.zoom(-10.f);
-    }
-    if (keyStates[SDL_SCANCODE_LCTRL]) {
-//        float zoomSpeed = 1.f - moveSpeed * KEY_ZOOM_EXTRA_SENSITIVITY;
-//        zoomLevel /= zoomSpeed;
-//        gridDrawer.scale(zoomSpeed, zoomSpeed);
-        camera.zoom(10.f);
+        camera.rotateTheta(keyRotate);
     }
     return 0;
 }
@@ -353,22 +345,11 @@ int initGraphics() {
         std::cout << log.str();
         return 1;
     }
-    camera.setResX(graphics.getResX());
-    camera.setResY(graphics.getResY());
-    gridDrawer.init(graphics.getAspectRatio(), &grid, &camera, 0, log);
+    camera.setAspect(graphics.getAspectRatio());
+//    camera.changeZoomFocus({15.f, 15.f, 0.f});
+    gridDrawer.init(&grid, &camera, 0, log);
     std::cout << log.str();
 
     grid.addPoint({1500.f, 1500.f});
-
-    #ifdef BENCHMARK_QUADTREE_POINT_INSERTION
-        // Benchmark point insertion
-        quadTree.setMaxPointsPerNode(50);
-        float invPi = 1.f / 3.14159265358979f;
-        float startTime = SDL_GetTicks();
-        for (unsigned i = 0; i < 1000000; ++i) {
-            quadTree.addPoint({(float)i * (float)sin(i * invPi) * 0.1f, (float)i * (float)cos(i * invPi) * 0.1f});
-        }
-        std::cout << SDL_GetTicks() - startTime;
-    #endif
     return 0;
 }
