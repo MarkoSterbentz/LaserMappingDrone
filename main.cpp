@@ -20,8 +20,6 @@
 #define MOUSE_SENSITIVITY_X -0.006f
 #define MOUSE_SENSITIVITY_Y 0.006f
 #define MOUSE_SENSITIVITY_WHEEL -800.f
-#define DATAFILE "dataOutputFile.dat"
-#define POSFILE "positionOutputFile.dat"
 
 using namespace LaserMappingDrone;
 
@@ -34,7 +32,7 @@ SDL_Thread* packetListeningThread;
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
 // Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
-Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 50000.f, 10, 40, 100000);
+Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 50000.f, 10, 40, 1920);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // Arguments: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
@@ -53,7 +51,9 @@ unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time
 /* Flag Booleans: */
 bool graphicsModeEnabled, streamModeEnabled, writeModeEnabled;
 StreamingMedium streamMedium;
-std::string dataFileName;
+std::string inputDataFileName;
+std::string outputDataFileName;
+int numPacketsToRead;
 
 // prototypes
 void mainLoop();
@@ -68,6 +68,10 @@ void disableGraphicsMode();
 void enableStreamMode();
 void disableStreamMode();
 void getStreamDevice();
+int getNumberOfPacketsToRead();
+int extractIntegerInput(std::string input);
+std::string getInputFileName();
+long getFileSize(std::string fileName);
 void enableWriteMode();
 void disableWriteMode();
 
@@ -141,28 +145,8 @@ int main(int argc, char* argv[]) {
     receiver = new PacketReceiver();
     analyzer = new PacketAnalyzer();
 
-    /* TESTING READING PACKETS FROM DATA FILE: */
-//    receiver->openInputFile("oneMinuteCapture.dat");
-//    // load k number of packets from the data file
-//    for (int k = 0; k < 10000; ++k) {
-//        //receiver->inputFile.seekg(DATABUFLEN, std::ios::cur);   // move the current position in the ifstream to the next packet
-//        //receiver->readSingleDataPacketFromFile();
-//        receiver->readDataPacketsFromFile(1);
-//        if (receiver->getPacketQueueSize() > 0) {
-//            analyzer->loadPacket(receiver->getNextQueuedPacket());
-//            receiver->popQueuedPacket(); // this packet will be analyzed, get it out of the queue
-//            std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
-//            std::cout << "Number of points: " << newPoints.size() << std::endl;
-//            for (unsigned j = 0; j < newPoints.size(); ++j) {
-//                queue.enqueue(newPoints[j]);
-//            }
-//        }
-//     }
-
-    /* END TESTING */
-
     /* Separate testing: */
-    receiver->openInputFile("oneMinuteCapture.dat");
+    receiver->openInputFile(inputDataFileName);
     /* End separate testing */
 
     /* Initialize components based on the flags: */
@@ -175,7 +159,7 @@ int main(int argc, char* argv[]) {
     }
 
     if (streamModeEnabled) {
-        initPacketHandling(dataFileName);
+        initPacketHandling(outputDataFileName);
     }
 
     /* Begin the main loop on this thread: */
@@ -220,12 +204,14 @@ void mainLoop() {
 // This function runs inside the listeningThread.
 int listeningThreadFunction(void* arg) {
     std::cout << "\nPacket handling thread is active.\n";
+    int packetsReadCount = 0;
     while (!packetHandlerQuit) {
         /*************************** HANDLE PACKETS *********************************/
         if (streamMedium == Velodyne) {
             receiver->listenForDataPacket();
-        } else if (streamMedium == file && !receiver->inputFile.eof()) {
+        } else if (streamMedium == file && !receiver->inputFile.eof() && packetsReadCount < numPacketsToRead) {
             receiver->readDataPacketsFromFile(1);
+            ++packetsReadCount;
         }
         // handle any incoming packet
         if (receiver->getPacketQueueSize() > 0) {
@@ -240,6 +226,7 @@ int listeningThreadFunction(void* arg) {
             }
         }
     }
+
     std::cout << "Packet handling thread is dying.\n";
     return 0;
 }
@@ -291,6 +278,8 @@ int handleControls() {
                 switch (event.key.keysym.sym) {
                     case SDLK_ESCAPE:
                         return 1;
+                    case SDLK_i:
+                        ++numPacketsToRead;
                     default:
                         break;
                 }
@@ -416,38 +405,82 @@ void disableStreamMode() {
 }
 
 void getStreamDevice() {
-    std::cout << "Select the device you are streaming data from (enter the associated number):" << std::endl;
-    std::cout << "1. Velodyne" << std::endl;
-    std::cout << "2. File" << std::endl;
-    std::string input;
-    std::getline(std::cin, input);
     int inputInt = -1;
     while (inputInt == -1) {
-        inputInt = std::stoi(input);
+        std::cout << "Select the device you are streaming data from (enter the associated number):" << std::endl;
+        std::cout << "1. Velodyne" << std::endl;
+        std::cout << "2. File" << std::endl;
+        std::string input;
+        std::getline(std::cin, input);
+        inputInt = extractIntegerInput(input);
         switch (inputInt) {
-            case (1):
+            case (1): {
                 streamMedium = Velodyne;
                 std::cout << "Selected streaming medium: VELODYNE." << std::endl;
                 break;
-            case (2):
+            }
+            case (2): {
                 streamMedium = file;
                 std::cout << "Selected streaming medium: FILE." << std::endl;
+                inputDataFileName = getInputFileName();
+                numPacketsToRead = getNumberOfPacketsToRead();
                 break;
-            default:
+            }
+            default: {
                 std::cout << "Invalid input. Please select a valid number." << std::endl;
                 inputInt = -1;
                 break;
+            }
         }
     }
+}
+
+int getNumberOfPacketsToRead() {
+    std::cout << "How many packets should be read in from this file?" << std::endl;
+    std::string input;
+    std::getline(std::cin, input);
+    int count = extractIntegerInput(input);
+    if (count < 1) {
+        count = 0;
+    }
+    std::cout << count<< " packets will be read from the file." << std::endl;
+    return count;
+}
+
+int extractIntegerInput(std::string input) {
+    int ret = -1;
+    try {
+        ret = std::stoi(input);
+    } catch (const std::invalid_argument& ia) {
+        std::cout << "Invalid input. Please select a valid number." << std::endl;
+    } catch (const std::out_of_range& oor) {
+        std::cout << "Input was out of range. Please select a valid number." << std::endl;
+    }
+    return ret;
+}
+
+std::string getInputFileName() {
+    std::string name = "";
+    std::cout << "Please enter the name of the file to use (be sure to include .dat): " << std::endl;
+    std::getline(std::cin, name);
+    long numBytes = getFileSize(name);
+    std::cout << "The file \"" << name << "\" (" << numBytes << " bytes | " << numBytes/1206 << " packets) " << "will be used as input." << std::endl;
+    return name;
+}
+
+// returns the size of the file in bytes
+long getFileSize(std::string fileName) {
+    std::ifstream in(fileName, std::ifstream::ate | std::ifstream::binary);
+    return in.tellg();
 }
 
 void enableWriteMode() {
     writeModeEnabled = true;
     std::cout << "Data writing ENABLED." << std::endl;
     std::cout << "What would you like to name the output data file? ";
-    std::getline(std::cin, dataFileName);
-    dataFileName.append(".dat");
-    std::cout << "Data will be written to: " << dataFileName << std::endl;
+    std::getline(std::cin, outputDataFileName);
+    outputDataFileName.append(".dat");
+    std::cout << "Data will be written to: " << outputDataFileName << std::endl;
 }
 
 void disableWriteMode() {
