@@ -32,7 +32,7 @@ SDL_Thread* packetListeningThread;
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
 // Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
-Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 50000.f, 10, 40, 1920);
+Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 50000.f, 10, 40, 100000);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // Arguments: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
@@ -145,9 +145,7 @@ int main(int argc, char* argv[]) {
     receiver = new PacketReceiver();
     analyzer = new PacketAnalyzer();
 
-    /* Separate testing: */
     receiver->openInputFile(inputDataFileName);
-    /* End separate testing */
 
     /* Initialize components based on the flags: */
     initKernel();
@@ -470,7 +468,7 @@ std::string getInputFileName() {
 
 // returns the size of the file in bytes
 long getFileSize(std::string fileName) {
-    std::ifstream in(fileName, std::ifstream::ate | std::ifstream::binary);
+    std::ifstream in(fileName, std::ios::binary | std::ios::ate);
     return in.tellg();
 }
 
