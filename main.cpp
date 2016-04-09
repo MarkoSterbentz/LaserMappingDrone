@@ -318,7 +318,7 @@ void initKernel() {
                 int gridIndexOffset = pGrid->kernel.contributingCells[i].yOffset * pGrid->getXRes(); // offset from the gridIndex to the current contributing cell
                 gridIndexOffset += pGrid->kernel.contributingCells[i].xOffset;
                 int ccIndex = gridIndex + gridIndexOffset; // contributingCellIndex
-                if (ccIndex >= 0 && ccIndex < pGrid->cells.size()) {
+                if (ccIndex >= 0 && ccIndex < (int) pGrid->cells.size()) {
                     for (unsigned j = 0; j < pGrid->cells[ccIndex].points.size(); ++j) {
                         average += pGrid->cells[ccIndex].points[j].y;
                     }
@@ -356,6 +356,5 @@ int initGraphics() {
     gridDrawer.init(&grid, &camera, 0, log);
     std::cout << log.str();
 
-    grid.addPoint({1500.f, 1500.f});
     return 0;
 }

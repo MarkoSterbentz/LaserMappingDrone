@@ -118,8 +118,8 @@ namespace LaserMappingDrone {
                 pac(point);
             }
             /* Running the kernel for the cell that contains the new point: */
-            int testCellX = (int)((point.x - xMin) * xIndexFactor);
-            int testCellY = (int)((point.y - yMin) * yIndexFactor);
+            //int testCellX = (int)((point.x - xMin) * xIndexFactor);
+            //int testCellY = (int)((point.y - yMin) * yIndexFactor);
 
             //runKernelImplicit(testCellX, testCellY);                                                          // PROBLEMS WHEN TRYING TO DO THIS!!
         }
