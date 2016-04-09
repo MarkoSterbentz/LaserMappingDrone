@@ -25,7 +25,6 @@ namespace LaserMappingDrone {
 
         void calculateInitialValues();
         void calcCamVectors();
-//        bool calcZoomFocus(float dt);
         void updateVpMat();
 
     public:
