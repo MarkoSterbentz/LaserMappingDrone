@@ -3,7 +3,7 @@
 
 /* Packet Receiver | Marko Sterbentz 2/5/2016
  * This class will receieve/read data from outside the application.
- * Potential sources include: VeloDyne VLP-16, binary data file
+ * Supported sources include: VeloDyne VLP-16, binary data file
  */
 
 #include <stdio.h>
@@ -21,6 +21,7 @@
 #include <fstream>
 #include <queue>
 #include <string>
+#include <stdexcept>
 
 #define DATAPORT "2368"    // the Data Packet is broadcasted to this port
 #define POSITIONPORT "8308" // the Position Packet is broadcasted to this port
@@ -33,33 +34,57 @@ enum StreamingMedium {Velodyne, file};
 class PacketReceiver {
 private:
     std::ofstream outputFileStream;
+    std::ifstream inputFile;
 
-
-    std::string outputFileName;
-    std::string inputFileName;
+    std::string outputDataFileName;
+    std::string inputDataFileName;
     int sockfd;
     unsigned char dataBuf[DATABUFLEN];
     unsigned char posBuf[POSBUFLEN];
     std::queue <unsigned char*> packetQueue;
     void readSingleDataPacketFromFile();
 
-public:
-    std::ifstream inputFile;
+    bool graphicsModeEnabled;
+    bool streamModeEnabled;
+    bool writeModeEnabled;
+    StreamingMedium streamMedium;
+    int numPacketsToRead;
+    int extractIntegerInput(std::string input);
+    void getStreamDevice();                                                     // NEEDS TO BE RENAMED
+    int getNumberOfPacketsToRead();                                             // NEEDS TO BE RENAMED
+    std::string getInputFileName();                                             // NEEDS TO BE RENAMED
 
+public:
     PacketReceiver();
     ~PacketReceiver();
-    void openOutputFile(std::string newOutputFileName);
-    void openInputFile(std::string newInputFileName);
+    void openOutputFile();
+    void openInputFile();
     int bindSocket();
     void listenForDataPacket();
     void writePacketToFile(unsigned char* packet);
+    bool endOfInputDataFile();
 
     void readDataPacketsFromFile(int numPackets);
-    void readAllDataPacketsFromFile();
 
     unsigned long getPacketQueueSize();
     unsigned char* getNextQueuedPacket();
     void popQueuedPacket();
+
+    void enableGraphicsMode();
+    void disableGraphicsMode();
+    void enableStreamMode();
+    void disableStreamMode();
+    void enableWriteMode();
+    void disableWriteMode();
+    void increaseNumPacketsToRead(int num);
+    long getFileSize(std::string fileName);
+
+    /* Getters for private variables: */
+    bool isGraphicsModeEnabled();
+    bool isWriteModeEnabled();
+    bool isStreamModeEnabled();
+    StreamingMedium getStreamMedium();
+    int getNumPacketsToRead();
 };
 
 #endif //PACKETANALYZER_PACKETRECEIVER_H
