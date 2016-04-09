@@ -24,7 +24,7 @@ namespace LaserMappingDrone {
     /*******************    GRID CLASS HEADER    *************************/
 
     template <class P>
-    struct GridDrawer;  // forward decaration necessary for templated friending.
+    struct GridDrawer;  // moveBackward decaration necessary for templated friending.
 
     struct CyclerEntry {
         unsigned long cellIndex;

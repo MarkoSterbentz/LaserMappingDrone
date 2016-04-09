@@ -8,6 +8,8 @@
 #include <sstream>
 #include <SDL_video.h>
 #include <GL/glew.h>
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
 
 namespace LaserMappingDrone {
     class Graphics {
@@ -24,6 +26,8 @@ namespace LaserMappingDrone {
         ~Graphics();
         bool init(std::stringstream &log);
         void render();
+        inline glm::vec2 screenToNdc(glm::vec2&& scr) {return {scr.x / (xRes*0.5f) - 1.f, -scr.y / (yRes*0.5f) + 1.f};}
+        inline void convertScreenCoordToNdc(glm::vec2& scr) { scr = screenToNdc(glm::vec2(scr)); }
         inline float getAspectRatio()   { return aspectRatio; };
         inline int getResX()            { return xRes; }
         inline int getResY()            { return yRes; }
