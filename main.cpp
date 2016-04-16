@@ -15,7 +15,9 @@
 #include "PacketAnalyzer.h"
 #include "PacketReceiver.h"
 
-#define KEY_MOVE_SENSITIVITY 10.f
+#include "ICP.h"
+
+#define KEY_MOVE_SENSITIVITY 100.f
 #define KEY_ROTATE_SENSITIVITY 0.01f
 #define MOUSE_SENSITIVITY_X -0.006f
 #define MOUSE_SENSITIVITY_Y 0.006f
