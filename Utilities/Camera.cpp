@@ -21,9 +21,9 @@ namespace LaserMappingDrone {
         phiMin = -1.5f;
         phiMax = 1.5f;
         distTarget = dist;
-        distSpeed = (distMax - distMin) * 0.0000002f;
+        distSpeed = (distMax - distMin) * 0.0000005f;
         physicsLastDt = 1.f;
-        zoomFocusSpeed = 0.004f;
+        zoomFocusSpeed = 0.01f;
 
         oldVp = true;
         oldVpInv = true;
@@ -217,7 +217,7 @@ namespace LaserMappingDrone {
         // or you shoot the horizon line or something.
     }
 
-    void Camera::dragHorizPlaneFromScreenSpace(const glm::vec2 &ndcStart, const glm::vec2 &ndcEnd) {
+    void Camera::dragHorizPlaneFromNdcSpace(const glm::vec2 &ndcStart, const glm::vec2 &ndcEnd) {
         glm::vec2 worldStart, worldEnd;
         int startIntersection = getHorizIntersectionFromScreenSpace(ndcStart, worldStart);
         int endIntersection = getHorizIntersectionFromScreenSpace(ndcEnd, worldEnd);
@@ -227,12 +227,20 @@ namespace LaserMappingDrone {
         }
     }
 
-    void Camera::forward(float distance) {
+    void Camera::moveBackward(float distance) {
         glm::vec2 horizVector;
         horizVector.x = cosf(theta);
         horizVector.y = sinf(theta);
-        horizVector *= -distance;
-        changeZoomFocus(focus + glm::vec3(horizVector, 0.0f));
+        horizVector *= distance;
+        zoomFocusTarget += glm::vec3(horizVector, 0.0f);
+    }
+
+    void Camera::moveLeft(float distance) {
+        glm::vec2 horizVector;
+        horizVector.x = cosf(theta - 1.57079632679f);
+        horizVector.y = sinf(theta - 1.57079632679f);
+        horizVector *= distance;
+        zoomFocusTarget += glm::vec3(horizVector, 0.0f);
     }
 
     void Camera::setAspect(float aspect) {
@@ -243,6 +251,11 @@ namespace LaserMappingDrone {
     void Camera::changeZoomFocus(const glm::vec3 &focus) {
         zoomFocusTarget = focus;
     }
+
+    int Camera::lookingUpOrDown() {
+        return (phi > 0) - (phi < 0);
+    }
+
 
 }
 

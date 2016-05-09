@@ -71,8 +71,6 @@ namespace LaserMappingDrone {
         // this is the data that will be buffered up as vertices
         std::vector<float> verts;
 
-        std::cout << "Stiff: " << grid->xMin << std::endl;
-
         // Here the vertices for the grid are generated
         float sclX = (grid->xMax - grid->xMin) * .5f;
         float sclY = (grid->yMax - grid->yMin) * .5f;
@@ -83,9 +81,6 @@ namespace LaserMappingDrone {
             verts.emplace_back(ctrX + (x * xStep * sclX - sclX));
             verts.emplace_back(ctrY + -sclY);
             verts.emplace_back(0.0f);
-
-            std::cout << ctrX + (x * xStep * sclX - sclX) << std::endl;
-            std::cout << ctrY + -sclY << std::endl;
 
             verts.emplace_back(ctrX + (x * xStep * sclX - sclX));
             verts.emplace_back(ctrY + sclY);

@@ -91,7 +91,7 @@ namespace glm
 		// First, isolate perspective.  This is the messiest.
 		if(LocalMatrix[0][3] != static_cast<T>(0) || LocalMatrix[1][3] != static_cast<T>(0) || LocalMatrix[2][3] != static_cast<T>(0))
 		{
-			// rightHandSide is the right hand side of the equation.
+			// rightHandSide is the moveLeft hand side of the equation.
 			tvec4<T, P> RightHandSide;
 			RightHandSide[0] = LocalMatrix[0][3];
 			RightHandSide[1] = LocalMatrix[1][3];

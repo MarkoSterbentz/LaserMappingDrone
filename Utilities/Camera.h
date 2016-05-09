@@ -25,7 +25,6 @@ namespace LaserMappingDrone {
 
         void calculateInitialValues();
         void calcCamVectors();
-//        bool calcZoomFocus(float dt);
         void updateVpMat();
 
     public:
@@ -38,12 +37,14 @@ namespace LaserMappingDrone {
         glm::mat4 getProjInv();
         glm::mat4 getVpInv();
         glm::mat4 getRotMat();
+        int lookingUpOrDown();
         int getHorizIntersectionFromScreenSpace(const glm::vec2& ndcClick, glm::vec2& result);
-        void dragHorizPlaneFromScreenSpace(const glm::vec2& ndcStart, const glm::vec2& ndcEnd);
+        void dragHorizPlaneFromNdcSpace(const glm::vec2 &ndcStart, const glm::vec2 &ndcEnd);
         void zoom(float distChange);
         void rotateTheta(float angle);
         void rotatePhi(float angle);
-        void forward(float distance);
+        void moveBackward(float distance);
+        void moveLeft(float distance);
         void setFovY(float fovY);
         void setNear(float near);
         void setFar(float far);

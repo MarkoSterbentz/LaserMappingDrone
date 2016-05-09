@@ -194,7 +194,7 @@ namespace LaserMappingDrone {
         if (point.D0 - node->xMin < node->xMax - point.D0) {  //point is to the left of center
             if (node->yMax - point.D1 < point.D1 - node->yMin) { return UP_L; }
             else { return DN_L; }
-        } else {                                            //point is to the right of center
+        } else {                                            //point is to the moveLeft of center
             if (node->yMax - point.D1 < point.D1 - node->yMin) { return UP_R; }
             else { return DN_R; }
         }

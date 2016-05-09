@@ -15,11 +15,14 @@
 #include "PacketAnalyzer.h"
 #include "PacketReceiver.h"
 
-#define KEY_MOVE_SENSITIVITY 100.f
+#define KEY_MOVE_SENSITIVITY 10.f
 #define KEY_ROTATE_SENSITIVITY 0.01f
 #define MOUSE_SENSITIVITY_X -0.006f
 #define MOUSE_SENSITIVITY_Y 0.006f
 #define MOUSE_SENSITIVITY_WHEEL -800.f
+#define MOUSE_SENSITIVITY_PAN 10.f
+
+
 
 using namespace LaserMappingDrone;
 
@@ -32,7 +35,7 @@ SDL_Thread* packetListeningThread;
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
 // Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
-Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 50000.f, 10, 40, 100000);
+Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 3000.f, 10, 10, 100000);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // Arguments: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
@@ -45,7 +48,6 @@ Graphics graphics;
 moodycamel::ReaderWriterQueue<CartesianPoint> queue(10000);
 
 // Some things helpful to controls
-long double zoomLevel;
 unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time step
 
 // prototypes
@@ -215,38 +217,20 @@ int handleControls() {
         switch(event.type) {
             case SDL_MOUSEMOTION:
                 if (event.button.button & SDL_BUTTON_RMASK) {
-                    if (event.button.button & SDL_BUTTON_LMASK) {
-                        camera.dragHorizPlaneFromScreenSpace(
-                                {event.motion.x - event.motion.xrel, event.motion.y - event.motion.yrel},
-                                {event.motion.x, event.motion.y});
-                    } else {
-                        camera.rotatePhi(event.motion.yrel * MOUSE_SENSITIVITY_Y);
-                        camera.rotateTheta(event.motion.xrel * MOUSE_SENSITIVITY_X);
-                    }
+                    camera.rotatePhi(event.motion.yrel * MOUSE_SENSITIVITY_Y);
+                    camera.rotateTheta(event.motion.xrel * MOUSE_SENSITIVITY_X);
+                } else if (event.button.button & SDL_BUTTON_LMASK) {
+                    camera.moveBackward(-event.motion.yrel * MOUSE_SENSITIVITY_PAN * camera.lookingUpOrDown());
+                    camera.moveLeft(event.motion.xrel * MOUSE_SENSITIVITY_PAN);
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                if (event.button.button == SDL_BUTTON_LEFT && !(event.button.button & SDL_BUTTON_RMASK)) {   // add point to grid
-                    float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
-                    float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
-                    glm::vec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
-                    glm::vec2 horizCoord{0.f, 0.f};
-                    if (camera.getHorizIntersectionFromScreenSpace({scrSpaceClick.x, scrSpaceClick.y}, horizCoord)) {
-                        grid.addPoint({horizCoord.x, horizCoord.y, 0.f});
-                    }
+                if (event.button.button == SDL_BUTTON_LEFT && !(event.button.button & SDL_BUTTON_RMASK)) {
+
                 }
-//                else if (event.button.button == SDL_BUTTON_RIGHT ) {   // add point to grid
-//                    float xPos = (float)event.button.x / (graphics.getResX() * 0.5f) - 1.0f;
-//                    float yPos = -(float)event.button.y / (graphics.getResY() * 0.5f) + 1.0f;
-//                    glm::vec4 scrSpaceClick(xPos, yPos, 0.0, 1.0);
-//                    glm::vec2 horizCoord{0.f, 0.f};
-//                    if (camera.getHorizIntersectionFromScreenSpace({scrSpaceClick.x, scrSpaceClick.y}, horizCoord)) {
-//                        float result = 0;
-//                        if (!grid.getKernelOutput(horizCoord.x, horizCoord.y, result)) {
-//                            std::cout << result << std::endl;
-//                        }
-//                    }
-//                }
+                else if (event.button.button == SDL_BUTTON_RIGHT ) {
+
+                }
                 break;
             case SDL_MOUSEWHEEL:
                 camera.zoom(event.wheel.y * MOUSE_SENSITIVITY_WHEEL);
@@ -276,17 +260,18 @@ int handleControls() {
     // Get current keyboard state ( this is used for smooth controls rather than key press event controls above )
     const Uint8* keyStates = SDL_GetKeyboardState(NULL);
     float keyRotate = KEY_ROTATE_SENSITIVITY * deltaTime;
+    float keyMove = KEY_MOVE_SENSITIVITY * deltaTime;
     if (keyStates[SDL_SCANCODE_W]) {
-        camera.rotatePhi(keyRotate);
+        camera.moveBackward(-keyMove);
     }
     if (keyStates[SDL_SCANCODE_S]) {
-        camera.rotatePhi(-keyRotate);
+        camera.moveBackward(keyMove);
     }
     if (keyStates[SDL_SCANCODE_A]) {
-        camera.rotateTheta(-keyRotate);
+        camera.moveLeft(keyMove);
     }
     if (keyStates[SDL_SCANCODE_D]) {
-        camera.rotateTheta(keyRotate);
+        camera.moveLeft(-keyMove);
     }
     return 0;
 }
@@ -346,7 +331,6 @@ void initKernel() {
 }
 
 int initGraphics() {
-    zoomLevel = 0.01f;
     std::stringstream log;
     if (!graphics.init(log)) { // if init fails, exit
         std::cout << log.str();
