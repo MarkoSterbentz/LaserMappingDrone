@@ -15,6 +15,7 @@
 #include "PacketAnalyzer.h"
 #include "PacketReceiver.h"
 
+#define EIGEN_STACK_ALLOCATION_LIMIT 200000
 #include "ICP.h"
 
 #define KEY_MOVE_SENSITIVITY 100.f
@@ -95,7 +96,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-#define POINTS_PER_CLOUD 10//46080
+#define POINTS_PER_CLOUD 14592
 struct Cloud {
     int head;
     Eigen::Matrix<double, 3, POINTS_PER_CLOUD> points;
@@ -104,7 +105,7 @@ struct Cloud {
 
 void mainLoop(PacketReceiver& receiver, Camera& camera) {
 
-    // ~38 packets per revolution, ~3 revolutions = 120 packets * 384 points/packet = 46080 points
+    // ~38 packets per revolution, ~1 revolutions = 38 packets * 384 points/packet = 14592 points
     Cloud cloud0, cloud1;
     Cloud* oldCloud = &cloud0;
     Cloud* newCloud = &cloud1;
@@ -117,17 +118,24 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
     while (loop) {
         CartesianPoint p;
         while (queue.try_dequeue(p)) {
-
-            newCloud->points(0, oldCloud->head) = p.x;
-            newCloud->points(1, oldCloud->head) = p.y;
-            newCloud->points(2, oldCloud->head) = p.z;
+            Eigen::Vector3d point = {newCloud->points(0, newCloud->head) = p.x,
+                                     newCloud->points(1, newCloud->head) = p.y,
+                                     newCloud->points(2, newCloud->head) = p.z};
+            point = worldTrans * point;
+            newCloud->points(0, newCloud->head) = point(0,0);
+            newCloud->points(1, newCloud->head) = point(1,0);
+            newCloud->points(2, newCloud->head) = point(2,0);
             newCloud->head += 1;
             if (newCloud->head == POINTS_PER_CLOUD) {
                 if (!firstCloudIn) {
                     firstCloudIn = true;
                 } else {
-                    // run ICP  // TODO: Order of arguments may be backwards and produce reverse transforms
+                    // TODO: Order of arguments may be backwards and produce reverse transforms
                     Eigen::Affine3d trans = RigidMotionEstimator::point_to_point(oldCloud->points, newCloud->points);
+                    // TODO: Look into noalias() function for optimization
+                    worldTrans = trans * worldTrans;
+                    // Not sure why this works, (multiplying 4x4 matrix by 3xn matrix) (there must be an overload)
+                    newCloud->points = trans * newCloud->points;
                 }
                 for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
                     grid.addPoint({newCloud->points(0, i), newCloud->points(1, i), newCloud->points(2, i)});

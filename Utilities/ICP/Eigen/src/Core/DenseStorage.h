@@ -76,7 +76,8 @@ struct plain_array<T, Size, MatrixOrArrayOptions, 16>
   plain_array() 
   { 
     EIGEN_MAKE_UNALIGNED_ARRAY_ASSERT(0xf);
-    EIGEN_STATIC_ASSERT(Size * sizeof(T) <= 128 * 128 * 8, OBJECT_ALLOCATED_ON_STACK_IS_TOO_BIG);
+      // CHANGED (added *10)
+    EIGEN_STATIC_ASSERT(Size * sizeof(T) <= 128 * 128 * 8 * 10, OBJECT_ALLOCATED_ON_STACK_IS_TOO_BIG);
   }
 
   plain_array(constructor_without_unaligned_array_assert) 
