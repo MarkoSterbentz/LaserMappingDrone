@@ -96,18 +96,18 @@ int main(int argc, char* argv[]) {
 }
 
 #define POINTS_PER_CLOUD 10//46080
-struct EigenMat {
+struct Cloud {
     int head;
-    Eigen::Matrix<float, 3, POINTS_PER_CLOUD> cloud;
-    EigenMat() : head(0) { }
+    Eigen::Matrix<double, 3, POINTS_PER_CLOUD> points;
+    Cloud() : head(0) { }
 };
 
 void mainLoop(PacketReceiver& receiver, Camera& camera) {
 
     // ~38 packets per revolution, ~3 revolutions = 120 packets * 384 points/packet = 46080 points
-    EigenMat cloud0, cloud1;
-    EigenMat* oldCloud = &cloud0;
-    EigenMat* newCloud = &cloud1;
+    Cloud cloud0, cloud1;
+    Cloud* oldCloud = &cloud0;
+    Cloud* newCloud = &cloud1;
     Eigen::Affine3d worldTrans;
     worldTrans.setIdentity();
     bool firstCloudIn = false;
@@ -118,23 +118,22 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
         CartesianPoint p;
         while (queue.try_dequeue(p)) {
 
-            newCloud->cloud(0, oldCloud->head) = p.x;
-            newCloud->cloud(1, oldCloud->head) = p.y;
-            newCloud->cloud(2, oldCloud->head) = p.z;
+            newCloud->points(0, oldCloud->head) = p.x;
+            newCloud->points(1, oldCloud->head) = p.y;
+            newCloud->points(2, oldCloud->head) = p.z;
             newCloud->head += 1;
             if (newCloud->head == POINTS_PER_CLOUD) {
                 if (!firstCloudIn) {
                     firstCloudIn = true;
                 } else {
-
                     // run ICP  // TODO: Order of arguments may be backwards and produce reverse transforms
-//                    Eigen::Affine3d trans = RigidMotionEstimator::point_to_point(oldCloud->cloud, newCloud->cloud);
+                    Eigen::Affine3d trans = RigidMotionEstimator::point_to_point(oldCloud->points, newCloud->points);
                 }
                 for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
-                    grid.addPoint({newCloud->cloud(0, i), newCloud->cloud(1, i), newCloud->cloud(2, i)});
+                    grid.addPoint({newCloud->points(0, i), newCloud->points(1, i), newCloud->points(2, i)});
                 }
                 newCloud->head = 0;
-                EigenMat* temp = oldCloud;
+                Cloud* temp = oldCloud;
                 oldCloud = newCloud;
                 newCloud = temp;
             }
