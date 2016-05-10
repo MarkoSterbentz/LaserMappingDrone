@@ -24,24 +24,19 @@
 #define MOUSE_SENSITIVITY_WHEEL -800.f
 #define MOUSE_SENSITIVITY_PAN 10.f
 
-
-
 using namespace LaserMappingDrone;
 
-// These regard the handling of incoming data from the LIDAR device
-PacketAnalyzer* analyzer;
-PacketReceiver* receiver;
-bool packetHandlerQuit;
-SDL_Thread* packetListeningThread;
+struct ListeningThreadData {
+    PacketReceiver* receiver;
+    PacketAnalyzer* analyzer;
+    bool packetHandlerQuit;
+};
 
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
 // Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
 Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 3000.f, 10, 10, 100000);
 GridDrawer<CartesianPoint> gridDrawer;
-
-// Arguments: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
-Camera camera(1.0, 10.0f, 100000.0, 1, 0.0, 1.2, 2000.0, 100.f, 10000.f);
 
 // The graphics backend
 Graphics graphics;
@@ -53,111 +48,54 @@ moodycamel::ReaderWriterQueue<CartesianPoint> queue(10000);
 unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time step
 
 // prototypes
-void mainLoop();
-void initPacketHandling();
-void stopPacketHandling();
+void mainLoop(PacketReceiver& receiver, Camera& camera);
+void initPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread);
+void stopPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread);
 void initKernel();
-int initGraphics();
-int handleControls();
+int handleCommandLineFlags(int argc, char* argv[], PacketReceiver& receiver);
+int initGraphics(Camera& camera);
+int handleControls(PacketReceiver& receiver, Camera& camera);
 int listeningThreadFunction(void* listeningThreadData);
 
 int main(int argc, char* argv[]) {
 
-    receiver = new PacketReceiver();
-    analyzer = new PacketAnalyzer();
+    PacketReceiver receiver;
+    PacketAnalyzer analyzer;
+    
+    ListeningThreadData ltd = {&receiver, &analyzer};
+    SDL_Thread* packetListeningThread;
 
-    /* Deal with the command line flags: */
-    if (argc == 1) {
-        /* User gave no flags, so prompt the user for the flags they would like to use: */
-        char input = '0';
-        /* Check for graphics flag: */
-        while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
-            std::cout << "Enable graphical display? (y/n) ";
-            std::cin.get(input);
-            std::cin.ignore(256, '\n');
-            if (input == 'y' || input == 'Y') {
-                receiver->enableGraphicsMode();
-            } else if (input == 'n' || input == 'N') {
-                receiver->disableGraphicsMode();
-            } else {
-                std::cout << "Please enter either 'y' or 'n'." << std::endl;
-            }
-        }
-        input = '0';
-        while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
-            std::cout << "Enable data streaming? (y/n) ";
-            std::cin.get(input);
-            std::cin.ignore(256, '\n');
-            if (input == 'y' || input == 'Y') {
-                receiver->enableStreamMode();
-            } else if (input == 'n' || input == 'N') {
-                receiver->disableStreamMode();
-            } else {
-                std::cout << "Please enter either 'y' or 'n'." << std::endl;
-            }
-        }
-        if (receiver->isStreamModeEnabled()) {
-            while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
-                std::cout << "Enable writing data to a file? (y/n) ";
-                std::cin.get(input);
-                std::cin.ignore(256, '\n');
-                if (input == 'y' || input == 'Y') {
-                    receiver->enableWriteMode();
-                } else if (input == 'n' || input == 'N') {
-                    receiver->disableWriteMode();
-                } else {
-                    std::cout << "Please enter either 'y' or 'n'." << std::endl;
-                }
-            }
-        }
-    } else {
-        /* Default flag values are set to false: */
-        for (int fc = 1; fc < argc; ++fc) {
-            if (std::string(argv[fc]) == "-g") {
-                receiver->enableGraphicsMode();
-            } else if (std::string(argv[fc]) == "-s") {
-                receiver->enableStreamMode();
-            } else if (std::string(argv[fc]) == "-sw"){
-                receiver->enableStreamMode();
-                receiver->enableWriteMode();
-            } else if (std::string(argv[fc]) == "-h") {
-                std::cout << "HELP" << std::endl;
-            } else {
-                std::cout << argv[fc] << " is an invalid flag." << std::endl;
-            }
-        }
-    }
+    // Arguments: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
+    Camera camera(1.0, 10.0f, 100000.0, 1, 0.0, 1.2, 2000.0, 100.f, 10000.f);
 
-    receiver->openInputFile();
+    handleCommandLineFlags(argc, argv, receiver);
+
+    receiver.openInputFile();
 
     /* Initialize components based on the flags: */
     initKernel();
 
-    if (receiver->isGraphicsModeEnabled()) {
-        if (initGraphics() == 1) {
+    if (receiver.isGraphicsModeEnabled()) {
+        if (initGraphics(camera) == 1) {
             return 1;
         }
     }
 
-    if (receiver->isStreamModeEnabled()) {
-        initPacketHandling();
+    if (receiver.isStreamModeEnabled()) {
+        initPacketHandling(ltd, &packetListeningThread);
     }
 
     /* Begin the main loop on this thread: */
-    mainLoop();
+    mainLoop(receiver, camera);
 
-    if (receiver->isStreamModeEnabled()) {
-        stopPacketHandling();
+    if (receiver.isStreamModeEnabled()) {
+        stopPacketHandling(ltd, &packetListeningThread);
     }
-
-    /* Memory Cleanup: */
-    delete analyzer;
-    delete receiver;
 
     return 0;
 }
 
-void mainLoop() {
+void mainLoop(PacketReceiver& receiver, Camera& camera) {
     previousTime = SDL_GetTicks();
     bool loop = true;
     while (loop) {
@@ -166,9 +104,9 @@ void mainLoop() {
             grid.addPoint(p);
         }
 
-        if (receiver->isGraphicsModeEnabled()) {
+        if (receiver.isGraphicsModeEnabled()) {
             /**************************** HANDLE CONTROLS ********************************/
-            int timeToQuit = handleControls(); // returns non-zero if quit events happen
+            int timeToQuit = handleControls(receiver, camera); // returns non-zero if quit events happen
             if (timeToQuit) {
                 loop = false;
             }
@@ -185,23 +123,27 @@ void mainLoop() {
 // This function runs inside the listeningThread.
 int listeningThreadFunction(void* arg) {
     std::cout << "\nPacket handling thread is active.\n";
+
+    ListeningThreadData* ltd = (ListeningThreadData*) arg;
     int packetsReadCount = 0;
-    while (!packetHandlerQuit) {
+    while (!ltd->packetHandlerQuit) {
         /*************************** HANDLE PACKETS *********************************/
-        if (receiver->getStreamMedium() == Velodyne) {
-            receiver->listenForDataPacket();
-        } else if (receiver->getStreamMedium() == file && !receiver->endOfInputDataFile() && packetsReadCount < receiver->getNumPacketsToRead()) {
-            receiver->readDataPacketsFromFile(1);
+        if (ltd->receiver->getStreamMedium() == Velodyne) {
+            ltd->receiver->listenForDataPacket();
+        } else if (ltd->receiver->getStreamMedium() == file
+                   && !ltd->receiver->endOfInputDataFile()
+                   && packetsReadCount < ltd->receiver->getNumPacketsToRead()) {
+            ltd->receiver->readDataPacketsFromFile(1);
             ++packetsReadCount;
         }
         // handle any incoming packet
-        if (receiver->getPacketQueueSize() > 0) {
-            if (receiver->isWriteModeEnabled()) {
-                receiver->writePacketToFile(receiver->getNextQueuedPacket());
+        if (ltd->receiver->getPacketQueueSize() > 0) {
+            if (ltd->receiver->isWriteModeEnabled()) {
+                ltd->receiver->writePacketToFile(ltd->receiver->getNextQueuedPacket());
             }
-            analyzer->loadPacket(receiver->getNextQueuedPacket());
-            receiver->popQueuedPacket();    // packet has been read, get rid of it
-            std::vector<CartesianPoint> newPoints(analyzer->getCartesianPoints());
+            ltd->analyzer->loadPacket(ltd->receiver->getNextQueuedPacket());
+            ltd->receiver->popQueuedPacket();    // packet has been read, get rid of it
+            std::vector<CartesianPoint> newPoints(ltd->analyzer->getCartesianPoints());
             for (unsigned j = 0; j < newPoints.size(); ++j) {
                 queue.enqueue(newPoints[j]);
             }
@@ -212,7 +154,7 @@ int listeningThreadFunction(void* arg) {
     return 0;
 }
 
-int handleControls() {
+int handleControls(PacketReceiver& receiver, Camera& camera) {
     /**************************** HANDLE EVENTS *********************************/
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // process all accumulated events
@@ -241,8 +183,6 @@ int handleControls() {
                 switch (event.key.keysym.sym) {
                     case SDLK_ESCAPE:
                         return 1;
-                    case SDLK_i:
-                        receiver->increaseNumPacketsToRead(1);
                     default:
                         break;
                 }
@@ -275,23 +215,26 @@ int handleControls() {
     if (keyStates[SDL_SCANCODE_D]) {
         camera.moveLeft(-keyMove);
     }
+    if (keyStates[SDL_SCANCODE_I]) {
+        receiver.increaseNumPacketsToRead(1);
+    }
     return 0;
 }
 
-void initPacketHandling() {
+void initPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread) {
     // packet handler setup
-    receiver->openOutputFile();
-    receiver->bindSocket();
+    ltd.receiver->openOutputFile();
+    ltd.receiver->bindSocket();
 
     // spawn the listening thread, passing it information in "data"
-    packetHandlerQuit = false;
-    packetListeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", NULL);
+    ltd.packetHandlerQuit = false;
+    *packetListeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", (void *) &ltd);
 }
 
-void stopPacketHandling() {
+void stopPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread) {
     // once the main loop has exited, set the listening thread's "quit" to true and wait for the thread to die.
-    packetHandlerQuit = true;
-    SDL_WaitThread(packetListeningThread, NULL);
+    ltd.packetHandlerQuit = true;
+    SDL_WaitThread(*packetListeningThread, NULL);
 }
 
 void initKernel() {
@@ -332,7 +275,7 @@ void initKernel() {
     }
 }
 
-int initGraphics() {
+int initGraphics(Camera& camera) {
     std::stringstream log;
     if (!graphics.init(log)) { // if init fails, exit
         std::cout << log.str();
@@ -342,5 +285,104 @@ int initGraphics() {
     gridDrawer.init(&grid, &camera, 0, log);
     std::cout << log.str();
 
+    return 0;
+}
+
+int handleCommandLineFlags(int argc, char* argv[], PacketReceiver& receiver) {
+    /* Deal with the command line flags: */
+    if (argc == 1) {
+        /* User gave no flags, so prompt the user for the flags they would like to use: */
+        char input = '0';
+        /* Check for graphics flag: */
+        while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
+            std::cout << "Enable graphical display? (y/n) ";
+            std::cin.get(input);
+            std::cin.ignore(256, '\n');
+            if (input == 'y' || input == 'Y') {
+                receiver.enableGraphicsMode();
+            } else if (input == 'n' || input == 'N') {
+                receiver.disableGraphicsMode();
+            } else {
+                std::cout << "Please enter either 'y' or 'n'." << std::endl;
+            }
+        }
+        input = '0';
+        while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
+            std::cout << "Enable data streaming? (y/n) ";
+            std::cin.get(input);
+            std::cin.ignore(256, '\n');
+            if (input == 'y' || input == 'Y') {
+                receiver.enableStreamMode();
+            } else if (input == 'n' || input == 'N') {
+                receiver.disableStreamMode();
+            } else {
+                std::cout << "Please enter either 'y' or 'n'." << std::endl;
+            }
+        }
+        if (receiver.isStreamModeEnabled()) {
+            while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
+                std::cout << "Enable writing data to a file? (y/n) ";
+                std::cin.get(input);
+                std::cin.ignore(256, '\n');
+                if (input == 'y' || input == 'Y') {
+                    receiver.enableWriteMode();
+                } else if (input == 'n' || input == 'N') {
+                    receiver.disableWriteMode();
+                } else {
+                    std::cout << "Please enter either 'y' or 'n'." << std::endl;
+                }
+            }
+        }
+    } else {
+        /* Validate flags: */
+        for (int fc = 1; fc < argc; ++fc) {
+            std::string arg = std::string(argv[fc]);
+            /* Handle multiple flags in one argument: */
+            if (arg[0] == '-') {
+                for (int i = 1; i < arg.length(); ++i) {
+                    switch (arg[i]) {
+                        case 'g':
+                        case 's':
+                        case 'w':
+                        case 'h':
+                            break;
+                        default:
+                            std::cout << arg[i] << " is an invalid flag. Ending program." << std::endl;
+                            return 1;
+                    }
+                }
+            } else {
+                std::cout << arg << " is an invalid flag." << std::endl;
+            }
+        }
+        /* Default flag values are set to false: */
+        for (int fc = 1; fc < argc; ++fc) {
+            std::string arg = std::string(argv[fc]);
+            /* Handle multiple flags in one argument: */
+            if (arg[0] == '-') {
+                for(int i = 1; i < arg.length(); ++i) {
+                    switch(arg[i]) {
+                        case 'g':
+                            receiver.enableGraphicsMode();
+                            break;
+                        case 's':
+                            receiver.enableStreamMode();
+                            break;
+                        case 'w':
+                            receiver.enableWriteMode();
+                            break;
+                        case 'h':
+                            std::cout << "HELP ME PLEASE!" << std::endl; //enableHelp();                      // ADD HELP FLAG
+                            break;
+                        default:
+                            std::cout << arg[i] << " is an invalid flag. Ending program." << std::endl;
+                            return 1;
+                    }
+                }
+            } else {
+                std::cout << arg << " is an invalid flag." << std::endl;
+            }
+        }
+    }
     return 0;
 }
