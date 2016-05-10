@@ -36,9 +36,6 @@ struct ListeningThreadData {
 Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 3000.f, 10, 10, 100000);
 GridDrawer<CartesianPoint> gridDrawer;
 
-// Arguments: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
-Camera camera(1.0, 10.0f, 100000.0, 1, 0.0, 1.2, 2000.0, 100.f, 10000.f);
-
 // The graphics backend
 Graphics graphics;
 
@@ -49,13 +46,13 @@ moodycamel::ReaderWriterQueue<CartesianPoint> queue(10000);
 unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time step
 
 // prototypes
-void mainLoop(PacketReceiver& receiver);
+void mainLoop(PacketReceiver& receiver, Camera& camera);
 void initPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread);
 void stopPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread);
 void initKernel();
 int handleCommandLineFlags(int argc, char* argv[], PacketReceiver& receiver);
-int initGraphics();
-int handleControls(PacketReceiver& receiver);
+int initGraphics(Camera& camera);
+int handleControls(PacketReceiver& receiver, Camera& camera);
 int listeningThreadFunction(void* listeningThreadData);
 
 int main(int argc, char* argv[]) {
@@ -66,6 +63,9 @@ int main(int argc, char* argv[]) {
     ListeningThreadData ltd = {&receiver, &analyzer};
     SDL_Thread* packetListeningThread;
 
+    // Arguments: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
+    Camera camera(1.0, 10.0f, 100000.0, 1, 0.0, 1.2, 2000.0, 100.f, 10000.f);
+
     handleCommandLineFlags(argc, argv, receiver);
 
     receiver.openInputFile();
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
     initKernel();
 
     if (receiver.isGraphicsModeEnabled()) {
-        if (initGraphics() == 1) {
+        if (initGraphics(camera) == 1) {
             return 1;
         }
     }
@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
     }
 
     /* Begin the main loop on this thread: */
-    mainLoop(receiver);
+    mainLoop(receiver, camera);
 
     if (receiver.isStreamModeEnabled()) {
         stopPacketHandling(ltd, &packetListeningThread);
@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void mainLoop(PacketReceiver& receiver) {
+void mainLoop(PacketReceiver& receiver, Camera& camera) {
     previousTime = SDL_GetTicks();
     bool loop = true;
     while (loop) {
@@ -104,7 +104,7 @@ void mainLoop(PacketReceiver& receiver) {
 
         if (receiver.isGraphicsModeEnabled()) {
             /**************************** HANDLE CONTROLS ********************************/
-            int timeToQuit = handleControls(receiver); // returns non-zero if quit events happen
+            int timeToQuit = handleControls(receiver, camera); // returns non-zero if quit events happen
             if (timeToQuit) {
                 loop = false;
             }
@@ -152,7 +152,7 @@ int listeningThreadFunction(void* arg) {
     return 0;
 }
 
-int handleControls(PacketReceiver& receiver) {
+int handleControls(PacketReceiver& receiver, Camera& camera) {
     /**************************** HANDLE EVENTS *********************************/
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // process all accumulated events
@@ -273,7 +273,7 @@ void initKernel() {
     }
 }
 
-int initGraphics() {
+int initGraphics(Camera& camera) {
     std::stringstream log;
     if (!graphics.init(log)) { // if init fails, exit
         std::cout << log.str();
