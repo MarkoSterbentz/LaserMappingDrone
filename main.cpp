@@ -95,13 +95,49 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+#define POINTS_PER_CLOUD 10//46080
+struct EigenMat {
+    int head;
+    Eigen::Matrix<float, 3, POINTS_PER_CLOUD> cloud;
+    EigenMat() : head(0) { }
+};
+
 void mainLoop(PacketReceiver& receiver, Camera& camera) {
+
+    // ~38 packets per revolution, ~3 revolutions = 120 packets * 384 points/packet = 46080 points
+    EigenMat cloud0, cloud1;
+    EigenMat* oldCloud = &cloud0;
+    EigenMat* newCloud = &cloud1;
+    Eigen::Affine3d worldTrans;
+    worldTrans.setIdentity();
+    bool firstCloudIn = false;
     previousTime = SDL_GetTicks();
     bool loop = true;
+
     while (loop) {
         CartesianPoint p;
         while (queue.try_dequeue(p)) {
-            grid.addPoint(p);
+
+            newCloud->cloud(0, oldCloud->head) = p.x;
+            newCloud->cloud(1, oldCloud->head) = p.y;
+            newCloud->cloud(2, oldCloud->head) = p.z;
+            newCloud->head += 1;
+            if (newCloud->head == POINTS_PER_CLOUD) {
+                if (!firstCloudIn) {
+                    firstCloudIn = true;
+                } else {
+
+                    // run ICP  // TODO: Order of arguments may be backwards and produce reverse transforms
+//                    Eigen::Affine3d trans = RigidMotionEstimator::point_to_point(oldCloud->cloud, newCloud->cloud);
+                }
+                for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
+                    grid.addPoint({newCloud->cloud(0, i), newCloud->cloud(1, i), newCloud->cloud(2, i)});
+                }
+                newCloud->head = 0;
+                EigenMat* temp = oldCloud;
+                oldCloud = newCloud;
+                newCloud = temp;
+            }
         }
 
         if (receiver.isGraphicsModeEnabled()) {
