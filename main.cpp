@@ -96,11 +96,11 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-#define POINTS_PER_CLOUD 14592 // 583 // when div by 24
+#define POINTS_PER_CLOUD 14592 // 583 // when div by 25
 struct Cloud {
     int head;
-    Eigen::Matrix<double, 3, POINTS_PER_CLOUD> points;
-    Cloud() : head(0) { }
+    Eigen::Matrix3Xd points;
+    Cloud() : head(0) { points.resize(3, POINTS_PER_CLOUD); }
 };
 
 void mainLoop(PacketReceiver& receiver, Camera& camera) {
@@ -131,6 +131,7 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
                                      newCloud->points(1, newCloud->head) = p.y,
                                      newCloud->points(2, newCloud->head) = p.z};
 //            point = worldTrans * point;
+
             newCloud->points(0, newCloud->head) = point(0,0);
             newCloud->points(1, newCloud->head) = point(1,0);
             newCloud->points(2, newCloud->head) = point(2,0);
@@ -139,30 +140,12 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
                 if (!firstCloudIn) {
                     firstCloudIn = true;
                 } else {
-//                    Eigen::Affine3d translateX;
-//                    translateX.setIdentity();
-//                    translateX(0, 3) = 1000;
-//                    Cloud testCloud = *oldCloud;
-//                    testCloud.points = translateX * testCloud.points;
-
-//                    auto rotation = Eigen::AngleAxisd(1.0, Eigen::Vector3d(1.0, 0.0, 0.0));
-//                    Eigen::Affine3d rotMat;
-//                    rotMat.rotate(rotation);
-//                    testCloud = *oldCloud;
-//                    testCloud.points = rotMat * testCloud.points;
-
-//                    // TODO: Order of arguments may be backwards and produce reverse transforms
-//                    Eigen::Affine3d trans = RigidMotionEstimator::point_to_point(testCloud.points, oldCloud->points);
-//                    std::cout << trans.matrix().matrix() << std::endl << std::endl;
-//
-//                    testCloud.points = trans * testCloud.points;
-
                     // TODO: Look into noalias() function for optimization
 //                    worldTrans = trans * worldTrans;
                     // Not sure why this works, (multiplying 4x4 matrix by 3xn matrix) (there must be an overload)
 //                    newCloud->points = trans * newCloud->points;
 
-                    SICP::point_to_point(newCloud->points, oldCloud->points);
+                    ICP::point_to_point(newCloud->points, oldCloud->points);
                 }
                 for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
                     grid.addPoint({newCloud->points(0, i), newCloud->points(1, i), newCloud->points(2, i)});
