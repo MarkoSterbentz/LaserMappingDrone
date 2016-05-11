@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.3)
 project(LaserMappingDrone)
 
 # Make sure the project compiles with the c++11 and thread safety flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -g -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -g -O3 -fopenmp")
 
 # Tell cMake where to look for the modules that search for SDL2 (the others come with cMake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmakeModules/")
@@ -35,14 +35,14 @@ find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
-set(LASERMAPPINGDRONE_INCLUDE_DIRS QuadTree AssetManagement Grid Utilities Utilities/ReaderWriterQueue PacketReceiver PacketAnalyzer)
+set(LASERMAPPINGDRONE_INCLUDE_DIRS QuadTree AssetManagement Grid Utilities Utilities/ReaderWriterQueue Utilities/ICP PacketReceiver PacketAnalyzer)
 include_directories(${LASERMAPPINGDRONE_INCLUDE_DIRS})
 
 # Find all the source files
 set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree/QuadTreeDrawer.cpp
         AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp Grid/Grid.h Grid/GridDrawer.h
         Utilities/Delegate.h PacketAnalyzer/PacketAnalyzer.cpp PacketAnalyzer/PacketAnalyzer.h
-        PacketReceiver/PacketReceiver.cpp PacketReceiver/PacketReceiver.h Utilities/Graphics.cpp Utilities/Graphics.h Grid/Kernel.h Utilities/Camera.cpp Utilities/Camera.h)
+        PacketReceiver/PacketReceiver.cpp PacketReceiver/PacketReceiver.h Utilities/Graphics.cpp Utilities/Graphics.h Grid/Kernel.h Utilities/Camera.cpp Utilities/Camera.h Utilities/ICP/ICP.h)
         #PacketReceiver/UdpConnection.cpp PacketReceiver/UdpConnection.h)
 
 # Make an executable called LaserMappingDrone out of all the above source files
@@ -56,3 +56,9 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/Shaders
         $<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders)
+
+# Copy data directory into build tree
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/data
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/data)

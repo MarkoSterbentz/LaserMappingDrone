@@ -15,7 +15,10 @@
 #include "PacketAnalyzer.h"
 #include "PacketReceiver.h"
 
-#define KEY_MOVE_SENSITIVITY 10.f
+#define EIGEN_STACK_ALLOCATION_LIMIT 200000
+#include "ICP.h"
+
+#define KEY_MOVE_SENSITIVITY 100.f
 #define KEY_ROTATE_SENSITIVITY 0.01f
 #define MOUSE_SENSITIVITY_X -0.006f
 #define MOUSE_SENSITIVITY_Y 0.006f
@@ -93,13 +96,82 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+#define POINTS_PER_CLOUD 14592 // 583 // when div by 24
+struct Cloud {
+    int head;
+    Eigen::Matrix<double, 3, POINTS_PER_CLOUD> points;
+    Cloud() : head(0) { }
+};
+
 void mainLoop(PacketReceiver& receiver, Camera& camera) {
+
+//    int counter = 0;
+
+    // ~38 packets per revolution, ~1 revolutions = 38 packets * 384 points/packet = 14592 points
+    Cloud cloud0, cloud1;
+    Cloud* oldCloud = &cloud0;
+    Cloud* newCloud = &cloud1;
+    Eigen::Affine3d worldTrans;
+    worldTrans.setIdentity();
+    bool firstCloudIn = false;
     previousTime = SDL_GetTicks();
     bool loop = true;
+
     while (loop) {
         CartesianPoint p;
         while (queue.try_dequeue(p)) {
-            grid.addPoint(p);
+//            grid.addPoint(p);
+
+//            if (++counter == 1000) {
+//                counter = 0;
+//            } else {
+//                continue;
+//            }
+            Eigen::Vector3d point = {newCloud->points(0, newCloud->head) = p.x,
+                                     newCloud->points(1, newCloud->head) = p.y,
+                                     newCloud->points(2, newCloud->head) = p.z};
+//            point = worldTrans * point;
+            newCloud->points(0, newCloud->head) = point(0,0);
+            newCloud->points(1, newCloud->head) = point(1,0);
+            newCloud->points(2, newCloud->head) = point(2,0);
+            newCloud->head += 1;
+            if (newCloud->head == POINTS_PER_CLOUD) {
+                if (!firstCloudIn) {
+                    firstCloudIn = true;
+                } else {
+//                    Eigen::Affine3d translateX;
+//                    translateX.setIdentity();
+//                    translateX(0, 3) = 1000;
+//                    Cloud testCloud = *oldCloud;
+//                    testCloud.points = translateX * testCloud.points;
+
+//                    auto rotation = Eigen::AngleAxisd(1.0, Eigen::Vector3d(1.0, 0.0, 0.0));
+//                    Eigen::Affine3d rotMat;
+//                    rotMat.rotate(rotation);
+//                    testCloud = *oldCloud;
+//                    testCloud.points = rotMat * testCloud.points;
+
+//                    // TODO: Order of arguments may be backwards and produce reverse transforms
+//                    Eigen::Affine3d trans = RigidMotionEstimator::point_to_point(testCloud.points, oldCloud->points);
+//                    std::cout << trans.matrix().matrix() << std::endl << std::endl;
+//
+//                    testCloud.points = trans * testCloud.points;
+
+                    // TODO: Look into noalias() function for optimization
+//                    worldTrans = trans * worldTrans;
+                    // Not sure why this works, (multiplying 4x4 matrix by 3xn matrix) (there must be an overload)
+//                    newCloud->points = trans * newCloud->points;
+
+                    SICP::point_to_point(newCloud->points, oldCloud->points);
+                }
+                for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
+                    grid.addPoint({newCloud->points(0, i), newCloud->points(1, i), newCloud->points(2, i)});
+                }
+                newCloud->head = 0;
+                Cloud* temp = oldCloud;
+                oldCloud = newCloud;
+                newCloud = temp;
+            }
         }
 
         if (receiver.isGraphicsModeEnabled()) {
