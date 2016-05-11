@@ -120,6 +120,8 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
     while (loop) {
         CartesianPoint p;
         while (queue.try_dequeue(p)) {
+//            grid.addPoint(p);
+
 //            if (++counter == 1000) {
 //                counter = 0;
 //            } else {
