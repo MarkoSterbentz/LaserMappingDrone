@@ -208,6 +208,7 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
             }
         }*/
 
+
         if (receiver.isGraphicsModeEnabled()) {
             /**************************** HANDLE CONTROLS ********************************/
             int timeToQuit = handleControls(receiver, camera); // returns non-zero if quit events happen
