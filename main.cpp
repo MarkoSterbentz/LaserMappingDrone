@@ -24,7 +24,7 @@
 #define MOUSE_SENSITIVITY_Y 0.006f
 #define MOUSE_SENSITIVITY_WHEEL -800.f
 #define MOUSE_SENSITIVITY_PAN 10.f
-#define POINTS_PER_CLOUD 768//14592 // 583 // when div by 25
+#define POINTS_PER_CLOUD 1459 //14592 per revolution
 #define NUM_HISTS 114
 
 using namespace LaserMappingDrone;
@@ -38,7 +38,7 @@ struct ListeningThreadData {
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
 // Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
-Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 3000.f, 10, 10, POINTS_PER_CLOUD * NUM_HISTS);
+Grid<CartesianPoint> grid(-5000.f, 5000.f, -5000.f, 5000.f, 10, 10, POINTS_PER_CLOUD * NUM_HISTS);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
@@ -114,7 +114,7 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
     int currentHist = 0;
     int counter = 0;
     ICP::Parameters param;
-    param.stop = 1e-6;
+    param.stop = 1e-8;
 
     bool loop = true;
     previousTime = SDL_GetTicks();
@@ -123,11 +123,11 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
         CartesianPoint p;
         while (queue.try_dequeue(p)) {
 
-//            if (++counter == 10) {
-//                counter = 0;
-//            } else {
-//                continue;
-//            }
+            if (++counter == 10) {
+                counter = 0;
+            } else {
+                continue;
+            }
 
             currentCloud(0, writeHead) = p.x;
             currentCloud(1, writeHead) = p.y;
