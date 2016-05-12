@@ -24,6 +24,8 @@
 #define MOUSE_SENSITIVITY_Y 0.006f
 #define MOUSE_SENSITIVITY_WHEEL -800.f
 #define MOUSE_SENSITIVITY_PAN 10.f
+#define POINTS_PER_CLOUD 768//14592 // 583 // when div by 25
+#define NUM_HISTS 114
 
 using namespace LaserMappingDrone;
 
@@ -36,14 +38,14 @@ struct ListeningThreadData {
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
 // Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
-Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 3000.f, 10, 10, 100000);
+Grid<CartesianPoint> grid(-3000.f, 3000.f, -3000.f, 3000.f, 10, 10, POINTS_PER_CLOUD * NUM_HISTS);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
 Graphics graphics;
 
 // This is a thread safe queue designed for one producer and one consumer
-moodycamel::ReaderWriterQueue<CartesianPoint> queue(10000);
+moodycamel::ReaderWriterQueue<CartesianPoint> queue(POINTS_PER_CLOUD * NUM_HISTS);
 
 // Some things helpful to controls
 unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time step
@@ -96,16 +98,64 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-#define POINTS_PER_CLOUD 14592 // 583 // when div by 25
-struct Cloud {
-    int head;
-    Eigen::Matrix3Xd points;
-    Cloud() : head(0) { points.resize(3, POINTS_PER_CLOUD); }
-};
+//struct Cloud {
+//    int head;
+//    Eigen::Matrix3Xd points;
+//    Cloud() : head(0) { points.resize(3, POINTS_PER_CLOUD); }
+//};
 
 void mainLoop(PacketReceiver& receiver, Camera& camera) {
 
-//    int counter = 0;
+    Eigen::Matrix3Xd currentCloud;
+    currentCloud.resize(3, POINTS_PER_CLOUD);
+    Eigen::Matrix3Xd histClouds;
+    int writeHead = 0;
+    int numHistFilled = 0;
+    int currentHist = 0;
+    int counter = 0;
+    ICP::Parameters param;
+    param.stop = 1e-6;
+
+    bool loop = true;
+    previousTime = SDL_GetTicks();
+
+    while (loop) {
+        CartesianPoint p;
+        while (queue.try_dequeue(p)) {
+
+//            if (++counter == 10) {
+//                counter = 0;
+//            } else {
+//                continue;
+//            }
+
+            currentCloud(0, writeHead) = p.x;
+            currentCloud(1, writeHead) = p.y;
+            currentCloud(2, writeHead) = p.z;
+            if (++writeHead >= POINTS_PER_CLOUD) {
+                writeHead = 0;
+                if (numHistFilled == NUM_HISTS - 1) { // numHistFilled > 0
+                    ICP::point_to_point(currentCloud, histClouds, param);
+                }
+                if (numHistFilled < NUM_HISTS - 1) {
+                    histClouds.resize(3, POINTS_PER_CLOUD * ++numHistFilled);
+                }
+                std::memcpy(&histClouds(0, currentHist * POINTS_PER_CLOUD), &currentCloud(0, 0),
+                            POINTS_PER_CLOUD * 3 * sizeof(double));
+                if (++currentHist >= NUM_HISTS - 1) {
+                    currentHist = 0;
+                }
+                for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
+                    grid.addPoint({(float)currentCloud(0, i), (float)currentCloud(1, i), (float)currentCloud(2, i)});
+                }
+                if (numHistFilled == NUM_HISTS - 1) { // numHistFilled > 0
+                    while (queue.try_dequeue(p));   // Discard points that came in while busy to avoid overflow.
+                }
+            }
+        }
+
+
+    /*int counter = 0;
 
     // ~38 packets per revolution, ~1 revolutions = 38 packets * 384 points/packet = 14592 points
     Cloud cloud0, cloud1;
@@ -120,17 +170,17 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
     while (loop) {
         CartesianPoint p;
         while (queue.try_dequeue(p)) {
-//            grid.addPoint(p);
 
-//            if (++counter == 1000) {
-//                counter = 0;
-//            } else {
-//                continue;
-//            }
+            if (++counter == 53) {
+                counter = 0;
+            } else {
+                continue;
+            }
+
             Eigen::Vector3d point = {newCloud->points(0, newCloud->head) = p.x,
                                      newCloud->points(1, newCloud->head) = p.y,
                                      newCloud->points(2, newCloud->head) = p.z};
-//            point = worldTrans * point;
+            point = worldTrans * point;
 
             newCloud->points(0, newCloud->head) = point(0,0);
             newCloud->points(1, newCloud->head) = point(1,0);
@@ -141,10 +191,11 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
                     firstCloudIn = true;
                 } else {
                     // TODO: Look into noalias() function for optimization
-//                    worldTrans = trans * worldTrans;
-                    // Not sure why this works, (multiplying 4x4 matrix by 3xn matrix) (there must be an overload)
-//                    newCloud->points = trans * newCloud->points;
 
+//                    Eigen::Affine3d transStep = ICP::point_to_point(newCloud->points, oldCloud->points);
+//                    worldTrans = transStep * worldTrans;
+
+//                    worldTrans = ICP::point_to_point(newCloud->points, oldCloud->points);
                     ICP::point_to_point(newCloud->points, oldCloud->points);
                 }
                 for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
@@ -155,7 +206,7 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
                 oldCloud = newCloud;
                 newCloud = temp;
             }
-        }
+        }*/
 
         if (receiver.isGraphicsModeEnabled()) {
             /**************************** HANDLE CONTROLS ********************************/

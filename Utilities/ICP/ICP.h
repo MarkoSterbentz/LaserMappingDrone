@@ -464,7 +464,7 @@ namespace ICP {
     /// @param Source (one 3D point per column)
     /// @param Target (one 3D point per column)
     /// @param Parameters
-    void point_to_point(Eigen::Matrix3Xd& X,
+    Eigen::Affine3d point_to_point(Eigen::Matrix3Xd& X,
                         Eigen::Matrix3Xd& Y,
                         Parameters par = Parameters()) {
         /// Build kd-tree
@@ -474,6 +474,13 @@ namespace ICP {
         Eigen::VectorXd W = Eigen::VectorXd::Zero(X.cols());
         Eigen::Matrix3Xd Xo1 = X;
         Eigen::Matrix3Xd Xo2 = X;
+
+        Eigen::Matrix3Xd originalX = X;
+        /// Keep track of total transform in from the next step in this:
+        Eigen::Affine3d transform;
+        transform.setIdentity();
+        /// This will decide whether or not a good match has been found
+        bool goodMatchFound = false;
         /// ICP
         for(int icp=0; icp<par.max_icp; ++icp) {
             /// Find closest point
@@ -481,23 +488,34 @@ namespace ICP {
             for(int i=0; i<X.cols(); ++i) {
                 Q.col(i) = Y.col(kdtree.closest(X.col(i).data()));
             }
-            /// Computer rotation and translation
+            /// Compute rotation and translation
             for(int outer=0; outer<par.max_outer; ++outer) {
                 /// Compute weights
                 W = (X-Q).colwise().norm();
                 robust_weight(par.f, W, par.p);
                 /// Rotation and translation update
-                RigidMotionEstimator::point_to_point(X, Q, W);
+                transform = RigidMotionEstimator::point_to_point(X, Q, W) * transform;
                 /// Stopping criteria
                 double stop1 = (X-Xo1).colwise().norm().maxCoeff();
                 Xo1 = X;
-                if(stop1 < par.stop) break;
+                if(stop1 < par.stop) {
+                    goodMatchFound = true;
+                    break;
+                }
             }
             /// Stopping criteria
             double stop2 = (X-Xo2).colwise().norm().maxCoeff();
             Xo2 = X;
-            if(stop2 < par.stop) break;
+            if(stop2 < par.stop) {
+//                goodMatchFound = true;
+                break;
+            }
         }
+        if (!goodMatchFound) {
+            X = originalX;
+            transform.setIdentity();
+        }
+        return transform;
     }
     /// Reweighted ICP with point to plane
     /// @param Source (one 3D point per column)

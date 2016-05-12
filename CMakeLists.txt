@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.3)
 project(LaserMappingDrone)
 
 # Make sure the project compiles with the c++11 and thread safety flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -g -O3 -fopenmp")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -fopenmp -Wall -Wextra")
 
 # Tell cMake where to look for the modules that search for SDL2 (the others come with cMake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmakeModules/")
