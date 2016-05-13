@@ -14,9 +14,7 @@
 #include "readerwriterqueue.h"
 #include "PacketAnalyzer.h"
 #include "PacketReceiver.h"
-
-#define EIGEN_STACK_ALLOCATION_LIMIT 200000
-#include "ICP.h"
+#include "Registrar.h"
 
 #define KEY_MOVE_SENSITIVITY 100.f
 #define KEY_ROTATE_SENSITIVITY 0.01f
@@ -34,6 +32,10 @@ struct ListeningThreadData {
     PacketAnalyzer* analyzer;
     bool packetHandlerQuit;
 };
+struct RegistrationThreadData {
+    Registrar<CartesianPoint>* registrar;
+    bool registrationQuit;
+};
 
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
@@ -45,7 +47,8 @@ GridDrawer<CartesianPoint> gridDrawer;
 Graphics graphics;
 
 // This is a thread safe queue designed for one producer and one consumer
-moodycamel::ReaderWriterQueue<CartesianPoint> queue(POINTS_PER_CLOUD * NUM_HISTS);
+moodycamel::ReaderWriterQueue<CartesianPoint> rawQueue(POINTS_PER_CLOUD * NUM_HISTS);
+moodycamel::ReaderWriterQueue<CartesianPoint> registeredQueue(POINTS_PER_CLOUD * NUM_HISTS);
 
 // Some things helpful to controls
 unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time step
@@ -54,6 +57,8 @@ unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time
 void mainLoop(PacketReceiver& receiver, Camera& camera);
 void initPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread);
 void stopPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread);
+void initRegistration(RegistrationThreadData& rtd, SDL_Thread** registrationThread);
+void stopRegistration(RegistrationThreadData& rtd, SDL_Thread** registrationThread);
 void initKernel();
 int handleCommandLineFlags(int argc, char* argv[], PacketReceiver& receiver);
 int initGraphics(Camera& camera);
@@ -64,19 +69,21 @@ int main(int argc, char* argv[]) {
 
     PacketReceiver receiver;
     PacketAnalyzer analyzer;
-    
-    ListeningThreadData ltd = {&receiver, &analyzer};
-    SDL_Thread* packetListeningThread;
-
-    // Arguments: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
-    Camera camera(1.0, 10.0f, 100000.0, 1, 0.0, 1.2, 2000.0, 100.f, 10000.f);
+    Registrar<CartesianPoint> registrar(&rawQueue, &registeredQueue, POINTS_PER_CLOUD, NUM_HISTS);
 
     handleCommandLineFlags(argc, argv, receiver);
-
     receiver.openInputFile();
+    
+    ListeningThreadData ltd = {&receiver, &analyzer};
+    SDL_Thread* packetListeningThread = NULL;
 
-    /* Initialize components based on the flags: */
+    RegistrationThreadData rtd = {&registrar};
+    SDL_Thread* registrationThread = NULL;
+
+    // This sets up the kerning tools used for data analysis
     initKernel();
+    // Camera parameters: Vertical FOV, Near Plane, Far Plane, Aspect, Theta, Phi, Distance, DistMin, DistMax
+    Camera camera(1.0, 10.0f, 100000.0, 1, 0.0, 1.2, 2000.0, 100.f, 10000.f);
 
     if (receiver.isGraphicsModeEnabled()) {
         if (initGraphics(camera) == 1) {
@@ -86,6 +93,7 @@ int main(int argc, char* argv[]) {
 
     if (receiver.isStreamModeEnabled()) {
         initPacketHandling(ltd, &packetListeningThread);
+        initRegistration(rtd, &registrationThread);
     }
 
     /* Begin the main loop on this thread: */
@@ -93,129 +101,29 @@ int main(int argc, char* argv[]) {
 
     if (receiver.isStreamModeEnabled()) {
         stopPacketHandling(ltd, &packetListeningThread);
+        stopRegistration(rtd, &registrationThread);
     }
 
     return 0;
 }
 
-//struct Cloud {
-//    int head;
-//    Eigen::Matrix3Xd points;
-//    Cloud() : head(0) { points.resize(3, POINTS_PER_CLOUD); }
-//};
-
 void mainLoop(PacketReceiver& receiver, Camera& camera) {
 
-    Eigen::Matrix3Xd currentCloud;
-    currentCloud.resize(3, POINTS_PER_CLOUD);
-    Eigen::Matrix3Xd histClouds;
-    int writeHead = 0;
-    int numHistFilled = 0;
-    int currentHist = 0;
-    int counter = 0;
-    ICP::Parameters param;
-    param.stop = 1e-8;
-
     bool loop = true;
     previousTime = SDL_GetTicks();
 
     while (loop) {
+        /**************************** HANDLE INCOMING POINTS ********************************/
         CartesianPoint p;
-        while (queue.try_dequeue(p)) {
-
-            if (++counter == 10) {
-                counter = 0;
-            } else {
-                continue;
-            }
-
-            currentCloud(0, writeHead) = p.x;
-            currentCloud(1, writeHead) = p.y;
-            currentCloud(2, writeHead) = p.z;
-            if (++writeHead >= POINTS_PER_CLOUD) {
-                writeHead = 0;
-                if (numHistFilled == NUM_HISTS - 1) { // numHistFilled > 0
-                    ICP::point_to_point(currentCloud, histClouds, param);
-                }
-                if (numHistFilled < NUM_HISTS - 1) {
-                    histClouds.resize(3, POINTS_PER_CLOUD * ++numHistFilled);
-                }
-                std::memcpy(&histClouds(0, currentHist * POINTS_PER_CLOUD), &currentCloud(0, 0),
-                            POINTS_PER_CLOUD * 3 * sizeof(double));
-                if (++currentHist >= NUM_HISTS - 1) {
-                    currentHist = 0;
-                }
-                for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
-                    grid.addPoint({(float)currentCloud(0, i), (float)currentCloud(1, i), (float)currentCloud(2, i)});
-                }
-                if (numHistFilled == NUM_HISTS - 1) { // numHistFilled > 0
-                    while (queue.try_dequeue(p));   // Discard points that came in while busy to avoid overflow.
-                }
-            }
+        while (registeredQueue.try_dequeue(p)) {
+            grid.addPoint(p);
         }
-
-
-    /*int counter = 0;
-
-    // ~38 packets per revolution, ~1 revolutions = 38 packets * 384 points/packet = 14592 points
-    Cloud cloud0, cloud1;
-    Cloud* oldCloud = &cloud0;
-    Cloud* newCloud = &cloud1;
-    Eigen::Affine3d worldTrans;
-    worldTrans.setIdentity();
-    bool firstCloudIn = false;
-    previousTime = SDL_GetTicks();
-    bool loop = true;
-
-    while (loop) {
-        CartesianPoint p;
-        while (queue.try_dequeue(p)) {
-
-            if (++counter == 53) {
-                counter = 0;
-            } else {
-                continue;
-            }
-
-            Eigen::Vector3d point = {newCloud->points(0, newCloud->head) = p.x,
-                                     newCloud->points(1, newCloud->head) = p.y,
-                                     newCloud->points(2, newCloud->head) = p.z};
-            point = worldTrans * point;
-
-            newCloud->points(0, newCloud->head) = point(0,0);
-            newCloud->points(1, newCloud->head) = point(1,0);
-            newCloud->points(2, newCloud->head) = point(2,0);
-            newCloud->head += 1;
-            if (newCloud->head == POINTS_PER_CLOUD) {
-                if (!firstCloudIn) {
-                    firstCloudIn = true;
-                } else {
-                    // TODO: Look into noalias() function for optimization
-
-//                    Eigen::Affine3d transStep = ICP::point_to_point(newCloud->points, oldCloud->points);
-//                    worldTrans = transStep * worldTrans;
-
-//                    worldTrans = ICP::point_to_point(newCloud->points, oldCloud->points);
-                    ICP::point_to_point(newCloud->points, oldCloud->points);
-                }
-                for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
-                    grid.addPoint({newCloud->points(0, i), newCloud->points(1, i), newCloud->points(2, i)});
-                }
-                newCloud->head = 0;
-                Cloud* temp = oldCloud;
-                oldCloud = newCloud;
-                newCloud = temp;
-            }
-        }*/
-
-
         if (receiver.isGraphicsModeEnabled()) {
             /**************************** HANDLE CONTROLS ********************************/
             int timeToQuit = handleControls(receiver, camera); // returns non-zero if quit events happen
             if (timeToQuit) {
                 loop = false;
             }
-
             /**************************** DO THE DRAWING *********************************/
             // draw the grid
             gridDrawer.drawGrid();
@@ -227,7 +135,7 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
 
 // This function runs inside the listeningThread.
 int listeningThreadFunction(void* arg) {
-    std::cout << "\nPacket handling thread is active.\n";
+    std::cout << "Packet handling thread is active.\n";
 
     ListeningThreadData* ltd = (ListeningThreadData*) arg;
     int packetsReadCount = 0;
@@ -250,13 +158,22 @@ int listeningThreadFunction(void* arg) {
             ltd->receiver->popQueuedPacket();    // packet has been read, get rid of it
             std::vector<CartesianPoint> newPoints(ltd->analyzer->getCartesianPoints());
             for (unsigned j = 0; j < newPoints.size(); ++j) {
-                queue.enqueue(newPoints[j]);
+                rawQueue.enqueue(newPoints[j]);
             }
         }
     }
 
     std::cout << "Packet handling thread is dying.\n";
     return 0;
+}
+
+int registrationThreadFunction(void* arg) {
+    std::cout << "Point registration thread is active.\n";
+    RegistrationThreadData* rtd = (RegistrationThreadData*) arg;
+    while (!rtd->registrationQuit) {
+        rtd->registrar->runICP();
+    }
+
 }
 
 int handleControls(PacketReceiver& receiver, Camera& camera) {
@@ -340,6 +257,16 @@ void stopPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningTh
     // once the main loop has exited, set the listening thread's "quit" to true and wait for the thread to die.
     ltd.packetHandlerQuit = true;
     SDL_WaitThread(*packetListeningThread, NULL);
+}
+
+void initRegistration(RegistrationThreadData& rtd, SDL_Thread** registrationThread) {
+    rtd.registrationQuit = false;
+    *registrationThread = SDL_CreateThread(registrationThreadFunction, "point registration thread", (void *) &rtd);
+}
+
+void stopRegistration(RegistrationThreadData& rtd, SDL_Thread** registrationThread) {
+    rtd.registrationQuit = true;
+    SDL_WaitThread(*registrationThread, NULL);
 }
 
 void initKernel() {

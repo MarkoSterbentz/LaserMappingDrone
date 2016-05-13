@@ -11,7 +11,7 @@
 ///   by Sofien Bouaziz, Andrea Tagliasacchi, Mark Pauly
 ///   Copyright (C) 2013  LGG, EPFL
 ///////////////////////////////////////////////////////////////////////////////
-///   1) This file contains different implementations of the ICP algorithm.
+///   1) This file contains different implementations of the Registration algorithm.
 ///   2) This code requires EIGEN and NANOFLANN.
 ///   3) If OPENMP is activated some part of the code will be parallelized.
 ///   4) This code is for now designed for 3D registration
@@ -19,8 +19,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///   namespace nanoflann: NANOFLANN KD-tree adaptor for EIGEN
 ///   namespace RigidMotionEstimator: functions to compute the rigid motion
-///   namespace SICP: sparse ICP implementation
-///   namespace ICP: reweighted ICP implementation
+///   namespace SICP: sparse Registration implementation
+///   namespace Registration: reweighted Registration implementation
 ///////////////////////////////////////////////////////////////////////////////
 #include <nanoflann.hpp>
 #include <Eigen/Dense>
@@ -202,7 +202,7 @@ namespace RigidMotionEstimator {
     }
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// ICP implementation using ADMM/ALM/Penalty method
+/// Registration implementation using ADMM/ALM/Penalty method
 namespace SICP {
     struct Parameters {
         bool use_penalty = false; /// if use_penalty then penalty method else ADMM or ALM (see max_inner)
@@ -210,11 +210,11 @@ namespace SICP {
         double mu = 10.0;         /// penalty weight
         double alpha = 1.2;       /// penalty increase factor
         double max_mu = 1e5;      /// max penalty
-        int max_icp = 100;        /// max ICP iteration
+        int max_icp = 100;        /// max Registration iteration
         int max_outer = 100;      /// max outer iteration
         int max_inner = 1;        /// max inner iteration. If max_inner=1 then ADMM else ALM
         double stop = 1e-5;       /// stopping criteria
-        bool print_icpn = false;  /// (debug) print ICP iteration
+        bool print_icpn = false;  /// (debug) print Registration iteration
     };
     /// Shrinkage operator (Automatic loop unrolling using template)
     template<unsigned int I>
@@ -249,7 +249,7 @@ namespace SICP {
             y(i) *= s;
         }
     }
-    /// Sparse ICP with point to point
+    /// Sparse Registration with point to point
     /// @param Source (one 3D point per column)
     /// @param Target (one 3D point per column)
     /// @param Parameters
@@ -265,7 +265,7 @@ namespace SICP {
         Eigen::Matrix3Xd C = Eigen::Matrix3Xd::Zero(3, X.cols());
         Eigen::Matrix3Xd Xo1 = X;
         Eigen::Matrix3Xd Xo2 = X;
-        /// ICP
+        /// Registration
         for(int icp=0; icp<par.max_icp; ++icp) {
             if(par.print_icpn) std::cout << "Iteration #" << icp << "/" << par.max_icp << std::endl;
             /// Find closest point
@@ -304,7 +304,7 @@ namespace SICP {
             if(stop < par.stop) break;
         }
     }
-    /// Sparse ICP with point to plane
+    /// Sparse Registration with point to plane
     /// @param Source (one 3D point per column)
     /// @param Target (one 3D point per column)
     /// @param Target normals (one 3D normal per column)
@@ -323,7 +323,7 @@ namespace SICP {
         Eigen::VectorXd C = Eigen::VectorXd::Zero(X.cols());
         Eigen::Matrix3Xd Xo1 = X;
         Eigen::Matrix3Xd Xo2 = X;
-        /// ICP
+        /// Registration
         for(int icp=0; icp<par.max_icp; ++icp) {
             if(par.print_icpn) std::cout << "Iteration #" << icp << "/" << par.max_icp << std::endl;
 
@@ -367,7 +367,7 @@ namespace SICP {
     }
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// ICP implementation using iterative reweighting
+/// Registration implementation using iterative reweighting
 namespace ICP {
     enum Function {
         PNORM,
@@ -387,7 +387,7 @@ namespace ICP {
         /// Parameters
         Function f;     /// robust function type
         double p;       /// paramter of the robust function
-        int max_icp;    /// max ICP iteration
+        int max_icp;    /// max Registration iteration
         int max_outer;  /// max outer iteration
         double stop;    /// stopping criteria
     };
@@ -460,12 +460,13 @@ namespace ICP {
             default: uniform_weight(r); break;
         }
     }
-    /// Reweighted ICP with point to point
+    /// Reweighted Registration with point to point
     /// @param Source (one 3D point per column)
     /// @param Target (one 3D point per column)
     /// @param Parameters
-    Eigen::Affine3d point_to_point(Eigen::Matrix3Xd& X,
+    bool point_to_point(Eigen::Matrix3Xd& X,
                         Eigen::Matrix3Xd& Y,
+                        /*Eigen::Affine3d& transformRecorder,*/
                         Parameters par = Parameters()) {
         /// Build kd-tree
         nanoflann::KDTreeAdaptor<Eigen::Matrix3Xd, 3, nanoflann::metric_L2_Simple> kdtree(Y);
@@ -475,13 +476,9 @@ namespace ICP {
         Eigen::Matrix3Xd Xo1 = X;
         Eigen::Matrix3Xd Xo2 = X;
 
-        Eigen::Matrix3Xd originalX = X;
-        /// Keep track of total transform in from the next step in this:
-        Eigen::Affine3d transform;
-        transform.setIdentity();
         /// This will decide whether or not a good match has been found
         bool goodMatchFound = false;
-        /// ICP
+        /// Registration
         for(int icp=0; icp<par.max_icp; ++icp) {
             /// Find closest point
 #pragma omp parallel for
@@ -494,12 +491,12 @@ namespace ICP {
                 W = (X-Q).colwise().norm();
                 robust_weight(par.f, W, par.p);
                 /// Rotation and translation update
-                transform = RigidMotionEstimator::point_to_point(X, Q, W) * transform;
+                /*transformRecorder = */RigidMotionEstimator::point_to_point(X, Q, W)/* * transformRecorder*/;
                 /// Stopping criteria
                 double stop1 = (X-Xo1).colwise().norm().maxCoeff();
                 Xo1 = X;
                 if(stop1 < par.stop) {
-                    goodMatchFound = true;
+//                    goodMatchFound = true;
                     break;
                 }
             }
@@ -507,17 +504,17 @@ namespace ICP {
             double stop2 = (X-Xo2).colwise().norm().maxCoeff();
             Xo2 = X;
             if(stop2 < par.stop) {
-//                goodMatchFound = true;
+                goodMatchFound = true;
                 break;
             }
         }
         if (!goodMatchFound) {
-            X = originalX;
-            transform.setIdentity();
+            return false;
         }
-        return transform;
+        return true;
     }
-    /// Reweighted ICP with point to plane
+
+    /// Reweighted Registration with point to plane
     /// @param Source (one 3D point per column)
     /// @param Target (one 3D point per column)
     /// @param Target normals (one 3D normal per column)
@@ -535,7 +532,7 @@ namespace ICP {
         Eigen::VectorXd W = Eigen::VectorXd::Zero(X.cols());
         Eigen::Matrix3Xd Xo1 = X;
         Eigen::Matrix3Xd Xo2 = X;
-        /// ICP
+        /// Registration
         for(int icp=0; icp<par.max_icp; ++icp) {
             /// Find closest point
 #pragma omp parallel for
