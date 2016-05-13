@@ -22,8 +22,14 @@
 #define MOUSE_SENSITIVITY_Y 0.006f
 #define MOUSE_SENSITIVITY_WHEEL -800.f
 #define MOUSE_SENSITIVITY_PAN 10.f
-#define POINTS_PER_CLOUD 1459 //14592 per revolution
-#define NUM_HISTS 114
+
+#define POINTS_PER_PACKET 384                   // known, do not set
+#define PACKETS_PER_REVOLUTION_1200_RPM 19      // approximate, from observation
+#define POINTS_PER_REVOLUTION POINTS_PER_PACKET * PACKETS_PER_REVOLUTION_1200_RPM
+#define REG_SPARSITY 11                         // every n points will be considered for ICP
+#define NUM_HISTS 150                           // number of point cloud histories to consider for ICP (~revolutions)
+#define MAX_POINTS_IN_GRID (POINTS_PER_REVOLUTION / REG_SPARSITY) * NUM_HISTS
+#define POINTS_PER_CLOUD POINTS_PER_REVOLUTION / REG_SPARSITY
 
 using namespace LaserMappingDrone;
 
@@ -40,15 +46,15 @@ struct RegistrationThreadData {
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
 // Arguments are: minX, maxX, minY, maxY, resX, resY, max number of points present
-Grid<CartesianPoint> grid(-5000.f, 5000.f, -5000.f, 5000.f, 10, 10, POINTS_PER_CLOUD * NUM_HISTS);
+Grid<CartesianPoint> grid(-5000.f, 5000.f, -5000.f, 5000.f, 10, 10, MAX_POINTS_IN_GRID);
 GridDrawer<CartesianPoint> gridDrawer;
 
 // The graphics backend
 Graphics graphics;
 
 // This is a thread safe queue designed for one producer and one consumer
-moodycamel::ReaderWriterQueue<CartesianPoint> rawQueue(POINTS_PER_CLOUD * NUM_HISTS);
-moodycamel::ReaderWriterQueue<CartesianPoint> registeredQueue(POINTS_PER_CLOUD * NUM_HISTS);
+moodycamel::ReaderWriterQueue<CartesianPoint> rawQueue(MAX_POINTS_IN_GRID);
+moodycamel::ReaderWriterQueue<CartesianPoint> registeredQueue(MAX_POINTS_IN_GRID);
 
 // Some things helpful to controls
 unsigned previousTime, currentTime, deltaTime; // Used to regulate controls time step
@@ -69,7 +75,7 @@ int main(int argc, char* argv[]) {
 
     PacketReceiver receiver;
     PacketAnalyzer analyzer;
-    Registrar<CartesianPoint> registrar(&rawQueue, &registeredQueue, POINTS_PER_CLOUD, NUM_HISTS);
+    Registrar<CartesianPoint> registrar(&rawQueue, &registeredQueue, POINTS_PER_CLOUD, NUM_HISTS, REG_SPARSITY);
 
     handleCommandLineFlags(argc, argv, receiver);
     receiver.openInputFile();

@@ -477,7 +477,8 @@ namespace ICP {
         Eigen::Matrix3Xd Xo2 = X;
 
         /// This will decide whether or not a good match has been found
-        bool goodMatchFound = false;
+        bool goodMatchFoundInner;
+        bool goodMatchFoundOuter = false;
         /// Registration
         for(int icp=0; icp<par.max_icp; ++icp) {
             /// Find closest point
@@ -485,6 +486,7 @@ namespace ICP {
             for(int i=0; i<X.cols(); ++i) {
                 Q.col(i) = Y.col(kdtree.closest(X.col(i).data()));
             }
+            goodMatchFoundInner = false;
             /// Compute rotation and translation
             for(int outer=0; outer<par.max_outer; ++outer) {
                 /// Compute weights
@@ -496,7 +498,7 @@ namespace ICP {
                 double stop1 = (X-Xo1).colwise().norm().maxCoeff();
                 Xo1 = X;
                 if(stop1 < par.stop) {
-//                    goodMatchFound = true;
+                    goodMatchFoundInner = true;
                     break;
                 }
             }
@@ -504,11 +506,11 @@ namespace ICP {
             double stop2 = (X-Xo2).colwise().norm().maxCoeff();
             Xo2 = X;
             if(stop2 < par.stop) {
-                goodMatchFound = true;
+                goodMatchFoundOuter = true;
                 break;
             }
         }
-        if (!goodMatchFound) {
+        if (!goodMatchFoundInner || !goodMatchFoundOuter) {
             return false;
         }
         return true;

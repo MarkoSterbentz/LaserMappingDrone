@@ -9,6 +9,27 @@
 
 namespace LaserMappingDrone {
 
+    enum Function {
+        PNORM,
+        TUKEY,
+        FAIR,
+        LOGISTIC,
+        TRIMMED,
+        NONE
+    };
+    struct Parameters {
+        Parameters() : f(NONE),
+                       p(0.1),
+                       max_icp(100),
+                       max_outer(100),
+                       stop(1e-5) {}
+        Function f;     /// robust function type
+        double p;       /// paramter of the robust function
+        int max_icp;    /// max Registration iteration
+        int max_outer;  /// max outer iteration
+        double stop;    /// stopping criteria
+    };
+
     template <class P>
     class Registrar {
         moodycamel::ReaderWriterQueue<P>* inQueue,* outQueue;
@@ -18,7 +39,7 @@ namespace LaserMappingDrone {
 
     public:
         Registrar(moodycamel::ReaderWriterQueue<P>* inQueue, moodycamel::ReaderWriterQueue<P>* outQueue,
-                  int numPerCloud, int numHists, int sparsity = 10)
+                  int numPerCloud, int numHists, int sparsity = 1)
                 : inQueue(inQueue), outQueue(outQueue), numPerCloud(numPerCloud), numHists(numHists), sparsity(sparsity),
                   writeHead(0), numHistFilled(0), currentHist(0), counter(0) {
             currentCloud.resize(3, numPerCloud);
