@@ -14,6 +14,8 @@
 #include "readerwriterqueue.h"
 #include "PacketAnalyzer.h"
 #include "PacketReceiver.h"
+
+//#define SHOW_NONCONTRIBUTING_POINTS
 #include "Registrar.h"
 
 #define KEY_MOVE_SENSITIVITY 100.f
@@ -26,10 +28,16 @@
 #define POINTS_PER_PACKET 384                   // known, do not set
 #define PACKETS_PER_REVOLUTION_1200_RPM 19      // approximate, from observation
 #define POINTS_PER_REVOLUTION POINTS_PER_PACKET * PACKETS_PER_REVOLUTION_1200_RPM
-#define REG_SPARSITY 11                         // every n points will be considered for ICP
-#define NUM_HISTS 150                           // number of point cloud histories to consider for ICP (~revolutions)
-#define MAX_POINTS_IN_GRID (POINTS_PER_REVOLUTION / REG_SPARSITY) * NUM_HISTS
-#define POINTS_PER_CLOUD POINTS_PER_REVOLUTION / REG_SPARSITY
+#define REVOLUTIONS_PER_CLOUD 1                 // n revolutions make up a cloud used in ICP
+#define CLOUD_SPARSITY 12                       // every n incoming point(s) will be considered for ICP (added to cloud)
+#define NUM_HISTS 150                           // number of point cloud histories to use for ICP
+#define POINTS_PER_CLOUD (POINTS_PER_REVOLUTION / CLOUD_SPARSITY) * REVOLUTIONS_PER_CLOUD
+
+#ifdef SHOW_NONCONTRIBUTING_POINTS
+#define MAX_POINTS_IN_GRID POINTS_PER_REVOLUTION * NUM_HISTS * REVOLUTIONS_PER_CLOUD
+#else
+#define MAX_POINTS_IN_GRID POINTS_PER_CLOUD * NUM_HISTS
+#endif
 
 using namespace LaserMappingDrone;
 
@@ -75,7 +83,7 @@ int main(int argc, char* argv[]) {
 
     PacketReceiver receiver;
     PacketAnalyzer analyzer;
-    Registrar<CartesianPoint> registrar(&rawQueue, &registeredQueue, POINTS_PER_CLOUD, NUM_HISTS, REG_SPARSITY);
+    Registrar<CartesianPoint> registrar(&rawQueue, &registeredQueue, POINTS_PER_CLOUD, NUM_HISTS, CLOUD_SPARSITY);
 
     handleCommandLineFlags(argc, argv, receiver);
     receiver.openInputFile();

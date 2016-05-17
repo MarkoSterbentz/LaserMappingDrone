@@ -1,11 +1,12 @@
-//
-// Created by marko on 4/15/16.
-//
-
 #ifndef LASERMAPPINGDRONE_ICP_H
 #define LASERMAPPINGDRONE_ICP_H
 
-
+/******************************************************************************
+ * This code has been modified and adapted by Galen Cochrane to fit the needs
+ * of the Laser Mapping Drone project at Idaho State University.
+ * It is no longer in its original form.  The follwing header text concerns
+ * its original form.
+ ******************************************************************************/
 ///////////////////////////////////////////////////////////////////////////////
 ///   "Sparse Iterative Closest Point"
 ///   by Sofien Bouaziz, Andrea Tagliasacchi, Mark Pauly
@@ -22,9 +23,10 @@
 ///   namespace SICP: sparse Registration implementation
 ///   namespace Registration: reweighted Registration implementation
 ///////////////////////////////////////////////////////////////////////////////
+
 #include <nanoflann.hpp>
 #include <Eigen/Dense>
-///////////////////////////////////////////////////////////////////////////////
+
 namespace nanoflann {
     /// KD-tree adaptor for working with data directly stored in an Eigen Matrix, without duplicating the data storage.
     /// This code is adapted from the KDTreeEigenMatrixAdaptor class of nanoflann.hpp
@@ -463,10 +465,11 @@ namespace ICP {
     /// Reweighted Registration with point to point
     /// @param Source (one 3D point per column)
     /// @param Target (one 3D point per column)
+    /// @param transformRecorder
     /// @param Parameters
     bool point_to_point(Eigen::Matrix3Xd& X,
                         Eigen::Matrix3Xd& Y,
-                        /*Eigen::Affine3d& transformRecorder,*/
+                        Eigen::Affine3d& transformRecorder,
                         Parameters par = Parameters()) {
         /// Build kd-tree
         nanoflann::KDTreeAdaptor<Eigen::Matrix3Xd, 3, nanoflann::metric_L2_Simple> kdtree(Y);
@@ -493,7 +496,7 @@ namespace ICP {
                 W = (X-Q).colwise().norm();
                 robust_weight(par.f, W, par.p);
                 /// Rotation and translation update
-                /*transformRecorder = */RigidMotionEstimator::point_to_point(X, Q, W)/* * transformRecorder*/;
+                transformRecorder = RigidMotionEstimator::point_to_point(X, Q, W) * transformRecorder;
                 /// Stopping criteria
                 double stop1 = (X-Xo1).colwise().norm().maxCoeff();
                 Xo1 = X;
@@ -515,7 +518,6 @@ namespace ICP {
         }
         return true;
     }
-
     /// Reweighted Registration with point to plane
     /// @param Source (one 3D point per column)
     /// @param Target (one 3D point per column)
