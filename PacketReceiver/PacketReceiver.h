@@ -1,9 +1,12 @@
 #ifndef PACKETANALYZER_PACKETRECEIVER_H
 #define PACKETANALYZER_PACKETRECEIVER_H
 
-/* Packet Receiver | Marko Sterbentz 2/5/2016
+/**
+ * Packet Receiver | Marko Sterbentz 2/5/2016
  * This class will receieve/read data from outside the application.
  * Supported sources include: VeloDyne VLP-16, binary data file
+ *
+ * Galen Cochrane - Last modified 2016 June 15
  */
 
 #include <stdio.h>
@@ -29,62 +32,71 @@
 #define DATABUFLEN 1249  //size of the data packet
 #define POSBUFLEN 554   // size of the position packet
 
-enum StreamingMedium {Velodyne, file};
+namespace LaserMappingDrone {
 
-class PacketReceiver {
-private:
-    std::ofstream outputFileStream;
-    std::ifstream inputFile;
+    enum StreamingMedium {
+        VELODYNE, INPUTFILE
+    };
+    enum OptionsState {
+        OFF = -1, UNKNOWN = 0, ON = 1
+    };
+    enum Options {
+        GRAPHICS = 0, STREAM = 1, WRITE = 2, FORWARD = 3
+    };
 
-    std::string outputDataFileName;
-    std::string inputDataFileName;
-    int sockfd;
-    unsigned char dataBuf[DATABUFLEN];
-    unsigned char posBuf[POSBUFLEN];
-    std::queue <unsigned char*> packetQueue;
-    void readSingleDataPacketFromFile();
+    class PacketReceiver {
+    private:
+        std::ofstream outputFileStream;
+        std::ifstream inputFile;
 
-    bool graphicsModeEnabled;
-    bool streamModeEnabled;
-    bool writeModeEnabled;
-    StreamingMedium streamMedium;
-    int numPacketsToRead;
-    int extractIntegerInput(std::string input);
-    void getStreamDevice();                                                     // NEEDS TO BE RENAMED
-    int getNumberOfPacketsToRead();                                             // NEEDS TO BE RENAMED
-    std::string getInputFileName();                                             // NEEDS TO BE RENAMED
+        std::string outputDataFileName;
+        std::string inputDataFileName;
+        int sockfd;
+        unsigned char dataBuf[DATABUFLEN];
+        unsigned char posBuf[POSBUFLEN];
+        std::queue<unsigned char*> packetQueue;
 
-public:
-    PacketReceiver();
-    ~PacketReceiver();
-    void openOutputFile();
-    void openInputFile();
-    int bindSocket();
-    void listenForDataPacket();
-    void writePacketToFile(unsigned char* packet);
-    bool endOfInputDataFile();
+        void readSingleDataPacketFromFile();
 
-    void readDataPacketsFromFile(int numPackets);
+        int cmdOptions[4];
 
-    unsigned long getPacketQueueSize();
-    unsigned char* getNextQueuedPacket();
-    void popQueuedPacket();
+        StreamingMedium streamMedium;
+        int numPacketsToRead;
 
-    void enableGraphicsMode();
-    void disableGraphicsMode();
-    void enableStreamMode();
-    void disableStreamMode();
-    void enableWriteMode();
-    void disableWriteMode();
-    void increaseNumPacketsToRead(int num);
-    long getFileSize(std::string fileName);
+        int extractIntegerInput(std::string input);
 
-    /* Getters for private variables: */
-    bool isGraphicsModeEnabled();
-    bool isWriteModeEnabled();
-    bool isStreamModeEnabled();
-    StreamingMedium getStreamMedium();
-    int getNumPacketsToRead();
-};
+        void getStreamDevice();                                                     // NEEDS TO BE RENAMED
+        int getNumberOfPacketsToRead();                                             // NEEDS TO BE RENAMED
+        std::string getInputFileName();                                             // NEEDS TO BE RENAMED
+
+    public:
+        PacketReceiver();
+        ~PacketReceiver();
+        void openOutputFile();
+        void openInputFile();
+        int bindSocket();
+        void listenForDataPacket();
+        void writePacketToFile(unsigned char* packet);
+        bool endOfInputDataFile();
+        void readDataPacketsFromFile(int numPackets);
+
+        unsigned long getPacketQueueSize();
+        unsigned char* getNextQueuedPacket();
+        void popQueuedPacket();
+
+        std::string getOptDesc(int option);
+        void enableOption(int option);
+        void disableOption(int option);
+        void increaseNumPacketsToRead(int num);
+        long getFileSize(std::string fileName);
+
+        /* Getters for private variables: */
+        bool isOptionSpecified(int option);
+        bool isOptionEnabled(int option);
+        StreamingMedium getStreamMedium();
+        int getNumPacketsToRead();
+    };
+
+}
 
 #endif //PACKETANALYZER_PACKETRECEIVER_H

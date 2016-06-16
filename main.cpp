@@ -53,6 +53,8 @@ void mainLoop(PacketReceiver& receiver, Camera& camera);
 void initPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread);
 void stopPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread);
 void initKernel();
+bool flagIsValid(char flag);
+void checkOptionInput(char &input, PacketReceiver &receiver, int option);
 int handleCommandLineFlags(int argc, char* argv[], PacketReceiver& receiver);
 int initGraphics(Camera& camera);
 int handleControls(PacketReceiver& receiver, Camera& camera);
@@ -76,20 +78,20 @@ int main(int argc, char* argv[]) {
     /* Initialize components based on the flags: */
     initKernel();
 
-    if (receiver.isGraphicsModeEnabled()) {
+    if (receiver.isOptionEnabled(GRAPHICS)) {
         if (initGraphics(camera) == 1) {
             return 1;
         }
     }
 
-    if (receiver.isStreamModeEnabled()) {
+    if (receiver.isOptionEnabled(STREAM)) {
         initPacketHandling(ltd, &packetListeningThread);
     }
 
     /* Begin the main loop on this thread: */
     mainLoop(receiver, camera);
 
-    if (receiver.isStreamModeEnabled()) {
+    if (receiver.isOptionEnabled(STREAM)) {
         stopPacketHandling(ltd, &packetListeningThread);
     }
 
@@ -121,60 +123,9 @@ void mainLoop(PacketReceiver& receiver, Camera& camera) {
         CartesianPoint p;
         while (queue.try_dequeue(p)) {
             grid.addPoint(p);
-
-/*//            if (++counter == 1000) {
-//                counter = 0;
-//            } else {
-//                continue;
-//            }
-            Eigen::Vector3d point = {newCloud->points(0, newCloud->head) = p.x,
-                                     newCloud->points(1, newCloud->head) = p.y,
-                                     newCloud->points(2, newCloud->head) = p.z};
-//            point = worldTrans * point;
-            newCloud->points(0, newCloud->head) = point(0,0);
-            newCloud->points(1, newCloud->head) = point(1,0);
-            newCloud->points(2, newCloud->head) = point(2,0);
-            newCloud->head += 1;
-            if (newCloud->head == POINTS_PER_CLOUD) {
-                if (!firstCloudIn) {
-                    firstCloudIn = true;
-                } else {
-//                    Eigen::Affine3d translateX;
-//                    translateX.setIdentity();
-//                    translateX(0, 3) = 1000;
-//                    Cloud testCloud = *oldCloud;
-//                    testCloud.points = translateX * testCloud.points;
-
-//                    auto rotation = Eigen::AngleAxisd(1.0, Eigen::Vector3d(1.0, 0.0, 0.0));
-//                    Eigen::Affine3d rotMat;
-//                    rotMat.rotate(rotation);
-//                    testCloud = *oldCloud;
-//                    testCloud.points = rotMat * testCloud.points;
-
-//                    // TODO: Order of arguments may be backwards and produce reverse transforms
-//                    Eigen::Affine3d trans = RigidMotionEstimator::point_to_point(testCloud.points, oldCloud->points);
-//                    std::cout << trans.matrix().matrix() << std::endl << std::endl;
-//
-//                    testCloud.points = trans * testCloud.points;
-
-                    // TODO: Look into noalias() function for optimization
-//                    worldTrans = trans * worldTrans;
-                    // Not sure why this works, (multiplying 4x4 matrix by 3xn matrix) (there must be an overload)
-//                    newCloud->points = trans * newCloud->points;
-
-                    SICP::point_to_point(newCloud->points, oldCloud->points);
-                }
-                for (int i = 0; i < POINTS_PER_CLOUD; ++i) {
-                    grid.addPoint({newCloud->points(0, i), newCloud->points(1, i), newCloud->points(2, i)});
-                }
-                newCloud->head = 0;
-                Cloud* temp = oldCloud;
-                oldCloud = newCloud;
-                newCloud = temp;
-            }*/
         }
 
-        if (receiver.isGraphicsModeEnabled()) {
+        if (receiver.isOptionEnabled(GRAPHICS)) {
             /**************************** HANDLE CONTROLS ********************************/
             int timeToQuit = handleControls(receiver, camera); // returns non-zero if quit events happen
             if (timeToQuit) {
@@ -198,9 +149,9 @@ int listeningThreadFunction(void* arg) {
     int packetsReadCount = 0;
     while (!ltd->packetHandlerQuit) {
         /*************************** HANDLE PACKETS *********************************/
-        if (ltd->receiver->getStreamMedium() == Velodyne) {
+        if (ltd->receiver->getStreamMedium() == VELODYNE) {
             ltd->receiver->listenForDataPacket();
-        } else if (ltd->receiver->getStreamMedium() == file
+        } else if (ltd->receiver->getStreamMedium() == INPUTFILE
                    && !ltd->receiver->endOfInputDataFile()
                    && packetsReadCount < ltd->receiver->getNumPacketsToRead()) {
             ltd->receiver->readDataPacketsFromFile(1);
@@ -208,7 +159,7 @@ int listeningThreadFunction(void* arg) {
         }
         // handle any incoming packet
         if (ltd->receiver->getPacketQueueSize() > 0) {
-            if (ltd->receiver->isWriteModeEnabled()) {
+            if (ltd->receiver->isOptionEnabled(WRITE)) {
                 ltd->receiver->writePacketToFile(ltd->receiver->getNextQueuedPacket());
             }
             ltd->analyzer->loadPacket(ltd->receiver->getNextQueuedPacket());
@@ -358,100 +309,99 @@ int initGraphics(Camera& camera) {
     return 0;
 }
 
+bool flagIsValid(char flag) {
+    switch (flag) {
+        case 'g':
+        case 's':
+        case 'f':
+        case 'w':
+        case 'h':
+            return true;
+        default:
+            return false;
+    }
+}
+
+void checkOptionInput(char &input, PacketReceiver &receiver, int option) {
+    std::cin.get(input);
+    std::cin.ignore(256, '\n');
+    if (input == 'y' || input == 'Y') {
+        receiver.enableOption(option);
+    } else if (input == 'n' || input == 'N') {
+        receiver.disableOption(option);
+    } else {
+        std::cout << "Please enter either 'y' or 'n'." << std::endl;
+    }
+}
+
 int handleCommandLineFlags(int argc, char* argv[], PacketReceiver& receiver) {
     /* Deal with the command line flags: */
-    if (argc == 1) {
-        /* User gave no flags, so prompt the user for the flags they would like to use: */
-        char input = '0';
-        /* Check for graphics flag: */
-        while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
-            std::cout << "Enable graphical display? (y/n) ";
-            std::cin.get(input);
-            std::cin.ignore(256, '\n');
-            if (input == 'y' || input == 'Y') {
-                receiver.enableGraphicsMode();
-            } else if (input == 'n' || input == 'N') {
-                receiver.disableGraphicsMode();
-            } else {
-                std::cout << "Please enter either 'y' or 'n'." << std::endl;
-            }
-        }
-        input = '0';
-        while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
-            std::cout << "Enable data streaming? (y/n) ";
-            std::cin.get(input);
-            std::cin.ignore(256, '\n');
-            if (input == 'y' || input == 'Y') {
-                receiver.enableStreamMode();
-            } else if (input == 'n' || input == 'N') {
-                receiver.disableStreamMode();
-            } else {
-                std::cout << "Please enter either 'y' or 'n'." << std::endl;
-            }
-        }
-        if (receiver.isStreamModeEnabled()) {
-            while (input != 'y' && input != 'Y' && input != 'n' && input != 'N') {
-                std::cout << "Enable writing data to a file? (y/n) ";
-                std::cin.get(input);
-                std::cin.ignore(256, '\n');
-                if (input == 'y' || input == 'Y') {
-                    receiver.enableWriteMode();
-                } else if (input == 'n' || input == 'N') {
-                    receiver.disableWriteMode();
-                } else {
-                    std::cout << "Please enter either 'y' or 'n'." << std::endl;
+    /* Validate flags: */
+    for (int fc = 1; fc < argc; ++fc) {
+        std::string arg = std::string(argv[fc]);
+        /* Handle multiple flags in one argument: */
+        if (arg[0] == '-') {
+            for (int i = 1; i < arg.length(); ++i) {
+                if (! flagIsValid(arg[i])) {
+                    std::cout << arg[i] << " is an invalid flag. Ending program." << std::endl;
+                    return 1;
                 }
             }
+        } else {
+            std::cout << arg << " is an invalid flag." << std::endl;
         }
-    } else {
-        /* Validate flags: */
-        for (int fc = 1; fc < argc; ++fc) {
-            std::string arg = std::string(argv[fc]);
-            /* Handle multiple flags in one argument: */
-            if (arg[0] == '-') {
-                for (int i = 1; i < arg.length(); ++i) {
-                    switch (arg[i]) {
-                        case 'g':
-                        case 's':
-                        case 'w':
-                        case 'h':
-                            break;
-                        default:
-                            std::cout << arg[i] << " is an invalid flag. Ending program." << std::endl;
-                            return 1;
-                    }
+    }
+    /* Default flag values are set to false: */
+    for (int fc = 1; fc < argc; ++fc) {
+        std::string arg = std::string(argv[fc]);
+        /* Handle multiple flags in one argument: */
+        if (arg[0] == '-') {
+            for(int i = 1; i < arg.length(); ++i) {
+                switch(arg[i]) {
+                    case 'g':
+                        receiver.enableOption(GRAPHICS);
+                        break;
+                    case 's':
+                        receiver.enableOption(STREAM);
+                        break;
+                    case 'f':
+                        receiver.enableOption(FORWARD);
+                        break;
+                    case 'w':
+                        receiver.enableOption(WRITE);
+                        break;
+                    case 'h':
+                        std::cout << "HELP ME PLEASE!" << std::endl; //enableHelp();                      // ADD HELP FLAG
+                        break;
+                    default:
+                        std::cout << arg[i] << " is an invalid flag. Ending program." << std::endl;
+                        return 1;
                 }
-            } else {
-                std::cout << arg << " is an invalid flag." << std::endl;
             }
+        } else {
+            std::cout << arg << " is an invalid flag." << std::endl;
         }
-        /* Default flag values are set to false: */
-        for (int fc = 1; fc < argc; ++fc) {
-            std::string arg = std::string(argv[fc]);
-            /* Handle multiple flags in one argument: */
-            if (arg[0] == '-') {
-                for(int i = 1; i < arg.length(); ++i) {
-                    switch(arg[i]) {
-                        case 'g':
-                            receiver.enableGraphicsMode();
-                            break;
-                        case 's':
-                            receiver.enableStreamMode();
-                            break;
-                        case 'w':
-                            receiver.enableWriteMode();
-                            break;
-                        case 'h':
-                            std::cout << "HELP ME PLEASE!" << std::endl; //enableHelp();                      // ADD HELP FLAG
-                            break;
-                        default:
-                            std::cout << arg[i] << " is an invalid flag. Ending program." << std::endl;
-                            return 1;
-                    }
-                }
-            } else {
-                std::cout << arg << " is an invalid flag." << std::endl;
-            }
+    }
+
+    /* For the necessary options that the user did not specify with flags, prompt. */
+    char input;
+    /* Check for graphics flag: */
+    while (!receiver.isOptionSpecified(GRAPHICS)) {
+        std::cout << "Enable graphical display? (y/n) ";
+        checkOptionInput(input, receiver, GRAPHICS);
+    }
+    while (!receiver.isOptionSpecified(STREAM)) {
+        std::cout << "Enable data streaming? (y/n) ";
+        checkOptionInput(input, receiver, STREAM);
+    }
+    if (receiver.isOptionEnabled(STREAM)) {
+        while (!receiver.isOptionSpecified(WRITE)) {
+            std::cout << "Enable writing data to a file? (y/n) ";
+            checkOptionInput(input, receiver, WRITE);
+        }
+        while (!receiver.isOptionSpecified(FORWARD)) {
+            std::cout << "Enable forwarding of data to a different location? (y/n) ";
+            checkOptionInput(input, receiver, FORWARD);
         }
     }
     return 0;
