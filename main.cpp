@@ -107,15 +107,6 @@ struct Cloud {
 
 void mainLoop(PacketReceiver& receiver, Camera& camera) {
 
-//    int counter = 0;
-
-    // ~38 packets per revolution, ~1 revolutions = 38 packets * 384 points/packet = 14592 points
-    Cloud cloud0, cloud1;
-    Cloud* oldCloud = &cloud0;
-    Cloud* newCloud = &cloud1;
-    Eigen::Affine3d worldTrans;
-    worldTrans.setIdentity();
-    bool firstCloudIn = false;
     previousTime = SDL_GetTicks();
     bool loop = true;
 
