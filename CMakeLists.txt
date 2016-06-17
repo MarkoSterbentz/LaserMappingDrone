@@ -21,9 +21,9 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 set(LIBS ${LIBS} ${SDL2_LIBRARY})
 
-#find_package(SDL2_net REQUIRED)
-#include_directories(${SDL2_NET_INCLUDE_DIR})
-#set(LIBS ${LIBS} ${SDL2_NET_LIBRARY})
+find_package(SDL2_net REQUIRED)
+include_directories(${SDL2_NET_INCLUDE_DIR})
+set(LIBS ${LIBS} ${SDL2_NET_LIBRARY})
 
 # Find GLEW
 find_package(GLEW REQUIRED)
@@ -42,7 +42,13 @@ include_directories(${LASERMAPPINGDRONE_INCLUDE_DIRS})
 set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree/QuadTreeDrawer.cpp
         AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp Grid/Grid.h Grid/GridDrawer.h
         Utilities/Delegate.h PacketAnalyzer/PacketAnalyzer.cpp PacketAnalyzer/PacketAnalyzer.h
-        PacketReceiver/PacketReceiver.cpp PacketReceiver/PacketReceiver.h Utilities/Graphics.cpp Utilities/Graphics.h Grid/Kernel.h Utilities/Camera.cpp Utilities/Camera.h Utilities/ICP/ICP.h)
+        PacketReceiver/PacketReceiver.cpp PacketReceiver/PacketReceiver.h
+        PacketReceiver/UdpConnection.h PacketReceiver/UdpConnection.cpp
+        Utilities/Graphics.cpp Utilities/Graphics.h
+        Grid/Kernel.h
+        Utilities/Camera.cpp Utilities/Camera.h
+        Utilities/ICP/ICP.h
+        )
         #PacketReceiver/UdpConnection.cpp PacketReceiver/UdpConnection.h)
 
 # Make an executable called LaserMappingDrone out of all the above source files
