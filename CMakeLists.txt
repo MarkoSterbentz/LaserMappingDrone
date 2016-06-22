@@ -43,11 +43,12 @@ set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree
         AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp Grid/Grid.h Grid/GridDrawer.h
         Utilities/Delegate.h PacketAnalyzer/PacketAnalyzer.cpp PacketAnalyzer/PacketAnalyzer.h
         PacketReceiver/PacketReceiver.cpp PacketReceiver/PacketReceiver.h
-        PacketReceiver/UdpConnection.h PacketReceiver/UdpConnection.cpp
+        PacketReceiver/UdpMaster.h PacketReceiver/UdpMaster.cpp
         Utilities/Graphics.cpp Utilities/Graphics.h
         Grid/Kernel.h
         Utilities/Camera.cpp Utilities/Camera.h
         Utilities/ICP/ICP.h
+        netEx.h
         )
         #PacketReceiver/UdpConnection.cpp PacketReceiver/UdpConnection.h)
 

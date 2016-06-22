@@ -24,10 +24,12 @@
 #include <fstream>
 #include <queue>
 #include <string>
-#include <stdexcept>
 
 #define DATAPORT "2368"    // the Data Packet is broadcasted to this port
 #define POSITIONPORT "8308" // the Position Packet is broadcasted to this port
+
+// Good candidates: 22022 22122 23032 21900-21931 or anything in dynamic
+#define SERVERPORT 22122
 
 #define DATABUFLEN 1249  //size of the data packet
 #define POSBUFLEN 554   // size of the position packet

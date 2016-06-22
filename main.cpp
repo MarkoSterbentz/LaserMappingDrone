@@ -18,6 +18,8 @@
 #define EIGEN_STACK_ALLOCATION_LIMIT 200000
 #include "ICP.h"
 
+//#include "netEx.h"
+
 #define KEY_MOVE_SENSITIVITY 100.f
 #define KEY_ROTATE_SENSITIVITY 0.01f
 #define MOUSE_SENSITIVITY_X -0.006f
@@ -61,6 +63,9 @@ int handleControls(PacketReceiver& receiver, Camera& camera);
 int listeningThreadFunction(void* listeningThreadData);
 
 int main(int argc, char* argv[]) {
+
+//    netStuff(argc, argv);
+//    return 0;
 
     PacketReceiver receiver;
     PacketAnalyzer analyzer;
