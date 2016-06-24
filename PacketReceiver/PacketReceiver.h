@@ -28,6 +28,7 @@
 #define DATAPORT "2368"    // the Data Packet is broadcasted to this port
 #define POSITIONPORT "8308" // the Position Packet is broadcasted to this port
 
+#include "UdpMaster.h"
 // Good candidates: 22022 22122 23032 21900-21931 or anything in dynamic
 #define SERVERPORT 22122
 
@@ -48,6 +49,13 @@ namespace LaserMappingDrone {
 
     class PacketReceiver {
     private:
+
+//        UDPsocket socket;
+//        IPaddress remote;
+//        UDPpacket* packet;
+        static const packetReceptionCallback receive;
+        UdpListener listener;
+
         std::ofstream outputFileStream;
         std::ifstream inputFile;
 

@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <functional>
 #include "SDL_net.h"
 
 namespace LaserMappingDrone {
@@ -18,39 +19,55 @@ namespace LaserMappingDrone {
     public:
 
         UdpMaster();
-        ~UdpMaster();
-
         bool init();
+        bool openLocalSocket(UDPsocket& localSocket, uint16_t port = 0);
+        bool openRemoteSocket(IPaddress& remoteSocket, uint16_t port, const std::string &host);
+        bool setUpPacket(UDPpacket* packet, uint32_t packetSize, const IPaddress& targetRemoteSocket);
+        bool setUpPacket(UDPpacket* packet, uint32_t packetSize);
 
-        bool send();
-        void receiveOne();
+        int sendOne(UDPsocket& localSocket, UDPpacket* packet);
+        int tryReceiveOne(UDPsocket& localSocket, UDPpacket* packet);
+        std::string dumpLog();
+        std::string peekLog();
+
+        void freePacket(UDPpacket* packet);
+        void closeLocalSocket(UDPsocket& localSocket);
+        ~UdpMaster();
 
     private:
 
         static bool sdlNetHasInitialized;
         static int needyMasterCount;
-
-        UDPsocket localSocket;
-        IPaddress remoteSocket;
-        UDPpacket *packet;
+        bool instanceHasInitialized;
         std::stringstream errorLog;
-
-        // todo: go into inheriting classes
-        bool initListener(const std::string &localIp, uint16_t localPort, uint32_t packetSize);
-        bool initSender(const std::string &remoteIp, uint16_t remotePort, uint32_t packetSize);
-        bool initTwoWay(const std::string &remoteIp, uint16_t remotePort,
-                        uint16_t localPort,
-                        uint32_t packetSize);
-
-        bool initSdlNetIfNotDone();
-        bool quitSdlNetIfUnused();
-        bool setUpPacket(uint32_t packetSize);
-        bool openLocalSocket(uint16_t port);
-        bool openRemoteSocket(const std::string &host, uint16_t port);
-        void freeResources();
+        bool initMaster();
+        bool deInitMaster();
+        void verifyInitStatus();
     };
 
-    UdpMaster udpConnection;
+
+    typedef std::function<void(UDPpacket*, void*)> packetReceptionCallback;
+    typedef void(*packetReceptionCallbackPtr)(UDPpacket*, void*);
+
+    class UdpListener {
+    public:
+
+        UdpListener(const packetReceptionCallback& receive);
+        ~UdpListener();
+        bool init(uint16_t port, uint32_t packetSize);
+        int processNewPackets(void* userData = NULL);
+        std::string dumpLog();
+        std::string peekLog();
+
+    private:
+
+        UdpMaster master;
+        UDPsocket localSocket;
+        UDPpacket* packet;
+        packetReceptionCallback receive;
+        bool hasInitialized;
+
+    };
 }
 
 #endif //LASERMAPPINGDRONE_UDPCONNECTION_H

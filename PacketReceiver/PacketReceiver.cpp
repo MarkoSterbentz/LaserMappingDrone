@@ -3,11 +3,17 @@
 //
 
 #include <sstream>
+#include <SDL_net.h>
 #include "PacketReceiver.h"
 
 namespace LaserMappingDrone {
 
-    PacketReceiver::PacketReceiver() : cmdOptions{} {
+    const packetReceptionCallback PacketReceiver::receive = [](UDPpacket* packet, void* userData) {
+//        PacketReceiver* receiver = (PacketReceiver*)userData;
+//        receiver->packetQueue.push(packet->data);
+    };
+
+    PacketReceiver::PacketReceiver() : listener(receive), cmdOptions{} {
 
     };
 
@@ -48,6 +54,19 @@ namespace LaserMappingDrone {
 
     /* Creates a socket that can listen for incoming data.  */
     int PacketReceiver::bindSocket() {
+
+//        if (! listener.init(2368, 1249)) {
+//            std::cout << listener.dumpLog();
+//        }
+//        std::cout << listener.dumpLog();
+
+
+//        SDLNet_Init();
+//        socket = SDLNet_UDP_Open(2368);
+//        packet = SDLNet_AllocPacket(1249); // 1206 seems to be real length?
+
+
+
         struct addrinfo hints, * servinfo, * p;
         int rv;
 
@@ -89,6 +108,23 @@ namespace LaserMappingDrone {
 
     /* Pushes the next arriving packet onto the packetQueue. */
     void PacketReceiver::listenForDataPacket() {
+
+//        int newPacketCount = listener.processNewPackets(nullptr);
+//        if (newPacketCount < 0) {
+//            std::cout << listener.dumpLog();
+//        } else if (newPacketCount > 0) {
+//            std::cout << "worked.\n";
+//        }
+
+
+
+
+//        SDLNet_UDP_Recv(socket, packet);
+//        std::cout << packet->address.host << " : " << packet->len << "/" << packet->maxlen << " : ";// << std::endl;
+//        packetQueue.push(packet->data);
+
+
+
         ssize_t numbytes;
         struct sockaddr_storage their_addr;
         socklen_t addr_len;

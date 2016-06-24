@@ -13,6 +13,7 @@ PacketAnalyzer::~PacketAnalyzer() {
 
 }
 void PacketAnalyzer::loadPacket(unsigned char * newPacket) {
+    std::cout << *((uint16_t*)newPacket) << std::endl;
     currentPacket = newPacket;
 }
 /*****************************************************************************

@@ -2,6 +2,7 @@
 // Created by adayoldbagel on 2/12/16.
 //
 
+#include <SDL_net.h>
 #include "UdpMaster.h"
 
 namespace LaserMappingDrone {
@@ -9,55 +10,76 @@ namespace LaserMappingDrone {
     bool UdpMaster::sdlNetHasInitialized = false;
     int UdpMaster::needyMasterCount = 0;
 
-    UdpMaster::UdpMaster() {
+    UdpMaster::UdpMaster() : instanceHasInitialized(false) {
 
     }
 
     UdpMaster::~UdpMaster() {
-        freeResources();
-        quitSdlNetIfUnused();
+        deInitMaster();
     }
 
     bool UdpMaster::init() {
-        return false;
+        return initMaster();
     }
 
-    bool UdpMaster::initListener(const std::string &localIp, uint16_t localPort, uint32_t packetSize) {
-        return false;
+    std::string UdpMaster::dumpLog() {
+        std::string log = errorLog.str();
+        errorLog.clear();
+        return log;
     }
 
-    bool UdpMaster::initSender(const std::string &remoteIp, uint16_t remotePort, uint32_t packetSize) {
-        return false;
+    std::string UdpMaster::peekLog() {
+        return errorLog.str();
     }
 
-    bool UdpMaster::initTwoWay(const std::string &remoteIp, uint16_t remotePort,
-                                   uint16_t localPort,
-                                   uint32_t packetSize)
-    {
-        freeResources();
-        initSdlNetIfNotDone();
-        if (!openLocalSocket(localPort)) {
-            return false;
+    int UdpMaster::sendOne(UDPsocket& localSocket, UDPpacket* packet) {
+        // -1 indicates that it is sent only to the address specified in the packet
+        int HowManyWereSent = SDLNet_UDP_Send(localSocket, -1, packet);
+        if (!HowManyWereSent) {
+            errorLog << "Packet was not sent: " << SDLNet_GetError() << std::endl;
+            verifyInitStatus();
+            if (packet->address.host == 0) {
+                errorLog << "[ Packet was to be sent to address 0 - was not set up correctly ]" << std::endl;
+            }
+            if (packet->address.host == 0) {
+                errorLog << "[ Packet was to be sent to port 0 - was not set up correctly ]" << std::endl;
+            }
         }
-        if (!openRemoteSocket(remoteIp, remotePort)) {
-            return false;
-        }
-        return setUpPacket(packetSize);
+        return HowManyWereSent;
     }
 
-    bool UdpMaster::initSdlNetIfNotDone() {
-        needyMasterCount += 1;
+    int UdpMaster::tryReceiveOne(UDPsocket& localSocket, UDPpacket* packet) {
+        // 0 if nothing to receive, 1 if received, -1 if error.
+        int worked = SDLNet_UDP_Recv(localSocket, packet);
+        if (worked == -1) {
+            errorLog << "Error receiving packet: " << SDLNet_GetError() << std::endl;
+            verifyInitStatus();
+        }
+        return worked;
+    }
+
+    bool UdpMaster::initMaster() {
+        if (instanceHasInitialized) {
+            return true;
+        }
         if (!sdlNetHasInitialized) {
             if (SDLNet_Init() == -1) {
-                std::cout << "SDL_Net could not initialize: " << SDLNet_GetError() << std::endl;
+                errorLog << "Could not initialized UdpMaster object because SDL_Net could not initialize: "
+                         << SDLNet_GetError() << std::endl;
                 return false;
             }
             sdlNetHasInitialized = true;
         }
+        needyMasterCount += 1;
+        instanceHasInitialized = true;
         return true;
     }
 
-    bool UdpMaster::quitSdlNetIfUnused() {
+    bool UdpMaster::deInitMaster() {
+        if (!instanceHasInitialized) {
+            return false;
+        }
+        instanceHasInitialized = false;
         needyMasterCount -= 1;
         if (sdlNetHasInitialized && needyMasterCount <= 0) {
             SDLNet_Quit();
@@ -68,56 +90,111 @@ namespace LaserMappingDrone {
         return false;
     }
 
-    bool UdpMaster::setUpPacket(uint32_t packetSize) {
-        // free old packet memory
-        SDLNet_FreePacket(packet);
-        // allocate new packet memory
-        packet = SDLNet_AllocPacket(packetSize);
-        if (packet == nullptr) {
-            std::cout << "\tSDLNet_AllocPacket failed : " << SDLNet_GetError() << std::endl;
-            return false;
+    void UdpMaster::verifyInitStatus() {
+        if (!instanceHasInitialized) {
+            errorLog << "[ This instance of UdpMaster has not been initialized! ]" << std::endl;
         }
-        packet->address.host = remoteSocket.host;
-        packet->address.port = remoteSocket.port;
-        return true;
     }
 
-    bool UdpMaster::openLocalSocket(uint16_t port) {
+    bool UdpMaster::openLocalSocket(UDPsocket& localSocket, uint16_t port /* = 0 */) {
+//        SDLNet_UDP_Close(localSocket);
         localSocket = SDLNet_UDP_Open(port);
         if (!localSocket) {
-            std::cout << "Failed to open local socket: " << SDLNet_GetError() << std::endl;
+            errorLog << "Failed to open local socket: " << SDLNet_GetError() << std::endl;
+            verifyInitStatus();
             return false;
         }
         return true;
     }
 
-    bool UdpMaster::openRemoteSocket(const std::string &host, uint16_t port) {
+    bool UdpMaster::openRemoteSocket(IPaddress& remoteSocket, uint16_t port, const std::string &host) {
         if (SDLNet_ResolveHost(&remoteSocket, host.c_str(), port) == -1) {
-            std::cout << "Failed to resolve host: " << SDLNet_GetError() << std::endl;
+            errorLog << "Failed to resolve host: " << SDLNet_GetError() << std::endl;
+            verifyInitStatus();
             return false;
         }
         return true;
     }
 
-    bool UdpMaster::send() {
-        // returns number of packets sent - 0 is error.
-        if (SDLNet_UDP_Send(localSocket, -1, packet) == 0 ) {
-            std::cout << "Failed to send packet: " << SDLNet_GetError() << "\n";
+    bool UdpMaster::setUpPacket(UDPpacket* packet, uint32_t packetSize, const IPaddress& targetRemoteSocket) {
+        if (setUpPacket(packet, packetSize)) {
             return false;
         }
+        packet->address.host = targetRemoteSocket.host;
+        packet->address.port = targetRemoteSocket.port;
         return true;
     }
 
-    void UdpMaster::receiveOne()
-    {
-        if (SDLNet_UDP_Recv(localSocket, packet)) {
-            std::cout << "Packet received: " << packet->data << "\n";\
+    bool UdpMaster::setUpPacket(UDPpacket* packet, uint32_t packetSize) {
+//        SDLNet_FreePacket(packet);
+        packet = SDLNet_AllocPacket(packetSize);
+        if (packet == nullptr) {
+            errorLog << "Packet allocation failed : " << SDLNet_GetError() << std::endl;
+            verifyInitStatus();
+            return false;
         }
+        packet->address.host = 0;
+        packet->address.port = 0;
+        return true;
     }
 
-    void UdpMaster::freeResources() {
+    void UdpMaster::freePacket(UDPpacket* packet) {
         SDLNet_FreePacket(packet);
-        packet = NULL;
     }
+
+    void UdpMaster::closeLocalSocket(UDPsocket& localSocket) {
+        SDLNet_UDP_Close(localSocket);
+    }
+
+
+    UdpListener::UdpListener(const packetReceptionCallback& receive)
+            : receive(receive), hasInitialized(false) { }
+
+    UdpListener::~UdpListener() {
+        if (hasInitialized) {
+            master.freePacket(packet);
+            master.closeLocalSocket(localSocket);
+        }
+    }
+
+    bool UdpListener::init(uint16_t port, uint32_t packetSize) {
+        if (hasInitialized) {
+            return false;
+        }
+        if (! master.init()){
+            return false;
+        }
+        if (! master.openLocalSocket(localSocket, port)) {
+            return false;
+        }
+        if (! master.setUpPacket(packet, packetSize)) {
+            return false;
+        }
+        hasInitialized = true;
+        return true;
+
+    }
+
+    int UdpListener::processNewPackets(void* userData /* = NULL */) {
+        int receivedOne;
+        int totalReceived = 0;
+        do {
+            receivedOne = master.tryReceiveOne(localSocket, packet);
+            if (receivedOne < 0) {
+                return receivedOne;
+            }
+            totalReceived += receivedOne;
+        } while (receivedOne > 0);
+        return totalReceived;
+    }
+
+    std::string UdpListener::dumpLog() {
+        return master.dumpLog();
+    }
+
+    std::string UdpListener::peekLog() {
+        return master.peekLog();
+    }
+
 
 }
