@@ -37,6 +37,8 @@ namespace LaserMappingDrone {
         glm::mat4 getProjInv();
         glm::mat4 getVpInv();
         glm::mat4 getRotMat();
+        float getFovY();
+        float getAspect();
         int lookingUpOrDown();
         int getHorizIntersectionFromScreenSpace(const glm::vec2& ndcClick, glm::vec2& result);
         void dragHorizPlaneFromNdcSpace(const glm::vec2 &ndcStart, const glm::vec2 &ndcEnd);

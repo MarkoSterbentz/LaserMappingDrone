@@ -17,6 +17,12 @@
 #include "Grid.h"
 #include "Camera.h"
 #include "LoadShaders.h"
+#include "ScreenShot.h"
+#include <ctime>
+#include <iomanip>
+
+#define SCREEN_SHOT_W 4000
+#define SCREEN_SHOT_H 2000
 
 namespace LaserMappingDrone {
 
@@ -25,6 +31,7 @@ namespace LaserMappingDrone {
 
         int init(Grid <P> *grid, Camera* camera, unsigned additionBufferSize, std::stringstream& log);
         void drawGrid();
+        void takeScreenShot();
 
     private:
         GLuint shader;
@@ -42,6 +49,9 @@ namespace LaserMappingDrone {
 
         std::vector<float> buffer;
         unsigned long addBufferSize, addBufferSizeElem;
+
+        ScreenShotTaker screenShotTaker;
+        bool screenShotCurrentFrame = false;
 
         void setColor(float r, float g, float b);
         void preDrawCommon();
@@ -160,11 +170,17 @@ namespace LaserMappingDrone {
         currentColor[1] = 1.f;
         currentColor[2] = 1.f;
 
+        screenShotTaker.init(SCREEN_SHOT_W, SCREEN_SHOT_H);
+
         return 0;
     }
 
     template <class P>
     void GridDrawer<P>::drawGrid() {
+        if (screenShotCurrentFrame) {
+            screenShotTaker.injectScreenShotState(*camera);
+        }
+
         uint32_t currentTime = SDL_GetTicks();
         camera->tickShmooze(currentTime - lastTime);
         lastTime = currentTime;
@@ -178,6 +194,16 @@ namespace LaserMappingDrone {
 
         drawBorders();
         drawPoints();
+
+        if (screenShotCurrentFrame) {
+            auto t = std::time(nullptr);
+            auto tm = *std::localtime(&t);
+            std::stringstream fileNameStream;
+            fileNameStream << "screenshot" << std::put_time(&tm, "%Y%m%d%H%M%S") << ".png";
+            screenShotTaker.retrieveAndWriteImageToFile(fileNameStream.str().c_str());
+            screenShotTaker.revertScreenShotState();
+            screenShotCurrentFrame = false;
+        }
     }
 
     template <class P>
@@ -207,6 +233,11 @@ namespace LaserMappingDrone {
         setColor(1.f, 1.f, 0.f);
         preDrawCommon();
         glDrawArrays(GL_POINTS, (GLint)pointsVertStart, (GLsizei)pointsVertCount);
+    }
+
+    template <class P>
+    void GridDrawer<P>::takeScreenShot() {
+        screenShotCurrentFrame = true;
     }
 
 }

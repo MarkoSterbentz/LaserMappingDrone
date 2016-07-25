@@ -195,6 +195,8 @@ int handleControls(PacketReceiver& receiver, Camera& camera) {
                 switch (event.key.keysym.sym) {
                     case SDLK_ESCAPE:
                         return 1;
+                    case SDLK_F12:
+                        gridDrawer.takeScreenShot();
                     default:
                         break;
                 }
