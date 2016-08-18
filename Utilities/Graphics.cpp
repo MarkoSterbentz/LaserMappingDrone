@@ -77,7 +77,7 @@ namespace LaserMappingDrone {
         // struct for holding sdl display information
         SDL_DisplayMode current;
         if(!SDL_GetCurrentDisplayMode(0, &current)) {
-            aspectRatio = (float)current.h / (float)current.w;
+            aspectRatio = (float)current.w / (float)current.h;
             xRes = current.w;
             yRes = current.h;
         } else {

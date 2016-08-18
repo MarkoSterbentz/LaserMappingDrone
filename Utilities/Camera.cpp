@@ -122,6 +122,15 @@ namespace LaserMappingDrone {
                 0.0, 0.0, 0.0, 1.0);
     }
 
+    float Camera::getFovY() {
+        return fovY;
+    }
+
+    float Camera::getAspect() {
+        return aspect;
+    }
+
+
     void Camera::tickShmooze(float dt) {
         if (fabs(dist - distTarget) > distSpeed * physicsLastDt * 0.2f) {
             dist += distSpeed * dt * (distTarget - dist);
@@ -255,7 +264,5 @@ namespace LaserMappingDrone {
     int Camera::lookingUpOrDown() {
         return (phi > 0) - (phi < 0);
     }
-
-
 }
 

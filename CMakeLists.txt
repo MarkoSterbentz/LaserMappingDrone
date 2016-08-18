@@ -35,14 +35,35 @@ find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
+# Use IMU submodule
+option(BNO055_COMPILE_STANDALONE "Compile BNO055 as lib" OFF)
+add_subdirectory(bno055_uartSimple)
+set(LIBS ${LIBS} BNO055)
+
 set(LASERMAPPINGDRONE_INCLUDE_DIRS QuadTree AssetManagement Grid Utilities Utilities/ReaderWriterQueue Utilities/Registration PacketReceiver PacketAnalyzer)
 include_directories(${LASERMAPPINGDRONE_INCLUDE_DIRS})
 
 # Find all the source files
 set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree/QuadTreeDrawer.cpp
-        AssetManagement/LoadShaders.h AssetManagement/LoadShaders.cpp Grid/Grid.h Grid/GridDrawer.h
-        Utilities/Delegate.h PacketAnalyzer/PacketAnalyzer.cpp PacketAnalyzer/PacketAnalyzer.h
-        PacketReceiver/PacketReceiver.cpp PacketReceiver/PacketReceiver.h Utilities/Graphics.cpp Utilities/Graphics.h Grid/Kernel.h Utilities/Camera.cpp Utilities/Camera.h Utilities/Registration/ICP.h Utilities/Registration/Registrar.h)
+        AssetManagement/LoadShaders.h
+        AssetManagement/LoadShaders.cpp
+        Grid/Grid.h
+        Grid/GridDrawer.h
+        Utilities/Delegate.h
+        PacketAnalyzer/PacketAnalyzer.cpp
+        PacketAnalyzer/PacketAnalyzer.h
+        PacketReceiver/PacketReceiver.cpp
+        PacketReceiver/PacketReceiver.h
+        Utilities/Graphics.cpp
+        Utilities/Graphics.h
+        Grid/Kernel.h
+        Utilities/Camera.cpp
+        Utilities/Camera.h
+        Utilities/Registration/ICP.h
+        Utilities/Registration/Registrar.h
+        Utilities/ScreenShot.cpp Utilities/ScreenShot.h
+        Utilities/stb_image_write.h
+        )
         #PacketReceiver/UdpConnection.cpp PacketReceiver/UdpConnection.h)
 
 # Make an executable called LaserMappingDrone out of all the above source files

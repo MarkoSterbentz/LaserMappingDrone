@@ -1,0 +1,3 @@
+[submodule "bno055_uartSimple"]
+	path = bno055_uartSimple
+	url = https://github.com/a-day-old-bagel/bno055_uartSimple
