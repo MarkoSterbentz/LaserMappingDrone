@@ -36,9 +36,9 @@ include_directories(${OPENGL_INCLUDE_DIR})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
 # Use IMU submodule
-option(BNO055_COMPILE_TEST "" OFF)
+option(BNO055_COMPILE_STANDALONE "Compile BNO055 as lib" OFF)
 add_subdirectory(bno055_uartSimple)
-include_directories(bno055_uartSimple)
+set(LIBS ${LIBS} BNO055)
 
 set(LASERMAPPINGDRONE_INCLUDE_DIRS QuadTree AssetManagement Grid Utilities Utilities/ReaderWriterQueue Utilities/ICP PacketReceiver PacketAnalyzer)
 include_directories(${LASERMAPPINGDRONE_INCLUDE_DIRS})
