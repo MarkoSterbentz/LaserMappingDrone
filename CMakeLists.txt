@@ -35,6 +35,11 @@ find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
+# Use IMU submodule
+option(BNO055_COMPILE_TEST "" OFF)
+add_subdirectory(bno055_uartSimple)
+include_directories(bno055_uartSimple)
+
 set(LASERMAPPINGDRONE_INCLUDE_DIRS QuadTree AssetManagement Grid Utilities Utilities/ReaderWriterQueue Utilities/ICP PacketReceiver PacketAnalyzer)
 include_directories(${LASERMAPPINGDRONE_INCLUDE_DIRS})
 
