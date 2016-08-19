@@ -12,10 +12,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -fopenmp -Wall -Wextra")
 # Tell cMake where to look for the modules that search for SDL2 (the others come with cMake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmakeModules/")
 
-## IF BUILDING FOR VISUAL STUDIO ON WINDOWS: Tell cMake where to look for third party libs (add to this for your own builds)
-#set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:/libs/SDL2-2.0.4" "C:/libs/glew-1.13.0")
-#set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "C:/libs/SDL2-2.0.4/lib/x86" "C:/libs/glew-1.13.0/lib/Release/win32")
-
 # Find SDL 2.0
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})

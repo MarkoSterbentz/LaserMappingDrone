@@ -51,6 +51,10 @@ struct RegistrationThreadData {
     Registrar<CartesianPoint>* registrar;
     bool registrationQuit;
 };
+struct ImuThreadData {
+    ImuReader* imu;
+    bool imuQuit;
+};
 
 // The grid and drawer
 // constructor min/max arguments are in millimeters (the LIDAR device is at the origin)
@@ -74,6 +78,8 @@ void initPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningTh
 void stopPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningThread);
 void initRegistration(RegistrationThreadData& rtd, SDL_Thread** registrationThread);
 void stopRegistration(RegistrationThreadData& rtd, SDL_Thread** registrationThread);
+void initImu(ImuThreadData& itd, SDL_Thread** imuThread);
+void stopImu(ImuThreadData& itd, SDL_Thread** imuThread);
 void initKernel();
 bool flagIsValid(char flag);
 void checkOptionInput(char &input, PacketReceiver &receiver, int option);
@@ -81,21 +87,27 @@ int handleCommandLineFlags(int argc, char* argv[], PacketReceiver& receiver);
 int initGraphics(Camera& camera);
 int handleControls(PacketReceiver& receiver, Camera& camera);
 int listeningThreadFunction(void* listeningThreadData);
+int registrationThreadFunction(void* arg);
+int imuThreadFunction(void* arg);
 
 int main(int argc, char* argv[]) {
 
     PacketReceiver receiver;
     PacketAnalyzer analyzer;
     Registrar<CartesianPoint> registrar(&rawQueue, &registeredQueue, POINTS_PER_CLOUD, NUM_HISTS, CLOUD_SPARSITY);
+    ImuReader imuReader;
+    
+    ListeningThreadData ltd = { &receiver, &analyzer, false };
+    SDL_Thread* packetListeningThread = NULL;
+
+    RegistrationThreadData rtd = { &registrar, false };
+    SDL_Thread* registrationThread = NULL;
+
+    ImuThreadData itd = { &imuReader, false };
+    SDL_Thread* imuThread = NULL;
 
     handleCommandLineFlags(argc, argv, receiver);
     receiver.openInputFile();
-    
-    ListeningThreadData ltd = {&receiver, &analyzer};
-    SDL_Thread* packetListeningThread = NULL;
-
-    RegistrationThreadData rtd = {&registrar};
-    SDL_Thread* registrationThread = NULL;
 
     // This sets up the kerning tools used for data analysis
     initKernel();
@@ -112,6 +124,7 @@ int main(int argc, char* argv[]) {
         initPacketHandling(ltd, &packetListeningThread);
         initRegistration(rtd, &registrationThread);
     }
+    initImu(itd, &imuThread);
 
     /* Begin the main loop on this thread: */
     mainLoop(receiver, camera);
@@ -120,6 +133,7 @@ int main(int argc, char* argv[]) {
         stopPacketHandling(ltd, &packetListeningThread);
         stopRegistration(rtd, &registrationThread);
     }
+    stopImu(itd, &imuThread);
 
     return 0;
 }
@@ -180,8 +194,6 @@ int listeningThreadFunction(void* arg) {
             }
         }
     }
-
-    std::cout << "Packet handling thread is dying.\n";
     return 0;
 }
 
@@ -191,7 +203,16 @@ int registrationThreadFunction(void* arg) {
     while (!rtd->registrationQuit) {
         rtd->registrar->runICP();
     }
+    return 0;
+}
 
+int imuThreadFunction(void* arg) {
+    std::cout << "IMU reading thread is active.\n";
+    ImuThreadData* idt = (ImuThreadData*) arg;
+    while (!idt->imuQuit) {
+        idt->imu->printOrientation();
+    }
+    return 0;
 }
 
 int handleControls(PacketReceiver& receiver, Camera& camera) {
@@ -269,7 +290,6 @@ void initPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningTh
     ltd.receiver->bindSocket();
 
     // spawn the listening thread, passing it information in "data"
-    ltd.packetHandlerQuit = false;
     *packetListeningThread = SDL_CreateThread (listeningThreadFunction, "listening thread", (void *) &ltd);
 }
 
@@ -280,13 +300,22 @@ void stopPacketHandling(ListeningThreadData& ltd, SDL_Thread** packetListeningTh
 }
 
 void initRegistration(RegistrationThreadData& rtd, SDL_Thread** registrationThread) {
-    rtd.registrationQuit = false;
     *registrationThread = SDL_CreateThread(registrationThreadFunction, "point registration thread", (void *) &rtd);
 }
 
 void stopRegistration(RegistrationThreadData& rtd, SDL_Thread** registrationThread) {
     rtd.registrationQuit = true;
     SDL_WaitThread(*registrationThread, NULL);
+}
+
+void initImu(ImuThreadData& itd, SDL_Thread** imuThread) {
+    itd.imu->init();
+    *imuThread = SDL_CreateThread(imuThreadFunction, "imu thread", (void*) &itd);
+}
+
+void stopImu(ImuThreadData& itd, SDL_Thread** imuThread) {
+    itd.imuQuit = true;
+    SDL_WaitThread(*imuThread, NULL);
 }
 
 void initKernel() {
