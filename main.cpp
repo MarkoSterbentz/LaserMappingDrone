@@ -14,6 +14,7 @@
 #include "readerwriterqueue.h"
 #include "PacketAnalyzer.h"
 #include "PacketReceiver.h"
+#include "ImuReader.h"
 
 //#define SHOW_NONCONTRIBUTING_POINTS
 #include "Registrar.h"

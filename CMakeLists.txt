@@ -38,9 +38,20 @@ set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 # Use IMU submodule
 option(BNO055_COMPILE_STANDALONE "Compile BNO055 as lib" OFF)
 add_subdirectory(bno055_uartSimple)
+include_directories(bno055_uartSimple)
 set(LIBS ${LIBS} BNO055)
 
-set(LASERMAPPINGDRONE_INCLUDE_DIRS QuadTree AssetManagement Grid Utilities Utilities/ReaderWriterQueue Utilities/Registration PacketReceiver PacketAnalyzer)
+set(LASERMAPPINGDRONE_INCLUDE_DIRS
+        QuadTree
+        AssetManagement
+        Grid
+        Utilities
+        Utilities/ReaderWriterQueue
+        Utilities/Registration
+        PacketReceiver
+        PacketAnalyzer
+        samplePipeline
+        )
 include_directories(${LASERMAPPINGDRONE_INCLUDE_DIRS})
 
 # Find all the source files
@@ -63,6 +74,8 @@ set(SOURCE_FILES main.cpp QuadTree/QuadTree.h QuadTree/QuadTreeDrawer.h QuadTree
         Utilities/Registration/Registrar.h
         Utilities/ScreenShot.cpp Utilities/ScreenShot.h
         Utilities/stb_image_write.h
+        samplePipeline/ImuReader.cpp
+        samplePipeline/ImuReader.h
         )
         #PacketReceiver/UdpConnection.cpp PacketReceiver/UdpConnection.h)
 
